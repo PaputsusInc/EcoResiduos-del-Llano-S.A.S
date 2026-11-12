@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resolución Método Exacto — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN REAL) -->
+  <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-900/30">
+        <i data-lucide="leaf" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-200"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Perfil del Operador -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[11px]">
+          CL
+        </div>
+        <div>
+          <p class="font-medium text-white leading-tight">Coordinador Logístico</p>
+          <p class="text-[10px] text-slate-400">Villavicencio · Meta</p>
+        </div>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-500" title="En línea"></span>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+    
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between shrink-0 shadow-sm">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+          <i data-lucide="check-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900 leading-tight">Resolución del Modelo Exacto y Comprobación</h2>
+          <p class="text-xs text-slate-500">Optimización de transporte lineal y verificación matemática de restricciones</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Selector de Escenario a Consultar -->
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="text-slate-500 font-medium">Consultar Escenario:</span>
+          <select id="selectEscenario" onchange="cambiarEscenario(this.value)" class="text-xs font-semibold rounded-lg border border-slate-300 px-3 py-1.5 bg-white text-slate-800 focus:ring-2 focus:ring-emerald-500">
+            <option value="ESC-01">ESC-01: Caso de Referencia (115 t / 135 t)</option>
+            <option value="ESC-04">ESC-04: Sobrecarga de Oferta (120 t vs 100 t)</option>
+          </select>
+        </div>
+
+        <a href="hu_19_procedimiento_metodo_exacto.html" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition">
+          <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i>
+          <span>Ver Pasos del Método</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- CUERPO SCROLLABLE -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- CASO 1: ESCENARIO ÓPTIMO CERTIFICADO (ESC-01) -->
+      <div id="panelOptimo" class="space-y-6">
+        
+        <!-- Banner de Estado Óptimo -->
+        <div class="bg-gradient-to-r from-emerald-900 to-slate-900 text-white p-5 rounded-xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                Óptimo certificado
+              </span>
+              <span class="font-mono text-xs text-slate-400">Cálculo: EJE-01 · HiGHS Simplex</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">Solución Óptima Global Obtenida y Comprobada</h3>
+            <p class="text-xs text-slate-300">
+              Se ha distribuido el 100% de la oferta semanal de las 10 empresas generadoras respetando estrictamente la capacidad máxima de las 4 plantas procesadoras.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-6 text-right shrink-0 font-mono">
+            <div>
+              <span class="text-[11px] text-slate-400 block font-sans">Costo Total Óptimo ($Z^*$):</span>
+              <span class="text-2xl font-bold text-emerald-400">$ 450.250 COP</span>
+            </div>
+            <div class="h-10 w-px bg-slate-700"></div>
+            <div>
+              <span class="text-[11px] text-slate-400 block font-sans">Tiempo de Solución:</span>
+              <span class="text-lg font-bold text-white">0,042 s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPROBACIÓN DE RESTRICCIONES -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Restricciones de Oferta (Igualdad estricta) -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Cumplimiento de Oferta por Empresa (100%)</h4>
+              </div>
+              <span class="text-[10px] text-slate-400 font-mono">Total salida = Oferta</span>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">EMP-01 (Palmeras del Llano):</span>
+                <span class="font-mono text-emerald-700 font-bold">25,0 t asignadas de 25,0 t (100 %)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">EMP-02 (Agropecuaria San Martín):</span>
+                <span class="font-mono text-emerald-700 font-bold">15,0 t asignadas de 15,0 t (100 %)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">EMP-03 (Hacienda La Cabaña):</span>
+                <span class="font-mono text-emerald-700 font-bold">18,0 t asignadas de 18,0 t (100 %)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">EMP-04 (Arrocera del Ariari):</span>
+                <span class="font-mono text-emerald-700 font-bold">12,0 t asignadas de 12,0 t (100 %)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">Otras 6 empresas generadoras:</span>
+                <span class="font-mono text-emerald-700 font-bold">45,0 t asignadas de 45,0 t (100 %)</span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 pt-1">
+              &check; Todas las empresas transfieren la totalidad de sus residuos sin saldos pendientes.
+            </p>
+          </div>
+
+          <!-- Restricciones de Capacidad (Desigualdad <= Capacidad) -->
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Cumplimiento de Capacidad Máxima en Plantas</h4>
+              </div>
+              <span class="text-[10px] text-slate-400 font-mono">Total entrada &le; Límite</span>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">PLA-01 (Villavicencio):</span>
+                <span class="font-mono text-slate-800">Recibe <strong>45,0 t</strong> de máx. 45,0 t (Holgura: 0,0 t)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">PLA-02 (Restrepo):</span>
+                <span class="font-mono text-slate-800">Recibe <strong>25,0 t</strong> de máx. 25,0 t (Holgura: 0,0 t)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">PLA-03 (Granada):</span>
+                <span class="font-mono text-slate-800">Recibe <strong>35,0 t</strong> de máx. 35,0 t (Holgura: 0,0 t)</span>
+              </div>
+              <div class="flex justify-between items-center p-2 rounded bg-slate-50 border border-slate-100">
+                <span class="font-semibold text-slate-800">PLA-04 (Puerto Gaitán):</span>
+                <span class="font-mono text-emerald-700 font-bold">Recibe <strong>10,0 t</strong> de máx. 30,0 t (Holgura: 20,0 t)</span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 pt-1">
+              &check; Ninguna planta sobrepasa su límite de recepción semanal.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CASO 2: ESCENARIO INFACTIBLE / SOBRECARGA (ESC-04) -->
+      <div id="panelInfactible" class="hidden space-y-6">
+        
+        <!-- Alerta Oficial: Capacidad superada por la oferta -->
+        <div class="bg-red-600 text-white p-6 rounded-xl shadow-lg space-y-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-red-700 flex items-center justify-center shrink-0">
+              <i data-lucide="alert-octagon" class="w-6 h-6 text-white"></i>
+            </div>
+            <div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-800 text-red-100 uppercase tracking-wider">
+                Estado: Infactible certificado
+              </span>
+              <h3 class="text-xl font-bold mt-0.5">Capacidad superada por la oferta</h3>
+            </div>
+          </div>
+
+          <p class="text-xs text-red-100 leading-relaxed max-w-3xl">
+            La suma de las ofertas semanales requeridas (<strong>120,0 t/semana</strong>) es estrictamente mayor que la suma de las capacidades máximas de procesamiento de las plantas (<strong>100,0 t/semana</strong>). El solucionador matemático certifica que <strong>no existe ninguna asignación factible</strong> capaz de cumplir con las restricciones de la red.
+          </p>
+
+          <div class="pt-2 flex items-center space-x-4 text-xs font-mono">
+            <span>Déficit global: <strong>-20,0 t/semana</strong></span>
+            <span>·</span>
+            <span>Asignaciones generadas: <strong>0 (Ocultas por inviabilidad)</strong></span>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center space-y-3 py-10">
+          <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto">
+            <i data-lucide="eye-off" class="w-6 h-6"></i>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900">Resultados de asignación no disponibles</h4>
+          <p class="text-xs text-slate-500 max-w-md mx-auto">
+            Para evitar la interpretación de asignaciones parciales o no válidas, el sistema no proyecta flujos cuando el escenario carece de viabilidad matemática.
+          </p>
+          <button onclick="cambiarEscenario('ESC-01')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">
+            Volver a Caso de Referencia (ESC-01)
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT DE CONMUTACIÓN DE ESCENARIOS -->
+  <script>
+    function cambiarEscenario(escId) {
+      const pOptimo = document.getElementById('panelOptimo');
+      const pInfactible = document.getElementById('panelInfactible');
+      const select = document.getElementById('selectEscenario');
+      select.value = escId;
+
+      if (escId === 'ESC-01') {
+        pOptimo.classList.remove('hidden');
+        pInfactible.classList.add('hidden');
+      } else {
+        pOptimo.classList.add('hidden');
+        pInfactible.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

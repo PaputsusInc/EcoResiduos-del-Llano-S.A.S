@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Principal — EcoResiduos del Llano S.A.S.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e',
+              600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .module-link:focus-visible, .sidebar-link:focus-visible {
+      outline: 2px solid #10b981;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex min-h-screen lg:h-screen lg:overflow-hidden font-sans">
+  <aside class="hidden lg:flex w-72 bg-slate-900 text-slate-200 flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs" aria-label="Navegación principal">
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" aria-current="page" class="sidebar-link flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-200"></i><span>Resumen Operativo</span>
+        </a>
+      </div>
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i><span>Empresas Generadoras</span></a>
+          <a href="hu_02_plantas_procesadoras.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="factory" class="w-4 h-4 text-slate-400"></i><span>Plantas Procesadoras</span></a>
+          <a href="hu_03_oferta_empresas.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="scale" class="w-4 h-4 text-slate-400"></i><span>Oferta Semanal (t/sem)</span></a>
+          <a href="hu_04_capacidad_plantas.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i><span>Capacidad de Plantas</span></a>
+          <a href="hu_05_distancias_viales.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i><span>Distancias Viales (km)</span></a>
+          <a href="hu_06_costos_transporte.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i><span>Costos de Transporte</span></a>
+          <a href="hu_07_validacion_escenario.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i><span>Verificación de Datos</span></a>
+        </div>
+      </div>
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i><span>Resolución Método Exacto</span></a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i><span>Modelo y Pasos Exactos</span></a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i><span>Comparativa Exacto vs. AG</span></a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="activity" class="w-4 h-4 text-slate-400"></i><span>Evolución por Generaciones</span></a>
+        </div>
+      </div>
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_11_sensibilidad_ofertas.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i><span>Variación de Ofertas (±%)</span></a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i><span>Variación de Capacidades</span></a>
+        </div>
+      </div>
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis y Escalabilidad</p>
+        <a href="hu_17_escalabilidad_red.html" class="sidebar-link flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition"><i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i><span>Escalabilidad de Red (N×M)</span></a>
+      </div>
+    </nav>
+
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden"><p class="text-white font-medium truncate">Coordinador Logístico</p><p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p></div>
+    </div>
+  </aside>
+
+  <main class="flex-1 min-w-0 lg:overflow-y-auto">
+    <header class="bg-white border-b border-slate-200 px-5 sm:px-6 min-h-16 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
+        <div><h2 class="text-base font-bold text-slate-800">Panel Principal</h2><p class="text-xs text-slate-500">Vista general de los módulos de planificación semanal</p></div>
+      </div>
+      <span class="hidden sm:inline-flex items-center gap-1.5 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 shrink-0"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-700"></i>EcoResiduos del Llano · Meta</span>
+    </header>
+
+    <div class="p-5 sm:p-6 space-y-6 max-w-[1480px] mx-auto">
+      <section class="bg-gradient-to-r from-emerald-900 to-slate-900 text-white p-5 sm:p-6 rounded-xl shadow-md flex flex-wrap items-center justify-between gap-5" aria-labelledby="tituloInicio">
+        <div class="max-w-2xl">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-300">Resumen operativo</span>
+          <h3 id="tituloInicio" class="text-xl sm:text-2xl font-bold mt-1">Planificación de transporte de residuos</h3>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">Accede a la configuración de la red, la optimización, los escenarios de sensibilidad y el análisis desde un solo lugar.</p>
+        </div>
+        <div class="flex gap-5 sm:gap-7 text-center shrink-0">
+          <div><strong class="block text-2xl font-bold text-emerald-300">4</strong><span class="text-[11px] text-slate-300">áreas</span></div>
+          <div class="w-px bg-slate-600"></div>
+          <div><strong class="block text-2xl font-bold text-emerald-300">14</strong><span class="text-[11px] text-slate-300">vistas disponibles</span></div>
+        </div>
+      </section>
+
+      <div class="flex items-center justify-between gap-4">
+        <div><h3 class="text-sm font-bold text-slate-900">Áreas del software</h3><p class="text-xs text-slate-500 mt-0.5">Selecciona una vista para abrirla.</p></div>
+        <span class="hidden sm:flex items-center gap-1.5 text-[11px] font-medium text-slate-500"><i data-lucide="mouse-pointer-2" class="w-3.5 h-3.5"></i>Enlaces a pantallas existentes</span>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 items-start">
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="redTitulo">
+          <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 grid place-items-center shrink-0"><i data-lucide="network" class="w-5 h-5"></i></div><div><span class="text-[10px] uppercase tracking-wider font-bold text-emerald-700">01 · Configuración</span><h4 id="redTitulo" class="text-base font-bold text-slate-900">Red y Parámetros</h4><p class="text-xs text-slate-500 mt-1">Define los orígenes, destinos y datos de transporte.</p></div></div>
+            <span class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full whitespace-nowrap">7 vistas</span>
+          </div>
+          <div class="p-3 grid sm:grid-cols-2 gap-1.5">
+            <a href="hu_01_empresas_generadoras.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="building-2" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Empresas generadoras</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_02_plantas_procesadoras.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="factory" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Plantas procesadoras</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_03_oferta_empresas.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="scale" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Oferta semanal</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_04_capacidad_plantas.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="warehouse" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Capacidad de plantas</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_05_distancias_viales.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="milestone" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Distancias viales</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_06_costos_transporte.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Costos de transporte</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+            <a href="hu_07_validacion_escenario.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-emerald-50 transition group"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Verificación de datos</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-700"></i></a>
+          </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="optTitulo">
+          <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-700 grid place-items-center shrink-0"><i data-lucide="chart-no-axes-combined" class="w-5 h-5"></i></div><div><span class="text-[10px] uppercase tracking-wider font-bold text-indigo-700">02 · Cálculo</span><h4 id="optTitulo" class="text-base font-bold text-slate-900">Optimización y Seguimiento</h4><p class="text-xs text-slate-500 mt-1">Consulta la resolución exacta y el comportamiento del AG.</p></div></div>
+            <span class="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-2 py-1 rounded-full whitespace-nowrap">4 vistas</span>
+          </div>
+          <div class="p-3 grid sm:grid-cols-2 gap-1.5">
+            <a href="hu_08_resolucion_exacta_estados.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-indigo-50 transition group"><i data-lucide="check-circle" class="w-4 h-4 text-indigo-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Resolución exacta</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-700"></i></a>
+            <a href="hu_19_procedimiento_metodo_exacto.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-indigo-50 transition group"><i data-lucide="list-ordered" class="w-4 h-4 text-indigo-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Modelo y pasos exactos</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-700"></i></a>
+            <a href="hu_16_comparacion_exacto_vs_ag.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-indigo-50 transition group"><i data-lucide="git-compare" class="w-4 h-4 text-indigo-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Comparativa exacto vs. AG</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-700"></i></a>
+            <a href="hu_18_seguimiento_generaciones_ag.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-indigo-50 transition group"><i data-lucide="activity" class="w-4 h-4 text-indigo-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Evolución por generaciones</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-700"></i></a>
+          </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="simTitulo">
+          <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-700 grid place-items-center shrink-0"><i data-lucide="sliders-horizontal" class="w-5 h-5"></i></div><div><span class="text-[10px] uppercase tracking-wider font-bold text-sky-700">03 · Escenarios</span><h4 id="simTitulo" class="text-base font-bold text-slate-900">Simulación de Escenarios</h4><p class="text-xs text-slate-500 mt-1">Explora cambios en oferta y capacidad.</p></div></div>
+            <span class="text-[11px] font-semibold bg-sky-50 text-sky-700 px-2 py-1 rounded-full whitespace-nowrap">2 vistas</span>
+          </div>
+          <div class="p-3 grid sm:grid-cols-2 gap-1.5">
+            <a href="hu_11_sensibilidad_ofertas.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-sky-50 transition group"><i data-lucide="sliders" class="w-4 h-4 text-sky-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Variación de ofertas</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-700"></i></a>
+            <a href="hu_12_sensibilidad_capacidades.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-sky-50 transition group"><i data-lucide="gauge" class="w-4 h-4 text-sky-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Variación de capacidades</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-700"></i></a>
+          </div>
+        </section>
+
+        <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="anaTitulo">
+          <div class="p-5 border-b border-slate-100 flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 grid place-items-center shrink-0"><i data-lucide="maximize-2" class="w-5 h-5"></i></div><div><span class="text-[10px] uppercase tracking-wider font-bold text-amber-700">04 · Análisis</span><h4 id="anaTitulo" class="text-base font-bold text-slate-900">Análisis y Escalabilidad</h4><p class="text-xs text-slate-500 mt-1">Revisa el rendimiento de la red ampliada.</p></div></div>
+            <span class="text-[11px] font-semibold bg-amber-50 text-amber-700 px-2 py-1 rounded-full whitespace-nowrap">1 vista</span>
+          </div>
+          <div class="p-3">
+            <a href="hu_17_escalabilidad_red.html" class="module-link flex items-center gap-2.5 p-2.5 rounded-lg hover:bg-amber-50 transition group"><i data-lucide="maximize-2" class="w-4 h-4 text-amber-700 shrink-0"></i><span class="text-xs font-semibold text-slate-800 flex-1">Escalabilidad de red (N×M)</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-700"></i></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

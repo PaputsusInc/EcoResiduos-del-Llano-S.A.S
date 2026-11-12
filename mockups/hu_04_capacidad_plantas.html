@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capacidad de Plantas — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN REAL) -->
+  <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-900/30">
+        <i data-lucide="leaf" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="warehouse" class="w-4 h-4 text-emerald-200"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Perfil del Operador -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[11px]">
+          CL
+        </div>
+        <div>
+          <p class="font-medium text-white leading-tight">Coordinador Logístico</p>
+          <p class="text-[10px] text-slate-400">Villavicencio · Meta</p>
+        </div>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-500" title="En línea"></span>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+    
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between shrink-0 shadow-sm">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+          <i data-lucide="warehouse" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900 leading-tight">Capacidad Máxima Semanal de Plantas</h2>
+          <p class="text-xs text-slate-500">Límites superiores de recepción para la semana activa de planificación</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Indicador de Balance -->
+        <div id="badgeBalance" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-xs text-emerald-800 font-medium">
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+          <span>Capacidad Total: <strong id="lblCapacidadTotalTop" class="font-mono">135,0 t/sem</strong> &ge; Oferta Fija: <strong class="font-mono">115,0 t/sem</strong></span>
+        </div>
+
+        <button onclick="guardarCapacidades()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i>
+          <span>Guardar Cambios</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ALERTA OPERATIVA: CAPACIDAD SUPERADA POR LA OFERTA -->
+    <div id="alertaDeficitCapacidad" class="hidden bg-red-600 text-white px-6 py-2.5 flex items-center justify-between shadow-md shrink-0">
+      <div class="flex items-center space-x-3">
+        <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+        <div>
+          <span class="font-bold text-sm">Capacidad superada por la oferta</span>
+          <span class="text-xs text-red-100 ml-2">La capacidad agregada programada (<span id="lblCapDeficit" class="font-bold">110,0</span> t/sem) es menor a la oferta fija a transportar (115,0 t/sem). La red se torna infactible.</span>
+        </div>
+      </div>
+      <button onclick="restablecerCapacidadesBase()" class="text-xs bg-white text-red-700 font-bold px-3 py-1 rounded shadow hover:bg-red-50">
+        Restablecer Límites Nominales
+      </button>
+    </div>
+
+    <!-- CUERPO SCROLLABLE -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- TARJETAS EDITABLES POR PLANTA -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="contenedorPlantasGrid">
+        <!-- Render dinámico vía JavaScript -->
+      </div>
+
+      <!-- TABLA DE BALANCE OPERATIVO DE CAPACIDAD -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden space-y-3 p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Resumen y Ajuste de Capacidad Semanal</h3>
+            <p class="text-xs text-slate-500">Define la cantidad máxima semanal de residuos que cada planta puede recibir y procesar.</p>
+          </div>
+          <button onclick="restablecerCapacidadesBase()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center space-x-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>Restablecer límites base</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-700 font-semibold border-b border-slate-200">
+                <th class="py-3 px-4">Código</th>
+                <th class="py-3 px-4">Nombre de la Planta</th>
+                <th class="py-3 px-4">Ubicación</th>
+                <th class="py-3 px-4 text-center">Capacidad Base</th>
+                <th class="py-3 px-4 text-right w-44">Capacidad Semanal (t)</th>
+                <th class="py-3 px-4 text-center">Recepción Estimada</th>
+                <th class="py-3 px-4 text-right">Holgura Libre</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCapacidadesBody" class="divide-y divide-slate-100">
+              <!-- Render dinámico -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-200">
+                <td colspan="4" class="py-3 px-4 text-left">CAPACIDAD TOTAL PROGRAMADA EN LA RED</td>
+                <td id="lblTotalCapPie" class="py-3 px-4 text-right font-mono text-emerald-700 text-sm">135,0 t/sem</td>
+                <td class="py-3 px-4 text-center font-mono">115,0 t/sem</td>
+                <td id="lblTotalHolguraPie" class="py-3 px-4 text-right font-mono text-emerald-700 text-sm">20,0 t/sem</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT REACTIVO Y CÁLCULOS -->
+  <script>
+    const OFERTA_TOTAL_FIJA = 115.0; // t/semana
+
+    const PLANTAS_BASE = [
+      { id: 'PLA-01', nombre: 'Planta Villavicencio', municipio: 'Villavicencio', capBase: 45.0, capActual: 45.0, flujoEstimado: 45.0, min: 10, max: 70 },
+      { id: 'PLA-02', nombre: 'Planta Restrepo', municipio: 'Restrepo', capBase: 25.0, capActual: 25.0, flujoEstimado: 25.0, min: 5, max: 50 },
+      { id: 'PLA-03', nombre: 'Planta Granada', municipio: 'Granada', capBase: 35.0, capActual: 35.0, flujoEstimado: 35.0, min: 10, max: 60 },
+      { id: 'PLA-04', nombre: 'Planta Puerto Gaitán', municipio: 'Puerto Gaitán', capBase: 30.0, capActual: 30.0, flujoEstimado: 10.0, min: 5, max: 60 }
+    ];
+
+    let plantas = PLANTAS_BASE.map(p => ({ ...p }));
+
+    function renderizarTodo() {
+      renderizarTarjetas();
+      renderizarTabla();
+      actualizarTotales();
+    }
+
+    function renderizarTarjetas() {
+      const grid = document.getElementById('contenedorPlantasGrid');
+      grid.innerHTML = '';
+
+      plantas.forEach((p, idx) => {
+        const holgura = Math.max(0, p.capActual - p.flujoEstimado);
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3';
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-slate-700 px-2 py-0.5 rounded bg-slate-100">${p.id}</span>
+            <span class="text-[11px] text-slate-500 font-medium">${p.municipio}</span>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-slate-900">${p.nombre}</h4>
+            <p class="text-[10px] text-slate-400">Límite superior semanal</p>
+          </div>
+
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-baseline">
+              <span class="text-[11px] text-slate-500">Capacidad:</span>
+              <span class="font-mono font-bold text-slate-900 text-sm">${p.capActual.toFixed(1)} t/sem</span>
+            </div>
+            <input type="range" min="${p.min}" max="${p.max}" step="0.5" value="${p.capActual}"
+              oninput="actualizarCapacidad(${idx}, this.value)"
+              class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+            <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+              <span>Mín: ${p.min} t</span>
+              <span>Base: ${p.capBase} t</span>
+              <span>Máx: ${p.max} t</span>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex justify-between text-[11px]">
+            <span class="text-slate-500">Holgura prevista:</span>
+            <strong class="font-mono ${holgura <= 0 ? 'text-amber-700' : 'text-emerald-700'}">${holgura.toFixed(1)} t/sem</strong>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function renderizarTabla() {
+      const tbody = document.getElementById('tablaCapacidadesBody');
+      tbody.innerHTML = '';
+
+      plantas.forEach((p, idx) => {
+        const holgura = Math.max(0, p.capActual - p.flujoEstimado);
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 font-mono font-bold text-slate-800">${p.id}</td>
+          <td class="py-2.5 px-4 font-semibold text-slate-900">${p.nombre}</td>
+          <td class="py-2.5 px-4 text-slate-600">${p.municipio}</td>
+          <td class="py-2.5 px-4 text-center font-mono text-slate-500">${p.capBase.toFixed(1)} t</td>
+          <td class="py-2.5 px-4 text-right">
+            <div class="inline-flex items-center space-x-1.5">
+              <input type="number" step="0.5" min="${p.min}" max="${p.max}" value="${p.capActual.toFixed(1)}"
+                oninput="actualizarCapacidad(${idx}, this.value)"
+                class="w-24 px-2 py-1 text-right text-xs font-mono font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+              <span class="text-[11px] text-slate-400 font-mono">t</span>
+            </div>
+          </td>
+          <td class="py-2.5 px-4 text-center font-mono text-slate-700">${p.flujoEstimado.toFixed(1)} t</td>
+          <td class="py-2.5 px-4 text-right font-mono font-bold ${holgura <= 0 ? 'text-amber-700' : 'text-emerald-700'}">
+            ${holgura.toFixed(1)} t/sem
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    function actualizarCapacidad(idx, valor) {
+      const valNum = parseFloat(valor);
+      plantas[idx].capActual = isNaN(valNum) || valNum < 0 ? 0 : valNum;
+      actualizarTotales();
+      renderizarTarjetas();
+    }
+
+    function actualizarTotales() {
+      const totalCap = plantas.reduce((acc, curr) => acc + curr.capActual, 0);
+      const holguraTotal = totalCap - OFERTA_TOTAL_FIJA;
+
+      document.getElementById('lblCapacidadTotalTop').textContent = `${totalCap.toFixed(1)} t/sem`;
+      document.getElementById('lblTotalCapPie').textContent = `${totalCap.toFixed(1)} t/sem`;
+      document.getElementById('lblTotalHolguraPie').textContent = `${holguraTotal.toFixed(1)} t/sem`;
+
+      const alerta = document.getElementById('alertaDeficitCapacidad');
+      const badgeBalance = document.getElementById('badgeBalance');
+
+      if (totalCap < OFERTA_TOTAL_FIJA) {
+        // Alerta: Capacidad superada por la oferta
+        alerta.classList.remove('hidden');
+        document.getElementById('lblCapDeficit').textContent = totalCap.toFixed(1);
+
+        badgeBalance.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-red-300 bg-red-50 text-xs text-red-800 font-bold';
+        badgeBalance.innerHTML = `<i data-lucide="alert-octagon" class="w-4 h-4 text-red-600"></i><span>Déficit de Capacidad: ${totalCap.toFixed(1)} t &lt; 115,0 t</span>`;
+      } else {
+        alerta.classList.add('hidden');
+        badgeBalance.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-xs text-emerald-800 font-medium';
+        badgeBalance.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i><span>Capacidad Total: <strong class="font-mono">${totalCap.toFixed(1)} t/sem</strong> &ge; Oferta Fija: <strong class="font-mono">115,0 t/sem</strong></span>`;
+      }
+      lucide.createIcons();
+    }
+
+    function restablecerCapacidadesBase() {
+      plantas = PLANTAS_BASE.map(p => ({ ...p }));
+      renderizarTodo();
+    }
+
+    function guardarCapacidades() {
+      const total = plantas.reduce((acc, curr) => acc + curr.capActual, 0);
+      alert(`Capacidades máximas de recepción guardadas exitosamente.\nCapacidad total instalada: ${total.toFixed(1)} t/semana.`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarTodo();
+    });
+  </script>
+</body>
+</html>

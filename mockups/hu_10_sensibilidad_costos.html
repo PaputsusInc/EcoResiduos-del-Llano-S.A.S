@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulación de Variación de Costos de Transporte — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-200"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="trending-up" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Simulación de Variación de Costos de Transporte</h2>
+          <p class="text-xs text-slate-500">Análisis de sensibilidad ante fluctuaciones de fletes, tarifas y combustible en la red del Meta</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600">
+          <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Variante en Edición: <strong class="text-slate-800">VAR-C01 (Alza Combustible)</strong></span>
+        </div>
+
+        <button onclick="resolverVariante()" class="flex items-center space-x-1.5 px-3.5 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition shadow-sm">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>Guardar y Resolver Variante</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Panel de Configuración de la Simulación -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Parámetros de la Variación de Costos</h3>
+            <p class="text-xs text-slate-500">Seleccione el corredor o conexiones a perturbar para proyectar el impacto en la asignación óptima</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs text-slate-500">Preajustes rápidos:</span>
+            <button onclick="aplicarPreset(10, 'todas')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium transition">
+              +10 % General
+            </button>
+            <button onclick="aplicarPreset(20, 'PLA-04')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-medium transition">
+              +20 % Puerto Gaitán
+            </button>
+            <button onclick="restablecerReferencia()" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded text-xs font-medium transition">
+              Restablecer Referencia
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Ámbito de la Variación</label>
+            <select id="selAmbito" onchange="actualizarTabla()" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option value="todas">Todas las conexiones transitables (39 rutas)</option>
+              <option value="PLA-01">Hacia Planta Villavicencio (PLA-01)</option>
+              <option value="PLA-02">Hacia Planta Restrepo (PLA-02)</option>
+              <option value="PLA-03">Hacia Planta Granada (PLA-03)</option>
+              <option value="PLA-04" selected>Hacia Planta Puerto Gaitán (PLA-04)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo de Ajuste</label>
+            <div class="flex items-center space-x-2">
+              <select id="selTipoAjuste" class="text-xs bg-slate-50 border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <option value="pct">Porcentaje (%)</option>
+                <option value="fijo">Valor fijo (COP/t)</option>
+              </select>
+              <input id="inputMagnitud" type="number" value="15" step="1" class="w-full text-xs bg-white border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-slate-800">
+            </div>
+          </div>
+          <div class="flex items-end">
+            <button onclick="aplicarAjusteManual()" class="w-full py-2 px-4 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-1.5 shadow-sm">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>Aplicar Ajuste a la Simulación</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas Comparativas de Impacto Económico -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Costo Base de Referencia</span>
+          <div class="text-xl font-bold text-slate-600">$ 450.250 <span class="text-xs font-normal">COP</span></div>
+          <p class="text-xs text-slate-400 mt-1">Escenario semanal ESC-01</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Costo en Escenario Variante</span>
+          <div id="cardCostoVariante" class="text-2xl font-black text-slate-800">$ 468.900 <span class="text-xs font-medium text-slate-500">COP</span></div>
+          <p id="cardDeltaCosto" class="text-xs text-rose-600 font-bold mt-1">▲ +$ 18.650 COP (+4,14 %)</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Estado de la Red</span>
+          <div class="flex items-center space-x-1.5 text-emerald-700 font-bold text-base mt-0.5">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Óptimo Certificado</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Demanda y capacidad satisfechas</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Rutas Reconfiguradas</span>
+          <div id="cardRutasMod" class="text-2xl font-black text-slate-800">2 <span class="text-xs font-medium text-slate-500">conexiones</span></div>
+          <p class="text-xs text-slate-500 mt-1">Redistribución por sensibilidad</p>
+        </div>
+      </div>
+
+      <!-- Tabla Comparativa de Conexiones: Referencia vs. Variante -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Tabla Comparativa de Tarifas y Flujos Asignados</h3>
+            <p class="text-xs text-slate-500">Monitoree el impacto directo del cambio de costo unitario sobre el volumen transportado hacia cada planta</p>
+          </div>
+          <span class="text-xs text-slate-500">Mostrando conexiones activas o modificadas</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Conexión (Origen → Destino)</th>
+                <th class="py-3 px-3 text-right">Distancia</th>
+                <th class="py-3 px-3 text-right">Costo Base (COP/t)</th>
+                <th class="py-3 px-3 text-center">Variación Aplicada</th>
+                <th class="py-3 px-3 text-right bg-emerald-50/60 text-emerald-900 font-bold">Costo Variante (COP/t)</th>
+                <th class="py-3 px-3 text-right">Flujo Base (t/sem)</th>
+                <th class="py-3 px-3 text-right bg-emerald-50/60 text-emerald-900 font-bold">Flujo Variante (t/sem)</th>
+                <th class="py-3 px-4 text-right">Subtotal Variante (COP)</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCostosBody" class="divide-y divide-slate-100">
+              <!-- Render dinámico de filas -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-100 font-bold text-slate-800 border-t-2 border-slate-300">
+                <td colspan="5" class="py-3 px-4">Totales de la Simulación Semanal</td>
+                <td class="py-3 px-3 text-right text-slate-600">115,0 t/sem</td>
+                <td id="totFlujoVar" class="py-3 px-3 text-right text-emerald-700 font-black">115,0 t/sem</td>
+                <td id="totCostoVar" class="py-3 px-4 text-right text-emerald-800 text-sm font-black">$ 468.900 COP</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Conexiones de referencia
+    const conexiones = [
+      { id: "EMP-01_PLA-01", origen: "EMP-01 (Palmar del Llano)", dest: "PLA-01", dist: "45 km", costoBase: 3500, flujoBase: 25.0, varPct: 0 },
+      { id: "EMP-02_PLA-01", origen: "EMP-02 (Agroind. Meta)", dest: "PLA-01", dist: "28 km", costoBase: 2800, flujoBase: 15.0, varPct: 0 },
+      { id: "EMP-03_PLA-04", origen: "EMP-03 (Bioenergía)", dest: "PLA-04", dist: "85 km", costoBase: 5200, flujoBase: 20.0, varPct: 15 },
+      { id: "EMP-04_PLA-02", origen: "EMP-04 (Molinos Oriente)", dest: "PLA-02", dist: "18 km", costoBase: 2100, flujoBase: 10.0, varPct: 0 },
+      { id: "EMP-05_PLA-02", origen: "EMP-05 (Aceites Llano)", dest: "PLA-02", dist: "22 km", costoBase: 2400, flujoBase: 8.0, varPct: 0 },
+      { id: "EMP-06_PLA-03", origen: "EMP-06 (Hda. La Cabaña)", dest: "PLA-03", dist: "15 km", costoBase: 1900, flujoBase: 12.0, varPct: 0 },
+      { id: "EMP-07_PLA-02", origen: "EMP-07 (Arrocera Esmeralda)", dest: "PLA-02", dist: "12 km", costoBase: 1600, flujoBase: 5.0, varPct: 0 },
+      { id: "EMP-07_PLA-04", origen: "EMP-07 (Arrocera Esmeralda)", dest: "PLA-04", dist: "110 km", costoBase: 6800, flujoBase: 2.0, varPct: 15 },
+      { id: "EMP-08_PLA-03", origen: "EMP-08 (Extractora Central)", dest: "PLA-03", dist: "32 km", costoBase: 3100, flujoBase: 6.0, varPct: 0 },
+      { id: "EMP-09_PLA-03", origen: "EMP-09 (Frigorífico Ariari)", dest: "PLA-03", dist: "25 km", costoBase: 2700, flujoBase: 5.0, varPct: 0 },
+      { id: "EMP-10_PLA-02", origen: "EMP-10 (Maderas Biomasa)", dest: "PLA-02", dist: "65 km", costoBase: 5000, flujoBase: 7.0, varPct: 0 }
+    ];
+
+    function actualizarTabla() {
+      const tbody = document.getElementById('tablaCostosBody');
+      tbody.innerHTML = '';
+
+      let costoTotalVar = 0;
+      let flujoTotalVar = 0;
+      let rutasModificadas = 0;
+
+      conexiones.forEach(c => {
+        const costoVar = Math.round(c.costoBase * (1 + c.varPct / 100));
+        const subtotal = c.flujoBase * costoVar;
+        costoTotalVar += subtotal;
+        flujoTotalVar += c.flujoBase;
+
+        if (c.varPct !== 0) rutasModificadas++;
+
+        const tr = document.createElement('tr');
+        tr.className = c.varPct !== 0 ? "bg-amber-50/40 hover:bg-amber-50/80 transition" : "hover:bg-slate-50 transition";
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 font-medium text-slate-800">
+            <span>${c.origen}</span>
+            <span class="text-slate-400 mx-1">→</span>
+            <span class="font-bold text-slate-700">${c.dest}</span>
+          </td>
+          <td class="py-2.5 px-3 text-right text-slate-600">${c.dist}</td>
+          <td class="py-2.5 px-3 text-right text-slate-600">$ ${c.costoBase.toLocaleString('es-CO')}</td>
+          <td class="py-2.5 px-3 text-center">
+            ${c.varPct > 0 
+              ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">+${c.varPct} %</span>`
+              : (c.varPct < 0 
+                  ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700">${c.varPct} %</span>`
+                  : `<span class="text-slate-400">0 %</span>`)
+            }
+          </td>
+          <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">
+            $ ${costoVar.toLocaleString('es-CO')}
+          </td>
+          <td class="py-2.5 px-3 text-right text-slate-600">${c.flujoBase.toFixed(1).replace('.', ',')}</td>
+          <td class="py-2.5 px-3 text-right font-bold text-slate-800 bg-emerald-50/30">${c.flujoBase.toFixed(1).replace('.', ',')}</td>
+          <td class="py-2.5 px-4 text-right font-black text-slate-900">$ ${subtotal.toLocaleString('es-CO')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('totCostoVar').innerText = `$ ${costoTotalVar.toLocaleString('es-CO')} COP`;
+      document.getElementById('cardCostoVariante').innerHTML = `$ ${costoTotalVar.toLocaleString('es-CO')} <span class="text-xs font-medium text-slate-500">COP</span>`;
+
+      const delta = costoTotalVar - 450250;
+      const pctDelta = ((delta / 450250) * 100).toFixed(2).replace('.', ',');
+      const elDelta = document.getElementById('cardDeltaCosto');
+      if (delta >= 0) {
+        elDelta.className = "text-xs text-rose-600 font-bold mt-1";
+        elDelta.innerText = `▲ +$ ${delta.toLocaleString('es-CO')} COP (+${pctDelta} %)`;
+      } else {
+        elDelta.className = "text-xs text-emerald-600 font-bold mt-1";
+        elDelta.innerText = `▼ -$ ${Math.abs(delta).toLocaleString('es-CO')} COP (${pctDelta} %)`;
+      }
+
+      document.getElementById('cardRutasMod').innerHTML = `${rutasModificadas} <span class="text-xs font-medium text-slate-500">conexiones</span>`;
+      lucide.createIcons();
+    }
+
+    function aplicarPreset(pct, destino) {
+      conexiones.forEach(c => {
+        if (destino === 'todas' || c.dest === destino) {
+          c.varPct = pct;
+        } else {
+          c.varPct = 0;
+        }
+      });
+      actualizarTabla();
+    }
+
+    function aplicarAjusteManual() {
+      const ambito = document.getElementById('selAmbito').value;
+      const pct = parseFloat(document.getElementById('inputMagnitud').value) || 0;
+      conexiones.forEach(c => {
+        if (ambito === 'todas' || c.dest === ambito) {
+          c.varPct = pct;
+        }
+      });
+      actualizarTabla();
+    }
+
+    function restablecerReferencia() {
+      conexiones.forEach(c => c.varPct = 0);
+      actualizarTabla();
+    }
+
+    function resolverVariante() {
+      alert("Variante guardada y recalculada con éxito bajo el modelo exacto. La solución permanece Óptima.");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      actualizarTabla();
+    });
+  </script>
+</body>
+</html>
+

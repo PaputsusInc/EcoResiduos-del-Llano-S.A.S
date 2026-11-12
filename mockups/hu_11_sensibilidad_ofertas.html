@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulación de Variación de Ofertas Semanales — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="sliders" class="w-4 h-4 text-emerald-200"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="sliders" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Simulación de Variación de Ofertas Semanales (±%)</h2>
+          <p class="text-xs text-slate-500">Evaluación de cambios en la generación de biomasa por empresa agropecuaria</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600">
+          <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Variante en Análisis: <strong class="text-slate-800">VAR-O01 (+20 % Palmar del Llano)</strong></span>
+        </div>
+
+        <button onclick="guardarVariante()" class="flex items-center space-x-1.5 px-3.5 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700 transition shadow-sm">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i>
+          <span>Guardar Variante y Reoptimizar</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Alerta Dinámica de Capacidad Superada -->
+      <div id="alertaCapacidad" class="hidden bg-rose-50 border border-rose-300 p-4 rounded-xl flex items-center space-x-3 shadow-sm">
+        <div class="p-2 bg-rose-100 text-rose-700 rounded-lg">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 text-xs">
+          <h4 class="font-bold text-rose-900 text-sm">Capacidad superada por la oferta</h4>
+          <p class="text-rose-700 mt-0.5">La oferta total simulada excede la capacidad instalada semanal de 135,0 t/semana de las 4 plantas. El problema resultará infactible.</p>
+        </div>
+        <span id="badgeExceso" class="px-2.5 py-1 bg-rose-200 text-rose-900 font-bold text-xs rounded-lg">+0,0 t exceso</span>
+      </div>
+
+      <!-- Tarjetas de Balance de Red de la Variante -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Oferta Base (Referencia)</span>
+          <div class="text-xl font-bold text-slate-600">115,0 <span class="text-xs font-normal">t/semana</span></div>
+          <p class="text-xs text-slate-400 mt-1">10 empresas agropecuarias</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Oferta Variante Simulada</span>
+          <div id="cardOfertaVar" class="text-2xl font-black text-slate-800">120,0 <span class="text-xs font-medium text-slate-500">t/semana</span></div>
+          <p id="cardDeltaOferta" class="text-xs text-emerald-600 font-bold mt-1">▲ +5,0 t/semana (+4,35 %)</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Capacidad Total de Red</span>
+          <div class="text-xl font-bold text-slate-800">135,0 <span class="text-xs font-medium text-slate-500">t/semana</span></div>
+          <p id="cardHolgura" class="text-xs text-emerald-600 font-semibold mt-1">Holgura disponible: 15,0 t/sem</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Costo Proyectado Estimado</span>
+          <div id="cardCostoEst" class="text-2xl font-black text-slate-800">$ 467.750 <span class="text-xs font-medium text-slate-500">COP</span></div>
+          <p class="text-xs text-slate-500 mt-1">+17.500 COP (+3,88 %)</p>
+        </div>
+      </div>
+
+      <!-- Tabla Interactiva de Simulación de Oferta por Empresa -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Control de Variación de Oferta por Origen (t/semana)</h3>
+            <p class="text-xs text-slate-500">Ajuste el porcentaje de variación individual o ingrese directamente las toneladas semanales deseadas</p>
+          </div>
+          <button onclick="restablecerOfertas()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition shadow-sm">
+            Restablecer Valores Base
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Código</th>
+                <th class="py-3 px-4">Empresa Generadora</th>
+                <th class="py-3 px-3">Municipio</th>
+                <th class="py-3 px-3 text-right">Oferta Base (t/sem)</th>
+                <th class="py-3 px-4 text-center w-56">Variación Porcentual (±%)</th>
+                <th class="py-3 px-3 text-right bg-emerald-50/60 text-emerald-900 font-bold">Nueva Oferta (t/sem)</th>
+                <th class="py-3 px-3 text-right">Diferencia (Δ)</th>
+                <th class="py-3 px-3 text-right">Participación (%)</th>
+              </tr>
+            </thead>
+            <tbody id="tablaOfertasBody" class="divide-y divide-slate-100">
+              <!-- Renderizado dinámico -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-100 font-bold text-slate-800 border-t-2 border-slate-300">
+                <td colspan="3" class="py-3 px-4">Total Oferta de la Red</td>
+                <td class="py-3 px-3 text-right text-slate-600">115,0 t/sem</td>
+                <td class="py-3 px-4 text-center text-slate-400">—</td>
+                <td id="totOfertaVar" class="py-3 px-3 text-right text-emerald-700 font-black">120,0 t/sem</td>
+                <td id="totDeltaTons" class="py-3 px-3 text-right text-emerald-700 font-bold">+5,0 t/sem</td>
+                <td class="py-3 px-3 text-right text-slate-900">100,0 %</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const empresasData = [
+      { id: "EMP-01", nombre: "Palmar del Llano S.A.", muni: "San Carlos de Guaroa", base: 25.0, varPct: 20 },
+      { id: "EMP-02", nombre: "Agroindustrial del Meta", muni: "Acacías", base: 15.0, varPct: 0 },
+      { id: "EMP-03", nombre: "Bioenergía Los Llanos", muni: "Puerto López", base: 20.0, varPct: 0 },
+      { id: "EMP-04", nombre: "Molinos del Oriente", muni: "Villavicencio", base: 10.0, varPct: 0 },
+      { id: "EMP-05", nombre: "Aceites y Grasas del Llano", muni: "Cumaral", base: 8.0, varPct: 0 },
+      { id: "EMP-06", nombre: "Hacienda La Cabaña", muni: "Granada", base: 12.0, varPct: 0 },
+      { id: "EMP-07", nombre: "Arrocera La Esmeralda", muni: "Restrepo", base: 7.0, varPct: 0 },
+      { id: "EMP-08", nombre: "Extractora Central Meta", muni: "San Martín", base: 6.0, varPct: 0 },
+      { id: "EMP-09", nombre: "Frigorífico del Ariari", muni: "Fuente de Oro", base: 5.0, varPct: 0 },
+      { id: "EMP-10", nombre: "Maderas y Biomasa del Meta", muni: "Barranca de Upía", base: 7.0, varPct: 0 }
+    ];
+
+    const CAPACIDAD_MAXIMA_RED = 135.0;
+
+    function renderTabla() {
+      const tbody = document.getElementById('tablaOfertasBody');
+      tbody.innerHTML = '';
+
+      let totalOfertaVar = 0;
+
+      // Calcular nuevo total para participación
+      empresasData.forEach(e => {
+        const nueva = Math.max(0, e.base * (1 + e.varPct / 100));
+        totalOfertaVar += nueva;
+      });
+
+      empresasData.forEach((e, idx) => {
+        const nuevaOferta = Math.max(0, e.base * (1 + e.varPct / 100));
+        const delta = nuevaOferta - e.base;
+        const part = ((nuevaOferta / totalOfertaVar) * 100).toFixed(1).replace('.', ',');
+
+        const tr = document.createElement('tr');
+        tr.className = e.varPct !== 0 ? "bg-emerald-50/30 hover:bg-emerald-50/60 transition" : "hover:bg-slate-50 transition";
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 font-mono text-slate-500 font-bold">${e.id}</td>
+          <td class="py-2.5 px-4 font-medium text-slate-800">${e.nombre}</td>
+          <td class="py-2.5 px-3 text-slate-600">${e.muni}</td>
+          <td class="py-2.5 px-3 text-right text-slate-600">${e.base.toFixed(1).replace('.', ',')}</td>
+          <td class="py-2.5 px-4 text-center">
+            <div class="flex items-center space-x-2">
+              <input type="range" min="-50" max="100" step="5" value="${e.varPct}" 
+                oninput="actualizarVarSlider(${idx}, this.value)"
+                class="w-full accent-emerald-600 cursor-pointer">
+              <span class="w-12 text-right font-mono text-xs font-bold ${e.varPct > 0 ? 'text-emerald-700' : (e.varPct < 0 ? 'text-amber-700' : 'text-slate-400')}">
+                ${e.varPct > 0 ? '+' : ''}${e.varPct}%
+              </span>
+            </div>
+          </td>
+          <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/40">
+            ${nuevaOferta.toFixed(1).replace('.', ',')}
+          </td>
+          <td class="py-2.5 px-3 text-right font-medium ${delta > 0 ? 'text-emerald-700' : (delta < 0 ? 'text-amber-700' : 'text-slate-400')}">
+            ${delta > 0 ? '+' : ''}${delta.toFixed(1).replace('.', ',')}
+          </td>
+          <td class="py-2.5 px-3 text-right text-slate-600 font-medium">${part} %</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Actualizar Totales y KPIs
+      document.getElementById('totOfertaVar').innerText = `${totalOfertaVar.toFixed(1).replace('.', ',')} t/sem`;
+      document.getElementById('cardOfertaVar').innerHTML = `${totalOfertaVar.toFixed(1).replace('.', ',')} <span class="text-xs font-medium text-slate-500">t/semana</span>`;
+
+      const deltaTotal = totalOfertaVar - 115.0;
+      const pctDeltaTotal = ((deltaTotal / 115.0) * 100).toFixed(2).replace('.', ',');
+      const elDeltaTotal = document.getElementById('totDeltaTons');
+      const elCardDelta = document.getElementById('cardDeltaOferta');
+
+      if (deltaTotal >= 0) {
+        elDeltaTotal.className = "py-3 px-3 text-right text-emerald-700 font-bold";
+        elDeltaTotal.innerText = `+${deltaTotal.toFixed(1).replace('.', ',')} t/sem`;
+        elCardDelta.className = "text-xs text-emerald-600 font-bold mt-1";
+        elCardDelta.innerText = `▲ +${deltaTotal.toFixed(1).replace('.', ',')} t/semana (+${pctDeltaTotal} %)`;
+      } else {
+        elDeltaTotal.className = "py-3 px-3 text-right text-amber-700 font-bold";
+        elDeltaTotal.innerText = `${deltaTotal.toFixed(1).replace('.', ',')} t/sem`;
+        elCardDelta.className = "text-xs text-amber-600 font-bold mt-1";
+        elCardDelta.innerText = `▼ ${deltaTotal.toFixed(1).replace('.', ',')} t/semana (${pctDeltaTotal} %)`;
+      }
+
+      // Validar Capacidad de Red
+      const alerta = document.getElementById('alertaCapacidad');
+      const cardHolgura = document.getElementById('cardHolgura');
+
+      if (totalOfertaVar > CAPACIDAD_MAXIMA_RED) {
+        alerta.classList.remove('hidden');
+        const exceso = (totalOfertaVar - CAPACIDAD_MAXIMA_RED).toFixed(1).replace('.', ',');
+        document.getElementById('badgeExceso').innerText = `+${exceso} t de sobrecarga`;
+        cardHolgura.className = "text-xs text-rose-600 font-bold mt-1";
+        cardHolgura.innerText = `Déficit: -${exceso} t/sem`;
+      } else {
+        alerta.classList.add('hidden');
+        const holgura = (CAPACIDAD_MAXIMA_RED - totalOfertaVar).toFixed(1).replace('.', ',');
+        cardHolgura.className = "text-xs text-emerald-600 font-semibold mt-1";
+        cardHolgura.innerText = `Holgura disponible: ${holgura} t/sem`;
+      }
+
+      // Costo proyectado aproximado
+      const costoEst = Math.round(450250 * (totalOfertaVar / 115.0));
+      document.getElementById('cardCostoEst').innerHTML = `$ ${costoEst.toLocaleString('es-CO')} <span class="text-xs font-medium text-slate-500">COP</span>`;
+    }
+
+    function actualizarVarSlider(index, valor) {
+      empresasData[index].varPct = parseInt(valor);
+      renderTabla();
+    }
+
+    function restablecerOfertas() {
+      empresasData.forEach(e => e.varPct = 0);
+      renderTabla();
+    }
+
+    function guardarVariante() {
+      alert("Variante de ofertas guardada exitosamente. Lista para comparar en el Comparador de Escenarios.");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderTabla();
+    });
+  </script>
+</body>
+</html>
+

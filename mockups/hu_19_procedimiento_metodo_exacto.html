@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelo y pasos del método exacto — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-emerald-200"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-emerald-200"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto" id="contenido">
+    <header class="min-h-16 bg-white border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700"><i data-lucide="list-ordered" class="w-5 h-5"></i></div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Modelo y Pasos del Método Exacto</h2>
+          <p class="text-xs text-slate-500">Solución inicial por Vogel · optimización y comprobación por MODI</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <label for="escenario" class="text-xs text-slate-500 font-medium">Consultar cálculo:</label>
+        <select id="escenario" class="text-xs font-semibold rounded-lg border border-slate-300 px-3 py-1.5 bg-white text-slate-800 focus:ring-2 focus:ring-emerald-500" onchange="mostrarEscenario(this.value)">
+          <option value="base">EJE-01 · ESC-01 Caso de referencia</option>
+          <option value="inviable">EJE-04 · ESC-04 Oferta superior a capacidad</option>
+        </select>
+        <a href="hu_08_resolucion_exacta_estados.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm transition"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>Resultado exacto</a>
+      </div>
+    </header>
+
+    <div id="panelBase" class="p-6 space-y-6">
+      <section class="bg-gradient-to-r from-emerald-900 to-slate-900 text-white p-5 rounded-xl shadow-md flex flex-wrap items-center justify-between gap-4" aria-labelledby="tituloEstado">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">Óptimo verificado por MODI</span><span class="font-mono text-xs text-slate-300">EJE-01 · ESC-01</span></div>
+          <h3 id="tituloEstado" class="text-lg font-bold">Del modelo de transporte a la asignación final</h3>
+          <p class="text-xs text-slate-300 max-w-2xl">Registro ilustrativo de la misma ejecución: se conserva la matriz usada, la solución inicial de Vogel, las iteraciones MODI y la comprobación de restricciones.</p>
+        </div>
+        <div class="text-right"><span class="block text-[11px] text-slate-300">Costo final de este ejemplo</span><strong class="text-2xl text-emerald-300 font-mono">$ 997.500 <span class="text-xs font-sans">COP</span></strong></div>
+      </section>
+
+      <nav aria-label="Etapas del procedimiento" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <a href="#modelo" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs grid place-items-center shrink-0">01</span><span><strong class="block text-xs text-slate-800">Modelo formulado</strong><small class="text-[11px] text-slate-500">Datos y restricciones</small></span></a>
+        <a href="#vogel" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs grid place-items-center shrink-0">02</span><span><strong class="block text-xs text-slate-800">Método de Vogel</strong><small class="text-[11px] text-slate-500">Solución inicial</small></span></a>
+        <a href="#modi" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs grid place-items-center shrink-0">03</span><span><strong class="block text-xs text-slate-800">Método MODI</strong><small class="text-[11px] text-slate-500">Mejora de la solución</small></span></a>
+        <a href="#verificacion" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs grid place-items-center shrink-0">04</span><span><strong class="block text-xs text-slate-800">Verificación</strong><small class="text-[11px] text-slate-500">Flujos, límites y costo</small></span></a>
+      </nav>
+
+      <section id="modelo" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 scroll-mt-5" aria-labelledby="tituloModelo">
+        <div class="flex flex-wrap justify-between gap-3 border-b border-slate-100 pb-3"><div><div class="flex items-center gap-2"><i data-lucide="boxes" class="w-4 h-4 text-emerald-600"></i><h3 id="tituloModelo" class="text-sm font-bold text-slate-900">01 · Modelo de transporte formulado</h3></div><p class="text-xs text-slate-500 mt-1">Datos congelados de EJE-01: 10 empresas, 4 plantas y costos unitarios en COP/t.</p></div><span class="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg h-fit">115 t/sem de oferta · 135 t/sem de capacidad</span></div>
+        <div class="grid lg:grid-cols-3 gap-4">
+          <div class="lg:col-span-2 rounded-lg bg-slate-900 text-slate-100 p-4 font-mono text-xs leading-7 overflow-x-auto">
+            <p class="text-emerald-300 font-sans font-bold mb-1">Función objetivo · minimizar costo semanal</p>
+            <p>Min Z = Σ<sub>i∈Empresas</sub> Σ<sub>j∈Plantas disponibles</sub> c<sub>ij</sub> · x<sub>ij</sub></p>
+            <p><span class="text-slate-400">Oferta:</span> Σ<sub>j</sub> x<sub>ij</sub> = oferta<sub>i</sub> &nbsp; para cada empresa i</p>
+            <p><span class="text-slate-400">Capacidad:</span> Σ<sub>i</sub> x<sub>ij</sub> ≤ capacidad<sub>j</sub> &nbsp; para cada planta j</p>
+            <p><span class="text-slate-400">Dominio:</span> x<sub>ij</sub> ≥ 0; x<sub>10,3</sub> = 0 por conexión no disponible</p>
+          </div>
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200"><p class="text-[11px] uppercase font-semibold tracking-wider text-slate-500">Variable del modelo</p><p class="text-xs font-mono font-bold mt-1">x<sub>i,j</sub> = toneladas/semana</p><p class="text-[11px] text-slate-500 mt-1">Ejemplo: x<sub>1,1</sub> conecta EMP-01 con PLA-01.</p></div>
+            <div class="p-3 bg-amber-50 rounded-lg border border-amber-200"><p class="text-[11px] font-semibold text-amber-800">Balance para Vogel y MODI</p><p class="text-xs text-amber-900 mt-1">Se agrega un origen auxiliar de 20 t con costo 0 para representar capacidad sin utilizar. No es un envío real.</p></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto border border-slate-200 rounded-lg"><table class="min-w-[820px] w-full text-xs text-right border-collapse" aria-label="Matriz de costos, ofertas y capacidades del escenario"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2.5 text-left">Origen / costo COP/t</th><th class="p-2.5">PLA-01<br><small class="font-normal">Villavicencio</small></th><th class="p-2.5">PLA-02<br><small class="font-normal">Restrepo</small></th><th class="p-2.5">PLA-03<br><small class="font-normal">Granada</small></th><th class="p-2.5">PLA-04<br><small class="font-normal">Puerto Gaitán</small></th><th class="p-2.5">Oferta t/sem</th></tr></thead><tbody id="tablaCostos" class="divide-y divide-slate-100 font-mono"></tbody><tfoot class="bg-emerald-50 font-bold text-emerald-800"><tr><th class="p-2.5 text-left">Capacidad máxima</th><td class="p-2.5">45</td><td class="p-2.5">25</td><td class="p-2.5">35</td><td class="p-2.5">30</td><td class="p-2.5">135</td></tr></tfoot></table></div>
+      </section>
+
+      <section id="vogel" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 scroll-mt-5" aria-labelledby="tituloVogel">
+        <div class="flex flex-wrap justify-between gap-3 border-b border-slate-100 pb-3"><div><div class="flex items-center gap-2"><i data-lucide="route" class="w-4 h-4 text-emerald-600"></i><h3 id="tituloVogel" class="text-sm font-bold text-slate-900">02 · Vogel: solución inicial factible</h3></div><p class="text-xs text-slate-500 mt-1">En cada paso se compara la diferencia entre los dos menores costos disponibles por fila o columna.</p></div><div class="text-right"><small class="block text-slate-500 text-[11px]">Costo intermedio · todavía no óptimo</small><strong class="text-lg font-mono text-slate-800">$ 1.052.550 COP</strong></div></div>
+        <div class="grid lg:grid-cols-3 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Primera penalización máxima</span><p class="mt-1 font-semibold text-slate-900">Fila EMP-04: 26.550 − 5.400 = <strong class="text-emerald-700">21.150 COP/t</strong></p></div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200"><span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Primera asignación</span><p class="mt-1 font-semibold text-slate-900">EMP-04 → PLA-03: mín(12, 35) = <strong>12 t</strong></p></div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200"><span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Saldo tras el paso</span><p class="mt-1 font-semibold text-slate-900">EMP-04: <strong>0 t</strong> · PLA-03: <strong>23 t</strong> libres</p></div>
+        </div>
+        <div class="overflow-x-auto border border-slate-200 rounded-lg"><table class="min-w-[740px] w-full text-xs text-left" aria-label="Pasos de asignación de Vogel"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2.5">Paso</th><th class="p-2.5">Fila / columna seleccionada</th><th class="p-2.5">Penalización</th><th class="p-2.5">Conexión asignada</th><th class="p-2.5 text-right">Cantidad</th><th class="p-2.5 text-right">Costo unitario</th></tr></thead><tbody id="tablaVogel" class="divide-y divide-slate-100"></tbody></table></div>
+        <p class="text-[11px] text-slate-500">El origen auxiliar absorbe 20 t de capacidad libre. Su asignación no se incluye en el costo real.</p>
+      </section>
+
+      <section id="modi" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 scroll-mt-5" aria-labelledby="tituloModi">
+        <div class="flex flex-wrap justify-between gap-3 border-b border-slate-100 pb-3"><div><div class="flex items-center gap-2"><i data-lucide="git-branch" class="w-4 h-4 text-emerald-600"></i><h3 id="tituloModi" class="text-sm font-bold text-slate-900">03 · MODI: prueba y mejora de optimalidad</h3></div><p class="text-xs text-slate-500 mt-1">Se calculan potenciales de filas y columnas; un costo reducido negativo señala una mejora posible.</p></div><span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg h-fit">3 ajustes · último costo reducido ≥ 0</span></div>
+        <div class="overflow-x-auto border border-slate-200 rounded-lg"><table class="min-w-[870px] w-full text-xs text-left" aria-label="Iteraciones de MODI"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2.5">Iteración</th><th class="p-2.5">Celda entrante</th><th class="p-2.5 text-right">Costo reducido</th><th class="p-2.5 text-right">Ajuste θ</th><th class="p-2.5">Celda saliente</th><th class="p-2.5 text-right">Costo tras el ajuste</th></tr></thead><tbody class="divide-y divide-slate-100"><tr><td class="p-2.5 font-semibold">1</td><td class="p-2.5">Auxiliar → PLA-02</td><td class="p-2.5 text-right font-mono text-rose-700">−16.050 COP/t</td><td class="p-2.5 text-right font-mono">1 t</td><td class="p-2.5">EMP-08 → PLA-01</td><td class="p-2.5 text-right font-mono font-semibold">$ 1.036.500</td></tr><tr class="bg-slate-50"><td class="p-2.5 font-semibold">2</td><td class="p-2.5">EMP-10 → PLA-04</td><td class="p-2.5 text-right font-mono text-rose-700">−7.800 COP/t</td><td class="p-2.5 text-right font-mono">5 t</td><td class="p-2.5">EMP-10 → PLA-02</td><td class="p-2.5 text-right font-mono font-semibold">$ 997.500</td></tr><tr><td class="p-2.5 font-semibold">3</td><td class="p-2.5">EMP-07 → PLA-03</td><td class="p-2.5 text-right font-mono text-rose-700">−3.150 COP/t</td><td class="p-2.5 text-right font-mono">0 t</td><td class="p-2.5">Auxiliar → PLA-03</td><td class="p-2.5 text-right font-mono font-semibold">$ 997.500</td></tr></tbody></table></div>
+        <div class="flex items-start gap-3 rounded-lg bg-emerald-50 border border-emerald-200 p-4"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-700 shrink-0"></i><div><p class="text-xs font-bold text-emerald-900">Criterio final cumplido</p><p class="text-xs text-emerald-800 mt-1">Tras actualizar la base en la iteración degenerada (θ = 0), todos los costos reducidos de las conexiones no básicas disponibles son no negativos. MODI certifica el costo mínimo del modelo mostrado.</p></div></div>
+      </section>
+
+      <section id="verificacion" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 scroll-mt-5" aria-labelledby="tituloVerificacion">
+        <div class="flex flex-wrap justify-between gap-3 border-b border-slate-100 pb-3"><div><div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i><h3 id="tituloVerificacion" class="text-sm font-bold text-slate-900">04 · Asignación final y comprobación</h3></div><p class="text-xs text-slate-500 mt-1">Toneladas por conexión: cada oferta se asigna, ninguna planta excede su capacidad.</p></div><strong class="text-lg font-mono text-emerald-700">$ 997.500 COP</strong></div>
+        <div class="overflow-x-auto border border-slate-200 rounded-lg"><table class="min-w-[820px] w-full text-xs text-right" aria-label="Matriz final de toneladas asignadas"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2.5 text-left">Origen / flujo t/sem</th><th class="p-2.5">PLA-01</th><th class="p-2.5">PLA-02</th><th class="p-2.5">PLA-03</th><th class="p-2.5">PLA-04</th><th class="p-2.5">Total salida</th><th class="p-2.5">Oferta</th></tr></thead><tbody id="tablaFinal" class="divide-y divide-slate-100 font-mono"></tbody><tfoot class="bg-emerald-50 text-emerald-800 font-bold"><tr><th class="p-2.5 text-left">Total recibido</th><td class="p-2.5">45</td><td class="p-2.5">19</td><td class="p-2.5">35</td><td class="p-2.5">16</td><td class="p-2.5">115</td><td class="p-2.5">115</td></tr><tr class="border-t border-emerald-200"><th class="p-2.5 text-left">Capacidad máxima</th><td class="p-2.5">45</td><td class="p-2.5">25</td><td class="p-2.5">35</td><td class="p-2.5">30</td><td class="p-2.5" colspan="2">135</td></tr></tfoot></table></div>
+        <div class="grid md:grid-cols-3 gap-3 text-xs"><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><strong class="text-emerald-800">10 de 10 ofertas completas</strong><p class="text-slate-600 mt-1">Σ flujos por empresa = oferta</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><strong class="text-emerald-800">4 de 4 capacidades respetadas</strong><p class="text-slate-600 mt-1">Σ flujos por planta ≤ capacidad</p></div><div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200"><strong class="text-emerald-800">Conexiones válidas</strong><p class="text-slate-600 mt-1">EMP-10 → PLA-03 mantiene flujo cero</p></div></div>
+      </section>
+    </div>
+
+    <div id="panelInviable" class="hidden p-6 space-y-6" aria-live="polite">
+      <section class="bg-rose-600 text-white p-6 rounded-xl shadow-md flex items-start gap-4"><i data-lucide="alert-octagon" class="w-7 h-7 shrink-0"></i><div><span class="text-[10px] uppercase font-bold tracking-wider bg-rose-800/50 px-2 py-0.5 rounded">EJE-04 · ESC-04 · Inviable</span><h3 class="text-lg font-bold mt-1">No existe una asignación factible</h3><p class="text-xs text-rose-50 mt-1">La oferta semanal es 120 t y la capacidad máxima conjunta es 100 t. El déficit de 20 t impide cumplir las restricciones de oferta.</p></div></section>
+      <div class="grid md:grid-cols-2 gap-4"><div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><h4 class="text-sm font-bold text-slate-900">Preparación y formulación completadas</h4><p class="text-xs text-slate-600 mt-2">1. Se leyeron los datos efectivos de ESC-04: oferta 120 t; capacidad 100 t.</p><p class="text-xs text-slate-600 mt-1">2. Se comprobó la condición necesaria 120 ≤ 100: <strong class="text-rose-700">falsa</strong>.</p></div><div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><h4 class="text-sm font-bold text-slate-900">Procedimiento detenido</h4><p class="text-xs text-slate-600 mt-2">Vogel y MODI no generan pasos de asignación para este caso. No se presenta costo óptimo ni matriz final.</p><a href="hu_08_resolucion_exacta_estados.html" class="inline-flex mt-3 text-xs font-semibold text-emerald-700 hover:underline">Consultar estado de la resolución →</a></div></div>
+    </div>
+  </main>
+  <script>
+    const empresas = [
+      ['EMP-01',25,[8250,12360,18600,44400]],
+      ['EMP-02',15,[19200,23550,9600,55500]],
+      ['EMP-03',18,[6600,4350,32400,34500]],
+      ['EMP-04',12,[26550,30600,5400,63000]],
+      ['EMP-05',8,[22800,27000,2550,59400]],
+      ['EMP-06',6,[2850,6900,25200,37800]],
+      ['EMP-07',10,[14400,18600,15300,50700]],
+      ['EMP-08',11,[24600,28800,49500,12600]],
+      ['EMP-09',5,[12600,16800,14400,48900]],
+      ['EMP-10',5,[33600,31200,null,23400]]
+    ];
+    const asignacionFinal = [[25,0,0,0],[0,0,15,0],[0,18,0,0],[0,0,12,0],[0,0,8,0],[5,1,0,0],[10,0,0,0],[0,0,0,11],[5,0,0,0],[0,0,0,5]];
+    const pasosVogel = [
+      ['Fila EMP-04',21150,'EMP-04 → PLA-03',12,5400],
+      ['Fila EMP-05',20250,'EMP-05 → PLA-03',8,2550],
+      ['Columna PLA-04',12600,'Auxiliar → PLA-04',20,0],
+      ['Fila EMP-08',12000,'EMP-08 → PLA-04',10,12600],
+      ['Fila EMP-02',9600,'EMP-02 → PLA-03',15,9600],
+      ['Fila EMP-09',4200,'EMP-09 → PLA-01',5,12600],
+      ['Fila EMP-07',4200,'EMP-07 → PLA-01',10,14400],
+      ['Fila EMP-08',4200,'EMP-08 → PLA-01',1,24600],
+      ['Fila EMP-01',4110,'EMP-01 → PLA-01',25,8250],
+      ['Fila EMP-06',4050,'EMP-06 → PLA-01',4,2850],
+      ['Fila EMP-10',31200,'EMP-10 → PLA-02',5,31200],
+      ['Fila EMP-06',6900,'EMP-06 → PLA-02',2,6900],
+      ['Columna PLA-02',4350,'EMP-03 → PLA-02',18,4350]
+    ];
+    const pesos = valor => new Intl.NumberFormat('es-CO').format(valor);
+    const tablaCostos = document.getElementById('tablaCostos');
+    const tablaFinal = document.getElementById('tablaFinal');
+    empresas.forEach(([id, oferta, costos], i) => {
+      tablaCostos.insertAdjacentHTML('beforeend', `<tr class="hover:bg-slate-50"><th class="p-2.5 text-left font-sans font-semibold text-slate-800">${id}</th>${costos.map(c => `<td class="p-2.5 ${c === null ? 'bg-amber-50 text-amber-700 font-sans' : ''}">${c === null ? 'Sin ruta' : pesos(c)}</td>`).join('')}<td class="p-2.5 font-bold">${oferta}</td></tr>`);
+      const flujos = asignacionFinal[i];
+      tablaFinal.insertAdjacentHTML('beforeend', `<tr class="hover:bg-slate-50"><th class="p-2.5 text-left font-sans font-semibold text-slate-800">${id}</th>${flujos.map((x,j) => `<td class="p-2.5 ${x ? 'font-bold text-emerald-700 bg-emerald-50/50' : j === 2 && i === 9 ? 'text-amber-600' : 'text-slate-400'}">${x || '—'}</td>`).join('')}<td class="p-2.5 font-semibold">${flujos.reduce((a,b)=>a+b,0)}</td><td class="p-2.5">${oferta}</td></tr>`);
+    });
+    document.getElementById('tablaVogel').innerHTML = pasosVogel.map((paso,i) => `<tr class="${i===0?'bg-emerald-50/60':'hover:bg-slate-50'}"><td class="p-2.5 font-mono font-bold">${i+1}</td><td class="p-2.5">${paso[0]}</td><td class="p-2.5 font-mono">${pesos(paso[1])} COP/t</td><td class="p-2.5 font-semibold">${paso[2]}</td><td class="p-2.5 text-right font-mono font-bold">${paso[3]} t</td><td class="p-2.5 text-right font-mono">${pesos(paso[4])} COP/t</td></tr>`).join('');
+    function mostrarEscenario(valor) {
+      document.getElementById('panelBase').classList.toggle('hidden', valor !== 'base');
+      document.getElementById('panelInviable').classList.toggle('hidden', valor !== 'inviable');
+      document.getElementById('contenido').scrollTo({top: 0, behavior: 'smooth'});
+    }
+    lucide.createIcons();
+  </script>
+</body>
+</html>

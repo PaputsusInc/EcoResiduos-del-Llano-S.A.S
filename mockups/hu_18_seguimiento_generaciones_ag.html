@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Evolución por Generaciones (Algoritmo Genético) — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="activity" class="w-4 h-4 text-emerald-200"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="activity" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Monitor de Evolución por Generaciones (Algoritmo Genético)</h2>
+          <p class="text-xs text-slate-500">Trazabilidad detallada de convergencia, costos factibles y aptitud cromosoma por cromosoma</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600">
+          <i data-lucide="cpu" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <span>Cálculo: <strong class="text-slate-800">EJE-02 (ESC-01 Base)</strong></span>
+        </div>
+
+        <button onclick="window.print()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Exportar Curvas</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Fila de Tarjetas de Estado de la Ejecución del AG -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Estado de la Búsqueda</span>
+          <div class="flex items-center space-x-1.5 text-emerald-700 font-bold text-base mt-0.5">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Finalizado Factible</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">200 de 200 generaciones evaluadas</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Mejor Costo Factible Acumulado</span>
+          <div class="text-2xl font-black text-slate-800">$ 458.530 <span class="text-xs font-medium text-slate-500">COP</span></div>
+          <p class="text-xs text-indigo-600 font-medium mt-1">Alcanzado en la generación 142</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Mayor Aptitud Alcanzada</span>
+          <div class="text-2xl font-black text-slate-800">0,9819</div>
+          <p class="text-xs text-slate-400 mt-1">Puntaje adimensional de convergencia</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Motivo de Parada</span>
+          <div class="text-sm font-bold text-slate-800 mt-1">Límite de Generaciones</div>
+          <p class="text-xs text-slate-500 mt-0.5">200 iteraciones completadas (0,815 s)</p>
+        </div>
+      </div>
+
+      <!-- Gráfica Interactiva Plotly.js de Convergencia -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Curvas de Evolución del Costo Factible y Aptitud por Generación</h3>
+            <p class="text-xs text-slate-500">Inspeccione la trayectoria descendente del costo semanal y el incremento de aptitud poblacional</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs">
+            <span class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span><span class="text-slate-600">Mejor Costo Acumulado</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span><span class="text-slate-600">Mejor Costo de Generación</span></span>
+            <span class="flex items-center space-x-1.5"><span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span><span class="text-slate-600">Aptitud (Eje Der.)</span></span>
+          </div>
+        </div>
+        <div id="plotConvergencia" style="height: 320px;"></div>
+      </div>
+
+      <!-- Tabla Detallada de Historial por Generación -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Historial de Generaciones de la Sesión</h3>
+            <p class="text-xs text-slate-500">Muestra la población inicial (Gen 0) y el avance hacia la solución final</p>
+          </div>
+          <span class="text-xs text-slate-500 font-medium">Muestra representativa de hitos de la corrida</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">N.º Generación</th>
+                <th class="py-3 px-4 text-center">Candidatos Factibles</th>
+                <th class="py-3 px-3 text-right">Mejor Costo de la Generación (COP)</th>
+                <th class="py-3 px-3 text-right bg-indigo-50/60 text-indigo-950 font-bold">Mejor Costo Acumulado (COP)</th>
+                <th class="py-3 px-3 text-right">Mayor Aptitud (Adimensional)</th>
+                <th class="py-3 px-4">Observación Operativa</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <!-- Generación 0 (Población inicial aleatoria) -->
+              <tr class="bg-slate-50/60 hover:bg-slate-100/60 transition">
+                <td class="py-2.5 px-4 font-mono font-bold text-slate-800">Gen 0 (Población Inicial)</td>
+                <td class="py-2.5 px-4 text-center font-bold text-rose-600">0 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-medium text-slate-400">No disponible</td>
+                <td class="py-2.5 px-3 text-right font-medium text-slate-400 bg-indigo-50/20">No disponible</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-600">0,4120</td>
+                <td class="py-2.5 px-4 text-slate-500 text-[11px]">Inicialización aleatoria. Sin individuos factibles que cumplan todas las restricciones.</td>
+              </tr>
+              <!-- Generación 1 -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-mono font-medium text-slate-800">Gen 1</td>
+                <td class="py-2.5 px-4 text-center font-medium text-emerald-700">42 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">$ 492.300</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900 bg-indigo-50/30">$ 492.300</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">0,7840</td>
+                <td class="py-2.5 px-4 text-slate-600 text-[11px]">Primera asignación factible identificada mediante operadores de reparación.</td>
+              </tr>
+              <!-- Generación 10 -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-mono font-medium text-slate-800">Gen 10</td>
+                <td class="py-2.5 px-4 text-center font-medium text-emerald-700">68 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">$ 478.100</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900 bg-indigo-50/30">$ 478.100</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">0,8450</td>
+                <td class="py-2.5 px-4 text-slate-600 text-[11px]">Cruce en dos puntos combina rutas eficientes de la zona central.</td>
+              </tr>
+              <!-- Generación 50 -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-mono font-medium text-slate-800">Gen 50</td>
+                <td class="py-2.5 px-4 text-center font-medium text-emerald-700">82 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">$ 465.400</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900 bg-indigo-50/30">$ 465.400</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">0,9120</td>
+                <td class="py-2.5 px-4 text-slate-600 text-[11px]">Reducción acelerada del costo en corredores Restrepo y Villavicencio.</td>
+              </tr>
+              <!-- Generación 100 -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-mono font-medium text-slate-800">Gen 100</td>
+                <td class="py-2.5 px-4 text-center font-medium text-emerald-700">89 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">$ 460.200</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900 bg-indigo-50/30">$ 460.200</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">0,9580</td>
+                <td class="py-2.5 px-4 text-slate-600 text-[11px]">Mutación explora variantes en el corredor Puerto Gaitán.</td>
+              </tr>
+              <!-- Generación 142 -->
+              <tr class="bg-indigo-50/40 hover:bg-indigo-50/70 transition">
+                <td class="py-2.5 px-4 font-mono font-bold text-indigo-900">Gen 142 (Mejor Hallazgo)</td>
+                <td class="py-2.5 px-4 text-center font-bold text-emerald-700">92 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900">$ 458.530</td>
+                <td class="py-2.5 px-3 text-right font-mono font-black text-indigo-900 bg-indigo-100/60">$ 458.530</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-indigo-900">0,9819</td>
+                <td class="py-2.5 px-4 text-indigo-800 font-semibold text-[11px]">Se alcanza la mejor solución factible de la corrida (Gap 1,84 % vs. exacto).</td>
+              </tr>
+              <!-- Generación 200 -->
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-mono font-bold text-slate-800">Gen 200 (Final)</td>
+                <td class="py-2.5 px-4 text-center font-medium text-emerald-700">94 de 100 candidatos</td>
+                <td class="py-2.5 px-3 text-right font-mono text-slate-700">$ 459.100</td>
+                <td class="py-2.5 px-3 text-right font-mono font-black text-indigo-900 bg-indigo-50/40">$ 458.530</td>
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-slate-800">0,9819</td>
+                <td class="py-2.5 px-4 text-slate-600 text-[11px]">Criterio de parada alcanzado (200 generaciones). Se conserva la mejor solución de Gen 142.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    function renderPlotConvergencia() {
+      // Puntos representativos para la gráfica (0 a 200)
+      const gens = [0, 1, 5, 10, 20, 35, 50, 75, 100, 120, 142, 160, 180, 200];
+      const costoGen = [null, 492300, 485000, 478100, 474000, 469200, 465400, 462800, 460200, 459600, 458530, 459200, 458900, 459100];
+      const costoAcum = [null, 492300, 485000, 478100, 474000, 469200, 465400, 462800, 460200, 459600, 458530, 458530, 458530, 458530];
+      const aptitud = [0.412, 0.784, 0.815, 0.845, 0.875, 0.895, 0.912, 0.938, 0.958, 0.970, 0.9819, 0.9819, 0.9819, 0.9819];
+
+      const traceAcum = {
+        x: gens,
+        y: costoAcum,
+        name: 'Mejor Costo Acumulado (COP)',
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#4f46e5', width: 3 },
+        marker: { size: 6 }
+      };
+
+      const traceGen = {
+        x: gens,
+        y: costoGen,
+        name: 'Mejor Costo de Generación (COP)',
+        type: 'scatter',
+        mode: 'lines',
+        line: { color: '#94a3b8', width: 1.5, dash: 'dot' }
+      };
+
+      const traceAptitud = {
+        x: gens,
+        y: aptitud,
+        name: 'Mayor Aptitud (Adimensional)',
+        yaxis: 'y2',
+        type: 'scatter',
+        mode: 'lines',
+        line: { color: '#059669', width: 2 }
+      };
+
+      const layout = {
+        margin: { t: 20, b: 40, l: 60, r: 60 },
+        font: { family: 'sans-serif', size: 10, color: '#475569' },
+        xaxis: { title: 'Número de Generación (0 a 200)' },
+        yaxis: {
+          title: 'Costo Factible (COP)',
+          range: [440000, 510000],
+          tickformat: ',.0f'
+        },
+        yaxis2: {
+          title: 'Aptitud Adimensional',
+          overlaying: 'y',
+          side: 'right',
+          range: [0.3, 1.05],
+          showgrid: false
+        },
+        legend: { orientation: 'h', x: 0.1, y: 1.15 }
+      };
+
+      Plotly.newPlot('plotConvergencia', [traceAcum, traceGen, traceAptitud], layout, { responsive: true, displayModeBar: false });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderPlotConvergencia();
+    });
+  </script>
+</body>
+</html>
+

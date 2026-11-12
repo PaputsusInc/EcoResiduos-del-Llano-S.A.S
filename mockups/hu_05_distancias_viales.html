@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distancias Viales — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN REAL) -->
+  <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-900/30">
+        <i data-lucide="leaf" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="milestone" class="w-4 h-4 text-emerald-200"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Perfil del Operador -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[11px]">
+          CL
+        </div>
+        <div>
+          <p class="font-medium text-white leading-tight">Coordinador Logístico</p>
+          <p class="text-[10px] text-slate-400">Villavicencio · Meta</p>
+        </div>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-500" title="En línea"></span>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+    
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between shrink-0 shadow-sm">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+          <i data-lucide="milestone" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900 leading-tight">Red de Conexiones y Distancias Viales</h2>
+          <p class="text-xs text-slate-500">Matriz de kilometraje en el sentido empresa generadora &rarr; planta procesadora</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Conmutador de Vistas -->
+        <div class="bg-slate-100 p-1 rounded-lg border border-slate-200 flex items-center text-xs">
+          <button id="btnVistaMatriz" onclick="cambiarVista('MATRIZ')" class="px-3 py-1 rounded-md font-semibold bg-white text-slate-900 shadow-sm flex items-center space-x-1.5 transition">
+            <i data-lucide="grid" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>Matriz Origen-Destino (10×4)</span>
+          </button>
+          <button id="btnVistaListado" onclick="cambiarVista('LISTADO')" class="px-3 py-1 rounded-md font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 transition">
+            <i data-lucide="list" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Listado de Conexiones</span>
+          </button>
+          <button id="btnVistaMapa" onclick="cambiarVista('MAPA')" class="px-3 py-1 rounded-md font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 transition">
+            <i data-lucide="map" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>Mapa de Recorridos</span>
+          </button>
+        </div>
+
+        <a href="hu_06_costos_transporte.html" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition">
+          <span>Costos de Transporte</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- CUERPO SCROLLABLE -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- TARJETA INFORMATIVA OPERATIVA -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+            <i data-lucide="map" class="w-4 h-4 text-emerald-600"></i>
+          </div>
+          <div>
+            <span class="font-bold text-slate-900">Fuente Vial Registrada:</span>
+            <span class="text-slate-600 ml-1">OpenStreetMap (mapa base) · OSRM driving (consulta vial provisional)</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3 text-slate-500">
+          <span>40 pares dirigidos de ejemplo</span>
+          <span>·</span>
+          <span class="text-amber-700 font-medium">Distancias de la matriz: ilustrativas</span>
+        </div>
+      </div>
+
+      <!-- VISTA 1: MATRIZ ORIGEN-DESTINO (10 x 4) -->
+      <div id="vistaMatriz" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden space-y-3 p-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Matriz de Distancias Viales ($km$)</h3>
+            <p class="text-xs text-slate-500">Datos ilustrativos del mockup. Consulta el recorrido seleccionado en la vista de mapa.</p>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">Unidad: Kilómetros (km)</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-center border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-700 font-semibold border-b border-slate-200">
+                <th class="py-3 px-4 text-left">Empresa Origen</th>
+                <th class="py-3 px-4 text-left">Municipio</th>
+                <th class="py-3 px-4">PLA-01<br><span class="text-[10px] text-slate-500 font-normal">Villavicencio</span></th>
+                <th class="py-3 px-4">PLA-02<br><span class="text-[10px] text-slate-500 font-normal">Restrepo</span></th>
+                <th class="py-3 px-4">PLA-03<br><span class="text-[10px] text-slate-500 font-normal">Granada</span></th>
+                <th class="py-3 px-4">PLA-04<br><span class="text-[10px] text-slate-500 font-normal">Puerto Gaitán</span></th>
+                <th class="py-3 px-4 text-right">Dist. Mínima</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMatrizDistancias" class="divide-y divide-slate-100 font-mono">
+              <!-- Render dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VISTA 2: LISTADO DETALLADO DE CONEXIONES -->
+      <div id="vistaListado" class="hidden bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden space-y-3 p-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Listado Completo de Conexiones Dirigidas</h3>
+            <p class="text-xs text-slate-500">Registro de cada par empresa-planta con su fuente de distancia documentada</p>
+          </div>
+          <div class="relative w-64">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+            <input type="text" id="filtroListado" oninput="filtrarListadoConexiones()" placeholder="Filtrar por origen o destino..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50">
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-700 font-semibold border-b border-slate-200">
+                <th class="py-2.5 px-4">Empresa de Origen</th>
+                <th class="py-2.5 px-4">Planta de Destino</th>
+                <th class="py-2.5 px-4 text-right">Distancia Vial (km)</th>
+                <th class="py-2.5 px-4">Fuente de la Distancia</th>
+                <th class="py-2.5 px-4 text-center">Estado de Ruta</th>
+              </tr>
+            </thead>
+            <tbody id="tablaListadoConexiones" class="divide-y divide-slate-100">
+              <!-- Render dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Consulta vial de una conexión seleccionada -->
+      <div id="vistaMapa" class="hidden bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="text-sm font-bold text-slate-900">Recorrido vial entre empresa y planta</h3>
+          <p class="text-xs text-slate-500">Selecciona una conexión para consultar y destacar su recorrido sobre OpenStreetMap.</p>
+        </div>
+        <div class="flex flex-wrap items-end gap-3 text-xs">
+          <div class="min-w-64 flex-1"><label for="origenMapa" class="block font-medium text-slate-700 mb-1">Empresa de origen</label><select id="origenMapa" onchange="consultarRuta()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white"></select></div>
+          <div class="min-w-64 flex-1"><label for="destinoMapa" class="block font-medium text-slate-700 mb-1">Planta de destino</label><select id="destinoMapa" onchange="consultarRuta()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white"></select></div>
+          <button onclick="consultarRuta()" class="px-3.5 py-2 rounded-lg bg-emerald-600 text-white font-semibold shadow-sm">Reintentar consulta</button>
+        </div>
+        <div id="mapaRecorridos" class="h-[440px] w-full rounded-lg border border-slate-200 bg-slate-100"></div>
+        <p id="avisoMapaRecorridos" class="hidden text-xs text-amber-700">El mapa base no está disponible. Los datos de la conexión siguen visibles.</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-200"><span class="block text-slate-500">Origen</span><strong id="rutaOrigen" class="text-slate-900">—</strong></div>
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-200"><span class="block text-slate-500">Destino</span><strong id="rutaDestino" class="text-slate-900">—</strong></div>
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-200"><span class="block text-slate-500">Distancia vial</span><strong id="rutaDistancia" class="text-slate-900 font-mono">Pendiente</strong></div>
+          <div class="p-3 bg-slate-50 rounded-lg border border-slate-200"><span class="block text-slate-500">Estado · Proveedor</span><strong id="rutaEstado" class="text-slate-900">Pendiente · OSRM</strong></div>
+        </div>
+        <p class="text-[11px] text-slate-500">OSRM driving es provisional: el recorrido mostrado no certifica aptitud para camiones ni asignación de toneladas.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT Y MATRIZ DE DATOS -->
+  <script>
+    const EMPRESAS = [
+      { id: 'EMP-01', nombre: 'Palmeras del Llano', mun: 'Acacías' },
+      { id: 'EMP-02', nombre: 'Agropecuaria San Martín', mun: 'San Martín' },
+      { id: 'EMP-03', nombre: 'Hacienda La Cabaña', mun: 'Cumaral' },
+      { id: 'EMP-04', nombre: 'Arrocera del Ariari', mun: 'Fuente de Oro' },
+      { id: 'EMP-05', nombre: 'Frutales y Cítricos Meta', mun: 'Granada' },
+      { id: 'EMP-06', nombre: 'BioCacao de la Sierra', mun: 'Villavicencio' },
+      { id: 'EMP-07', nombre: 'AgroForestal La Esperanza', mun: 'Castilla la Nueva' },
+      { id: 'EMP-08', nombre: 'Plantaciones San Rafael', mun: 'Puerto López' },
+      { id: 'EMP-09', nombre: 'Ganadería Sostenible Guamal', mun: 'Guamal' },
+      { id: 'EMP-10', nombre: 'Agropecuaria Cabuyaro', mun: 'Cabuyaro' }
+    ];
+
+    const PLANTAS = [
+      { id: 'PLA-01', nombre: 'Planta Villavicencio' },
+      { id: 'PLA-02', nombre: 'Planta Restrepo' },
+      { id: 'PLA-03', nombre: 'Planta Granada' },
+      { id: 'PLA-04', nombre: 'Planta Puerto Gaitán' }
+    ];
+    const COORD_EMPRESAS = [[3.99,-73.77],[3.69,-73.70],[4.27,-73.49],[3.46,-73.62],[3.55,-73.70],[4.142,-73.626],[3.83,-73.69],[4.09,-72.96],[3.88,-73.77],[4.28,-72.79]];
+    const COORD_PLANTAS = [[4.15,-73.61],[4.26,-73.56],[3.54,-73.70],[4.31,-72.08]];
+    let mapaRecorridos, capaRuta, marcadorOrigen, marcadorDestino, consultaActual;
+    function coordenadasNodo(id, base) { return JSON.parse(localStorage.getItem(`ubicacion_${id}`) || 'null') || base; }
+
+    // Matriz 10 x 4 de distancias en km (null representa No disponible en Cabuyaro -> Granada)
+    const MATRIZ_DISTANCIAS = [
+      [27.5, 41.2, 62.0, 148.0], // EMP-01 Acacías
+      [64.0, 78.5, 32.0, 185.0], // EMP-02 San Martín
+      [22.0, 14.5, 108.0, 115.0], // EMP-03 Cumaral
+      [88.5, 102.0, 18.0, 210.0], // EMP-04 Fuente de Oro
+      [76.0, 90.0, 8.5, 198.0],  // EMP-05 Granada
+      [9.5, 23.0, 84.0, 126.0],   // EMP-06 Villavicencio
+      [48.0, 62.0, 51.0, 169.0], // EMP-07 Castilla la Nueva
+      [82.0, 96.0, 165.0, 42.0],  // EMP-08 Puerto López
+      [42.0, 56.0, 48.0, 163.0], // EMP-09 Guamal
+      [112.0, 104.0, null, 78.0]  // EMP-10 Cabuyaro (PLA-03 es No disponible)
+    ];
+
+    function renderizarMatriz() {
+      const tbody = document.getElementById('tablaMatrizDistancias');
+      tbody.innerHTML = '';
+
+      EMPRESAS.forEach((emp, i) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+
+        let html = `
+          <td class="py-2.5 px-4 text-left font-mono font-bold text-slate-800 font-sans">${emp.id}</td>
+          <td class="py-2.5 px-4 text-left font-semibold text-slate-900 font-sans">${emp.nombre} <span class="text-slate-400 font-normal">(${emp.mun})</span></td>
+        `;
+
+        let minVal = Infinity;
+        for (let j = 0; j < 4; j++) {
+          const d = MATRIZ_DISTANCIAS[i][j];
+          if (d !== null && d < minVal) minVal = d;
+        }
+
+        for (let j = 0; j < 4; j++) {
+          const d = MATRIZ_DISTANCIAS[i][j];
+          if (d === null) {
+            html += `<td class="py-2.5 px-4 text-amber-700 font-medium bg-amber-50/50">No disponible</td>`;
+          } else {
+            const esMin = d === minVal;
+            html += `<td class="py-2.5 px-4 ${esMin ? 'text-emerald-700 font-bold bg-emerald-50/50' : 'text-slate-800'}">${d.toFixed(1)} km</td>`;
+          }
+        }
+
+        html += `<td class="py-2.5 px-4 text-right font-bold text-emerald-700">${minVal.toFixed(1)} km</td>`;
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderizarListado(filtro = '') {
+      const tbody = document.getElementById('tablaListadoConexiones');
+      tbody.innerHTML = '';
+      const f = filtro.toLowerCase();
+
+      EMPRESAS.forEach((emp, i) => {
+        PLANTAS.forEach((pla, j) => {
+          const d = MATRIZ_DISTANCIAS[i][j];
+          const texto = `${emp.id} ${emp.nombre} ${emp.mun} ${pla.id} ${pla.nombre}`.toLowerCase();
+
+          if (!f || texto.includes(f)) {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50 transition';
+
+            if (d === null) {
+              tr.innerHTML = `
+                <td class="py-2 px-4 font-medium text-slate-900">${emp.id} · ${emp.nombre} <span class="text-slate-400">(${emp.mun})</span></td>
+                <td class="py-2 px-4 font-medium text-slate-900">${pla.id} · ${pla.nombre}</td>
+                <td class="py-2 px-4 text-right font-mono font-bold text-amber-700 bg-amber-50/30">No disponible</td>
+                <td class="py-2 px-4 text-slate-500">Sin dato en la matriz ilustrativa</td>
+                <td class="py-2 px-4 text-center">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">
+                    Sin dato ilustrativo
+                  </span>
+                </td>
+              `;
+            } else {
+              tr.innerHTML = `
+                <td class="py-2 px-4 font-medium text-slate-900">${emp.id} · ${emp.nombre} <span class="text-slate-400">(${emp.mun})</span></td>
+                <td class="py-2 px-4 font-medium text-slate-900">${pla.id} · ${pla.nombre}</td>
+                <td class="py-2 px-4 text-right font-mono font-bold text-slate-900">${d.toFixed(1)} km</td>
+                <td class="py-2 px-4 text-slate-600">Dato ilustrativo del mockup</td>
+                <td class="py-2 px-4 text-center">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700">
+                    Ilustrativa
+                  </span>
+                </td>
+              `;
+            }
+            tbody.appendChild(tr);
+          }
+        });
+      });
+    }
+
+    function cambiarVista(vista) {
+      [['MATRIZ','vistaMatriz','btnVistaMatriz'],['LISTADO','vistaListado','btnVistaListado'],['MAPA','vistaMapa','btnVistaMapa']].forEach(([clave, vistaId, botonId]) => {
+        document.getElementById(vistaId).classList.toggle('hidden', clave !== vista);
+        document.getElementById(botonId).className = clave === vista
+          ? 'px-3 py-1 rounded-md font-semibold bg-white text-slate-900 shadow-sm flex items-center space-x-1.5 transition'
+          : 'px-3 py-1 rounded-md font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 transition';
+      });
+      if (vista === 'LISTADO') renderizarListado();
+      if (vista === 'MAPA') { iniciarMapaRecorridos(); consultarRuta(); }
+      lucide.createIcons();
+    }
+
+    function iniciarMapaRecorridos() {
+      if (mapaRecorridos) { setTimeout(() => mapaRecorridos.invalidateSize(), 50); return; }
+      if (!window.L) { document.getElementById('avisoMapaRecorridos').classList.remove('hidden'); return; }
+      mapaRecorridos = L.map('mapaRecorridos').setView([4.08, -73.5], 8);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors', maxZoom: 19 }).addTo(mapaRecorridos);
+      setTimeout(() => mapaRecorridos.invalidateSize(), 50);
+    }
+
+    async function consultarRuta() {
+      if (consultaActual) consultaActual.abort();
+      const i = Number(document.getElementById('origenMapa').value);
+      const j = Number(document.getElementById('destinoMapa').value);
+      const origen = EMPRESAS[i], destino = PLANTAS[j];
+      const [latO, lonO] = coordenadasNodo(origen.id, COORD_EMPRESAS[i]);
+      const [latD, lonD] = coordenadasNodo(destino.id, COORD_PLANTAS[j]);
+      document.getElementById('rutaOrigen').textContent = `${origen.id} · ${origen.nombre}`;
+      document.getElementById('rutaDestino').textContent = `${destino.id} · ${destino.nombre}`;
+      document.getElementById('rutaDistancia').textContent = 'Pendiente';
+      document.getElementById('rutaEstado').textContent = 'Consultando · OSRM';
+      if (mapaRecorridos) {
+        if (capaRuta) mapaRecorridos.removeLayer(capaRuta);
+        if (marcadorOrigen) mapaRecorridos.removeLayer(marcadorOrigen);
+        if (marcadorDestino) mapaRecorridos.removeLayer(marcadorDestino);
+        marcadorOrigen = L.marker([latO, lonO]).addTo(mapaRecorridos).bindPopup(origen.nombre);
+        marcadorDestino = L.marker([latD, lonD]).addTo(mapaRecorridos).bindPopup(destino.nombre);
+        mapaRecorridos.fitBounds([[latO, lonO], [latD, lonD]], { padding: [40, 40] });
+      }
+      consultaActual = new AbortController();
+      try {
+        const url = `https://router.project-osrm.org/route/v1/driving/${lonO},${latO};${lonD},${latD}?overview=full&geometries=geojson`;
+        const respuesta = await fetch(url, { signal: consultaActual.signal });
+        if (!respuesta.ok) throw new Error('El proveedor vial no respondió.');
+        const datos = await respuesta.json();
+        if (datos.code === 'NoRoute' || !datos.routes?.length) {
+          document.getElementById('rutaDistancia').textContent = 'No disponible';
+          document.getElementById('rutaEstado').textContent = 'Sin ruta · OSRM';
+          return;
+        }
+        const ruta = datos.routes[0];
+        document.getElementById('rutaDistancia').textContent = `${(ruta.distance / 1000).toFixed(1)} km`;
+        document.getElementById('rutaEstado').textContent = 'Calculada · OSRM';
+        if (mapaRecorridos) {
+          capaRuta = L.polyline(ruta.geometry.coordinates.map(([lon, lat]) => [lat, lon]), { color: '#16a34a', weight: 5 }).addTo(mapaRecorridos);
+          mapaRecorridos.fitBounds(capaRuta.getBounds(), { padding: [30, 30] });
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        document.getElementById('rutaDistancia').textContent = 'No disponible';
+        document.getElementById('rutaEstado').textContent = 'Error de consulta · OSRM';
+      }
+    }
+
+    function filtrarListadoConexiones() {
+      const q = document.getElementById('filtroListado').value;
+      renderizarListado(q);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarMatriz();
+      renderizarListado();
+      document.getElementById('origenMapa').innerHTML = EMPRESAS.map((e,i) => `<option value="${i}">${e.id} · ${e.nombre}</option>`).join('');
+      document.getElementById('destinoMapa').innerHTML = PLANTAS.map((p,i) => `<option value="${i}">${p.id} · ${p.nombre}</option>`).join('');
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

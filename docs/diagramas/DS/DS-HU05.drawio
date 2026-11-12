@@ -1,0 +1,375 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
+  <diagram name="Página-1" id="zWfsyKY-uudAtUCREwg5">
+    <mxGraphModel dx="3427" dy="3686" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-1" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlActor;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;align=center;size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Coordinador Logistico" vertex="1">
+          <mxGeometry height="1899" width="35" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-2" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="VistaParametrizacionDinamica" vertex="1">
+          <mxGeometry height="1899" width="233" x="719" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-3" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ControladorPeticionesHTTP" vertex="1">
+          <mxGeometry height="1899" width="213" x="1281" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-4" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="OrquestadorOptimizacion" vertex="1">
+          <mxGeometry height="1899" width="203" x="1747" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-5" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Escenario" vertex="1">
+          <mxGeometry height="1899" width="150" x="2077" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-6" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Ruta" vertex="1">
+          <mxGeometry height="1899" width="150" x="2277" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-7" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="IPuertoRepositorioEscenarios" vertex="1">
+          <mxGeometry height="1899" width="225" x="2477" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-8" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AdaptadorPersistencia" vertex="1">
+          <mxGeometry height="1899" width="178" x="2752" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-9" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="alt" vertex="1">
+          <mxGeometry height="202" width="525" x="1838" y="682" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-10" parent="PjwNsLu6H9h5hpMZvRJw-9" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[Proveedor OSRM responde recorrido valido]" vertex="1">
+          <mxGeometry height="20" width="495" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-11" parent="PjwNsLu6H9h5hpMZvRJw-9" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" value="[Falla la consulta o no existe ruta vial]" vertex="1">
+          <mxGeometry height="3" width="525" y="106" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-12" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=40;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="loop" vertex="1">
+          <mxGeometry height="313" width="545" x="1828" y="581" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-13" parent="PjwNsLu6H9h5hpMZvRJw-12" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[Para cada ruta con estado_consulta pendiente]" vertex="1">
+          <mxGeometry height="20" width="505" x="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-14" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="opt" vertex="1">
+          <mxGeometry height="239" width="906" x="98" y="1312" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-15" parent="PjwNsLu6H9h5hpMZvRJw-14" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[Usuario selecciona una conexion calculada para destacar su recorrido]" vertex="1">
+          <mxGeometry height="20" width="876" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-16" parent="1" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30;fillColor=light-dark(#eeeeee,#1f2020);fontColor=light-dark(#333333,#cccccc);" value="opt" vertex="1">
+          <mxGeometry height="263" width="1762" x="98" y="1561" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-17" parent="PjwNsLu6H9h5hpMZvRJw-16" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" value="[Consulta vial en estado error y usuario solicita reintentar]" vertex="1">
+          <mxGeometry height="20" width="1732" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-18" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-1" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-2" value="Filtra conexiones por empresa (emp_id) y planta (pla_id) en el mapa OpenStreetMap">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="481" y="129" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-19" parent="PjwNsLu6H9h5hpMZvRJw-18" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="1" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-371" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-20" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-2" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-3" value="get_consultar_rutas_mapa(esc_id, emp_id, pla_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="183" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-21" parent="PjwNsLu6H9h5hpMZvRJw-20" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="2" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-283.5" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-22" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-4" value="consultar_recorridos_viales_osrm(esc_id, emp_id, pla_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1627" y="237" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-23" parent="PjwNsLu6H9h5hpMZvRJw-22" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="3" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-238" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-24" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-7" value="obtener_por_id(esc_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2227" y="291" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-25" parent="PjwNsLu6H9h5hpMZvRJw-24" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="4" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-377.75" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-26" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-7" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-8" value="obtener_por_id(esc_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2723" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-27" parent="PjwNsLu6H9h5hpMZvRJw-26" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="5" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-133.25" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-28" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-8" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-7" value="escenario">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2726" y="399" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-29" parent="PjwNsLu6H9h5hpMZvRJw-28" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="6" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="119.25" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-30" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-7" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-4" value="escenario">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2230" y="453" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-31" parent="PjwNsLu6H9h5hpMZvRJw-30" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="7" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="363.75" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-32" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-5" value="filtrar_conexiones(emp_id, pla_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2009" y="507" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-33" parent="PjwNsLu6H9h5hpMZvRJw-32" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="8" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-159" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-34" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-5" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-4" value="rutas_filtradas">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2012" y="561" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-35" parent="PjwNsLu6H9h5hpMZvRJw-34" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="9" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="145" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-36" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-6" value="Consulta OSRM driving con coordenadas vigentes (descarta respuestas de coordenadas anteriores)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2209" y="662" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-37" parent="PjwNsLu6H9h5hpMZvRJw-36" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="10" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-359" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-38" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-6" value="registrar_recorrido_vial(distancia_km, geometria, OSRM, calculada)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2109" y="763" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-39" parent="PjwNsLu6H9h5hpMZvRJw-38" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="11" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-259" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-40" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-6" value="registrar_recorrido_vial(null, vacio, OSRM, error o sin_ruta)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2109" y="864" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-41" parent="PjwNsLu6H9h5hpMZvRJw-40" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="12" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-259" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-42" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-7" value="guardar(escenario)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2227" y="938" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-43" parent="PjwNsLu6H9h5hpMZvRJw-42" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="13" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-377.75" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-44" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-7" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-8" value="guardar(escenario)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2723" y="992" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-45" parent="PjwNsLu6H9h5hpMZvRJw-44" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="14" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-133.25" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-46" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-8" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-7" value="ok">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2726" y="1046" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-47" parent="PjwNsLu6H9h5hpMZvRJw-46" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="15" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="119.25" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-48" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-7" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-4" value="ok">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2230" y="1100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-49" parent="PjwNsLu6H9h5hpMZvRJw-48" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="16" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="363.75" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-50" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-3" value="rutas_filtradas">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1630" y="1154" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-51" parent="PjwNsLu6H9h5hpMZvRJw-50" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="17" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="224" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-52" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-2" value="HTTP 200 OK (Lista de rutas con estado, km, proveedor y geometria)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1123" y="1208" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-53" parent="PjwNsLu6H9h5hpMZvRJw-52" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="18" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="269.5" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-54" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-2" style="curved=1;endArrow=block;rounded=0;" target="PjwNsLu6H9h5hpMZvRJw-2" value="mostrar_conexiones_distancias(rutas_filtradas)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="887" y="1262" />
+              <mxPoint x="887" y="1292" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-55" parent="PjwNsLu6H9h5hpMZvRJw-54" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="19" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-57" y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-56" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-1" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-2" value="Selecciona conexion (ruta_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="481" y="1393" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-57" parent="PjwNsLu6H9h5hpMZvRJw-56" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="20" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-371" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-58" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-2" style="curved=1;endArrow=block;rounded=0;" target="PjwNsLu6H9h5hpMZvRJw-2" value="destacar_recorrido_mapa(ruta_id, geometria)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="887" y="1447" />
+              <mxPoint x="887" y="1477" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-59" parent="PjwNsLu6H9h5hpMZvRJw-58" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="21" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-57" y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-60" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-2" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-1" value="Dibuja recorrido GeoJSON sobre OpenStreetMap y muestra extremos, km y proveedor OSRM">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="484" y="1531" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-61" parent="PjwNsLu6H9h5hpMZvRJw-60" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="22" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="357" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-62" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-1" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-2" value="Pulsa reintentar consulta vial (ruta_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="481" y="1642" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-63" parent="PjwNsLu6H9h5hpMZvRJw-62" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="23" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-371" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-64" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-2" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-3" value="post_reintentar_consulta_vial(esc_id, ruta_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="1696" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-65" parent="PjwNsLu6H9h5hpMZvRJw-64" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="24" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-283.5" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-66" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-3" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-4" value="consultar_recorridos_viales_osrm(esc_id, emp_id, pla_id)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1627" y="1750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-67" parent="PjwNsLu6H9h5hpMZvRJw-66" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="25" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="-238" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-68" edge="1" parent="1" source="PjwNsLu6H9h5hpMZvRJw-4" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" target="PjwNsLu6H9h5hpMZvRJw-2" value="Actualiza estado_consulta, distancia_km y geometria">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1354" y="1804" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PjwNsLu6H9h5hpMZvRJw-69" parent="PjwNsLu6H9h5hpMZvRJw-68" style="ellipse;aspect=fixed;fillColor=#000000;align=center;fontColor=#FFFFFF;" value="26" vertex="1">
+          <mxGeometry height="14" relative="1" width="14" as="geometry">
+            <mxPoint x="500" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análisis Marginal: Precios Sombra de Oferta y Capacidad — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="help-circle" class="w-4 h-4 text-emerald-200"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="help-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Análisis Marginal: Precios Sombra de Oferta y Capacidad</h2>
+          <p class="text-xs text-slate-500">Valor económico marginal por cada tonelada adicional procesada o recolectada en el Meta</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Asociado al Óptimo Exacto: <strong class="text-slate-800">EJE-01 (ESC-01 Base)</strong></span>
+        </div>
+
+        <button onclick="window.print()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Imprimir Informe Dual</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Tarjetas Resumen de Holguras y Cuellos de Botella -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Plantas Saturadas (Cuellos de Botella)</span>
+          <div class="text-2xl font-black text-rose-600">1 <span class="text-xs font-medium text-slate-500">de 4 plantas</span></div>
+          <p class="text-xs text-slate-500 mt-1">PLA-01 (Villavicencio) opera al 100% de capacidad</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Mayor Ahorro Marginal por Expansión</span>
+          <div class="text-2xl font-black text-emerald-700">-$ 600 <span class="text-xs font-medium text-slate-500">COP/t</span></div>
+          <p class="text-xs text-slate-500 mt-1">Expansión de PLA-01 reduce el costo logístico total</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Empresas con Costo Marginal Mínimo</span>
+          <div class="text-2xl font-black text-slate-800">EMP-07 <span class="text-xs font-medium text-slate-500">Restrepo</span></div>
+          <p class="text-xs text-slate-500 mt-1">Costo marginal de despacho: $ 1.600 COP/t</p>
+        </div>
+      </div>
+
+      <!-- Tabla 1: Precios Sombra de Capacidad en Plantas -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Precios Sombra de Capacidad de Plantas Procesadoras</h3>
+            <p class="text-xs text-slate-500">Impacto en el costo total al ampliar en 1 tonelada la capacidad máxima de recepción semanal</p>
+          </div>
+          <span class="text-xs text-slate-500">Restricciones de cota superior (≤ Capacidad)</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Planta Procesadora</th>
+                <th class="py-3 px-3">Ubicación</th>
+                <th class="py-3 px-3 text-right">Capacidad Vigente</th>
+                <th class="py-3 px-3 text-right">Toneladas Asignadas</th>
+                <th class="py-3 px-3 text-right">Holgura</th>
+                <th class="py-3 px-3 text-right bg-emerald-50 text-emerald-900 font-bold">Precio Sombra (COP/t)</th>
+                <th class="py-3 px-4 text-center">Rango de Validez (t/sem)</th>
+                <th class="py-3 px-4">Interpretación Operativa</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="bg-amber-50/40 hover:bg-amber-50/70 transition">
+                <td class="py-3 px-4 font-bold text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1.5">PLA-01</span>
+                  <span>Planta Villavicencio</span>
+                </td>
+                <td class="py-3 px-3 text-slate-600">Villavicencio</td>
+                <td class="py-3 px-3 text-right text-slate-700">40,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-900">40,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-bold text-rose-600">0,0 t (Saturada)</td>
+                <td class="py-3 px-3 text-right font-black text-emerald-800 bg-emerald-50/60">- $ 600 COP/t</td>
+                <td class="py-3 px-4 text-center font-mono text-slate-700">[35,0 ; 48,0]</td>
+                <td class="py-3 px-4 text-slate-600 text-[11px]">
+                  Cada tonelada adicional admitida en Villavicencio ahorra $ 600 COP al evitar envíos más lejanos.
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-bold text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1.5">PLA-02</span>
+                  <span>Planta Restrepo</span>
+                </td>
+                <td class="py-3 px-3 text-slate-600">Restrepo</td>
+                <td class="py-3 px-3 text-right text-slate-700">30,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-900">20,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-medium text-emerald-600">10,0 t (Holgura)</td>
+                <td class="py-3 px-3 text-right font-black text-slate-400 bg-emerald-50/20">0 COP/t</td>
+                <td class="py-3 px-4 text-center font-mono text-slate-700">[20,0 ; Sin límite]</td>
+                <td class="py-3 px-4 text-slate-500 text-[11px]">
+                  Capacidad sobrante. Aumentar su capacidad no reduce el costo actual de transporte.
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-bold text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1.5">PLA-03</span>
+                  <span>Planta Granada</span>
+                </td>
+                <td class="py-3 px-3 text-slate-600">Granada</td>
+                <td class="py-3 px-3 text-right text-slate-700">35,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-900">30,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-medium text-emerald-600">5,0 t (Holgura)</td>
+                <td class="py-3 px-3 text-right font-black text-slate-400 bg-emerald-50/20">0 COP/t</td>
+                <td class="py-3 px-4 text-center font-mono text-slate-700">[30,0 ; Sin límite]</td>
+                <td class="py-3 px-4 text-slate-500 text-[11px]">
+                  No es cuello de botella. Tiene 5 toneladas de margen operativo sin costo marginal.
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-bold text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1.5">PLA-04</span>
+                  <span>Planta Puerto Gaitán</span>
+                </td>
+                <td class="py-3 px-3 text-slate-600">Puerto Gaitán</td>
+                <td class="py-3 px-3 text-right text-slate-700">30,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-bold text-slate-900">25,0 t/sem</td>
+                <td class="py-3 px-3 text-right font-medium text-emerald-600">5,0 t (Holgura)</td>
+                <td class="py-3 px-3 text-right font-black text-slate-400 bg-emerald-50/20">0 COP/t</td>
+                <td class="py-3 px-4 text-center font-mono text-slate-700">[25,0 ; Sin límite]</td>
+                <td class="py-3 px-4 text-slate-500 text-[11px]">
+                  Capacidad suficiente para absorber la biomasa de la zona oriental.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tabla 2: Precios Sombra de Oferta en Empresas Generadoras -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Precios Sombra de Oferta de Empresas Generadoras</h3>
+            <p class="text-xs text-slate-500">Costo marginal en COP de evacuar una tonelada adicional de residuos desde cada origen</p>
+          </div>
+          <span class="text-xs text-slate-500">Restricciones de igualdad (= Oferta semanal)</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Empresa Generadora</th>
+                <th class="py-3 px-3">Municipio</th>
+                <th class="py-3 px-3 text-right">Oferta Evacuada</th>
+                <th class="py-3 px-3 text-right bg-emerald-50 text-emerald-900 font-bold">Precio Sombra (COP/t)</th>
+                <th class="py-3 px-4 text-center">Rango de Validez (t/sem)</th>
+                <th class="py-3 px-4">Destino Marginal Asignado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-01</span> Palmar del Llano S.A.</td>
+                <td class="py-2.5 px-3 text-slate-600">San Carlos de Guaroa</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">25,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 3.500 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[20,0 ; 32,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-01 (Villavicencio)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-02</span> Agroindustrial del Meta</td>
+                <td class="py-2.5 px-3 text-slate-600">Acacías</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">15,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 2.800 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[10,0 ; 20,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-01 (Villavicencio)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-03</span> Bioenergía Los Llanos</td>
+                <td class="py-2.5 px-3 text-slate-600">Puerto López</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">20,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 5.200 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[15,0 ; 25,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-04 (Puerto Gaitán)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-04</span> Molinos del Oriente</td>
+                <td class="py-2.5 px-3 text-slate-600">Villavicencio</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">10,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 2.100 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[5,0 ; 18,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-02 (Restrepo)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-05</span> Aceites y Grasas del Llano</td>
+                <td class="py-2.5 px-3 text-slate-600">Cumaral</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">8,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 2.400 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[4,0 ; 15,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-02 (Restrepo)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-06</span> Hacienda La Cabaña</td>
+                <td class="py-2.5 px-3 text-slate-600">Granada</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">12,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 1.900 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[8,0 ; 17,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-03 (Granada)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-07</span> Arrocera La Esmeralda</td>
+                <td class="py-2.5 px-3 text-slate-600">Restrepo</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">7,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 1.600 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[4,0 ; 12,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-02 (Restrepo)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-08</span> Extractora Central Meta</td>
+                <td class="py-2.5 px-3 text-slate-600">San Martín</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">6,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 3.100 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[3,0 ; 10,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-03 (Granada)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-09</span> Frigorífico del Ariari</td>
+                <td class="py-2.5 px-3 text-slate-600">Fuente de Oro</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">5,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 2.700 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[2,0 ; 8,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-03 (Granada)</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-2.5 px-4 font-medium text-slate-800"><span class="font-mono text-slate-500 mr-1">EMP-10</span> Maderas y Biomasa del Meta</td>
+                <td class="py-2.5 px-3 text-slate-600">Barranca de Upía</td>
+                <td class="py-2.5 px-3 text-right font-bold text-slate-800">7,0 t/sem</td>
+                <td class="py-2.5 px-3 text-right font-black text-slate-900 bg-emerald-50/30">$ 5.000 COP/t</td>
+                <td class="py-2.5 px-4 text-center font-mono text-slate-700">[4,0 ; 11,0]</td>
+                <td class="py-2.5 px-4 text-slate-600">PLA-02 (Restrepo)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
+

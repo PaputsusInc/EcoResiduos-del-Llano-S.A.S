@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparador de Escenarios: Referencia vs. Variantes — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="split" class="w-4 h-4 text-emerald-200"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="split" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Comparador de Escenarios: Referencia vs. Variantes</h2>
+          <p class="text-xs text-slate-500">Evaluación multidimensional de costos, tiempos, asignaciones y estabilidad ante perturbaciones</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="text-slate-500">Variante a Contrastar:</span>
+          <select id="selVariante" onchange="cargarComparativa()" class="bg-slate-100 border border-slate-300 rounded-lg p-1.5 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+            <option value="VAR-C01">VAR-C01: Alza Combustible (+15% Pto. Gaitán)</option>
+            <option value="VAR-O01" selected>VAR-O01: Incremento de Cosecha (+20% Palmar del Llano)</option>
+            <option value="VAR-K01">VAR-K01: Mantenimiento Preventivo (PLA-01 -15 t/sem)</option>
+          </select>
+        </div>
+
+        <button onclick="window.print()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Exportar Comparativa</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Fila de Tarjetas Comparativas Lado a Lado -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Tarjeta Escenario Referencia (ESC-01) -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">ESC-01</span>
+              <h3 class="text-sm font-bold text-slate-800 mt-1">Escenario de Referencia (Base Semanal)</h3>
+            </div>
+            <span class="text-xs text-slate-400">Oferta: 115,0 t · Cap: 135,0 t</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+              <span class="text-[11px] text-slate-500 font-medium">Método Exacto (HiGHS)</span>
+              <div class="text-lg font-black text-slate-800 mt-0.5">$ 450.250 <span class="text-[10px] font-normal">COP</span></div>
+              <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Óptimo certificado · 0,042 s</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+              <span class="text-[11px] text-slate-500 font-medium">Algoritmo Genético (AG)</span>
+              <div class="text-lg font-black text-slate-800 mt-0.5">$ 458.530 <span class="text-[10px] font-normal">COP</span></div>
+              <p class="text-[10px] text-indigo-600 font-semibold mt-0.5">Gap +1,84 % · 0,815 s</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Escenario Variante Seleccionada -->
+        <div class="bg-white p-5 rounded-xl border border-emerald-200 shadow-sm space-y-4 bg-emerald-50/10">
+          <div class="flex items-center justify-between pb-3 border-b border-emerald-100">
+            <div>
+              <span id="badgeVarId" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">VAR-O01</span>
+              <h3 id="tituloVar" class="text-sm font-bold text-slate-800 mt-1">Variante: Incremento Cosecha (+20% Palmar)</h3>
+            </div>
+            <span id="subVarBal" class="text-xs text-slate-500">Oferta: 120,0 t · Cap: 135,0 t</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-white rounded-lg border border-emerald-100 shadow-sm">
+              <span class="text-[11px] text-slate-500 font-medium">Método Exacto (HiGHS)</span>
+              <div id="costoExactoVar" class="text-lg font-black text-slate-800 mt-0.5">$ 467.750 <span class="text-[10px] font-normal">COP</span></div>
+              <p id="deltaExactoVar" class="text-[10px] text-rose-600 font-bold mt-0.5">▲ +$ 17.500 COP (+3,88 %)</p>
+            </div>
+            <div class="p-3 bg-white rounded-lg border border-emerald-100 shadow-sm">
+              <span class="text-[11px] text-slate-500 font-medium">Algoritmo Genético (AG)</span>
+              <div id="costoAGVar" class="text-lg font-black text-slate-800 mt-0.5">$ 475.200 <span class="text-[10px] font-normal">COP</span></div>
+              <p id="gapAGVar" class="text-[10px] text-indigo-600 font-semibold mt-0.5">Gap +1,59 % · 0,890 s</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Gráfico Comparativo Plotly.js -->
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Comparación de Costo Total y Estabilidad del Gap</h3>
+            <p class="text-xs text-slate-500">Respuesta de los dos algoritmos de optimización ante el cambio en las condiciones operativas</p>
+          </div>
+          <span class="text-xs text-slate-500">Moneda: COP</span>
+        </div>
+        <div id="plotlyChart" style="height: 280px;"></div>
+      </div>
+
+      <!-- Matriz Diferencial de Asignaciones (Δ t/semana) -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Matriz Diferencial de Flujos Asignados (Δ t/semana)</h3>
+            <p class="text-xs text-slate-500">Identifique qué rutas de transporte absorbieron el incremento o se reconfiguraron en la variante</p>
+          </div>
+          <div class="flex items-center space-x-3 text-xs">
+            <span class="flex items-center space-x-1"><span class="w-3 h-3 bg-emerald-100 rounded inline-block"></span><span class="text-slate-600">Aumento de Flujo</span></span>
+            <span class="flex items-center space-x-1"><span class="w-3 h-3 bg-rose-100 rounded inline-block"></span><span class="text-slate-600">Disminución</span></span>
+            <span class="flex items-center space-x-1"><span class="w-3 h-3 bg-slate-100 rounded inline-block"></span><span class="text-slate-600">Sin Cambio (0,0)</span></span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Empresa Origen</th>
+                <th class="py-3 px-3 text-right">Δ PLA-01 (Villavicencio)</th>
+                <th class="py-3 px-3 text-right">Δ PLA-02 (Restrepo)</th>
+                <th class="py-3 px-3 text-right">Δ PLA-03 (Granada)</th>
+                <th class="py-3 px-3 text-right">Δ PLA-04 (Pto. Gaitán)</th>
+                <th class="py-3 px-4 text-right bg-slate-200/60 font-bold">Δ Total Empresa</th>
+                <th class="py-3 px-3 text-center">Impacto Logístico</th>
+              </tr>
+            </thead>
+            <tbody id="tablaDeltaBody" class="divide-y divide-slate-100">
+              <!-- Render dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const variantesData = {
+      "VAR-O01": {
+        id: "VAR-O01",
+        titulo: "Variante: Incremento Cosecha (+20% Palmar del Llano)",
+        bal: "Oferta: 120,0 t · Cap: 135,0 t",
+        exacto: 467750,
+        ag: 475200,
+        deltaExacto: "▲ +$ 17.500 COP (+3,88 %)",
+        gapAG: "Gap +1,59 % · 0,890 s",
+        deltas: [
+          { emp: "EMP-01 (Palmar del Llano)", p1: 0, p2: 5.0, p3: 0, p4: 0, tot: 5.0, obs: "Excedente derivado a Restrepo" },
+          { emp: "EMP-02 (Agroind. Meta)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-03 (Bioenergía Llanos)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-04 (Molinos Oriente)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-05 (Aceites del Llano)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-06 (Hda. La Cabaña)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-07 (Arrocera Esmeralda)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-08 (Extractora Central)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-09 (Frigorífico Ariari)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-10 (Maderas Biomasa)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" }
+        ]
+      },
+      "VAR-C01": {
+        id: "VAR-C01",
+        titulo: "Variante: Alza Combustible (+15% Puerto Gaitán)",
+        bal: "Oferta: 115,0 t · Cap: 135,0 t",
+        exacto: 468900,
+        ag: 476800,
+        deltaExacto: "▲ +$ 18.650 COP (+4,14 %)",
+        gapAG: "Gap +1,68 % · 0,840 s",
+        deltas: [
+          { emp: "EMP-01 (Palmar del Llano)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-02 (Agroind. Meta)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-03 (Bioenergía Llanos)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Ruta absorbente" },
+          { emp: "EMP-04 (Molinos Oriente)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-05 (Aceites del Llano)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-06 (Hda. La Cabaña)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-07 (Arrocera Esmeralda)", p1: 0, p2: 2.0, p3: 0, p4: -2.0, tot: 0, obs: "Desvío de Pto. Gaitán a Restrepo" },
+          { emp: "EMP-08 (Extractora Central)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-09 (Frigorífico Ariari)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-10 (Maderas Biomasa)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" }
+        ]
+      },
+      "VAR-K01": {
+        id: "VAR-K01",
+        titulo: "Variante: Mantenimiento Preventivo (PLA-01 Villavicencio -15 t/sem)",
+        bal: "Oferta: 115,0 t · Cap: 120,0 t",
+        exacto: 464450,
+        ag: 472100,
+        deltaExacto: "▲ +$ 14.200 COP (+3,15 %)",
+        gapAG: "Gap +1,65 % · 0,820 s",
+        deltas: [
+          { emp: "EMP-01 (Palmar del Llano)", p1: -15.0, p2: 10.0, p3: 5.0, p4: 0, tot: 0, obs: "Redirigido a Restrepo y Granada" },
+          { emp: "EMP-02 (Agroind. Meta)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-03 (Bioenergía Llanos)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-04 (Molinos Oriente)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-05 (Aceites del Llano)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-06 (Hda. La Cabaña)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-07 (Arrocera Esmeralda)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-08 (Extractora Central)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-09 (Frigorífico Ariari)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" },
+          { emp: "EMP-10 (Maderas Biomasa)", p1: 0, p2: 0, p3: 0, p4: 0, tot: 0, obs: "Estable" }
+        ]
+      }
+    };
+
+    function renderPlotly(varData) {
+      const traceExacto = {
+        x: ['Referencia (ESC-01)', varData.id],
+        y: [450250, varData.exacto],
+        name: 'Método Exacto',
+        type: 'bar',
+        marker: { color: '#059669' },
+        text: ['$ 450.250', `$ ${varData.exacto.toLocaleString('es-CO')}`],
+        textposition: 'auto'
+      };
+
+      const traceAG = {
+        x: ['Referencia (ESC-01)', varData.id],
+        y: [458530, varData.ag],
+        name: 'Algoritmo Genético',
+        type: 'bar',
+        marker: { color: '#6366f1' },
+        text: ['$ 458.530', `$ ${varData.ag.toLocaleString('es-CO')}`],
+        textposition: 'auto'
+      };
+
+      const layout = {
+        barmode: 'group',
+        margin: { t: 20, b: 40, l: 60, r: 20 },
+        font: { family: 'sans-serif', size: 11, color: '#475569' },
+        yaxis: {
+          title: 'Costo Total (COP)',
+          range: [420000, 500000],
+          tickformat: ',.0f'
+        },
+        legend: { orientation: 'h', x: 0.3, y: 1.15 }
+      };
+
+      Plotly.newPlot('plotlyChart', [traceExacto, traceAG], layout, { responsive: true, displayModeBar: false });
+    }
+
+    function renderDeltaTable(deltas) {
+      const tbody = document.getElementById('tablaDeltaBody');
+      tbody.innerHTML = '';
+
+      function formatDeltaCell(val) {
+        if (val > 0) return `<td class="py-2.5 px-3 text-right font-bold text-emerald-700 bg-emerald-50/60">+${val.toFixed(1).replace('.', ',')}</td>`;
+        if (val < 0) return `<td class="py-2.5 px-3 text-right font-bold text-rose-700 bg-rose-50/60">${val.toFixed(1).replace('.', ',')}</td>`;
+        return `<td class="py-2.5 px-3 text-right text-slate-300">0,0</td>`;
+      }
+
+      deltas.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.className = d.tot !== 0 || d.p1 !== 0 || d.p2 !== 0 || d.p3 !== 0 || d.p4 !== 0 
+          ? "bg-amber-50/30 hover:bg-amber-50/60 transition" 
+          : "hover:bg-slate-50 transition";
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 font-medium text-slate-800">${d.emp}</td>
+          ${formatDeltaCell(d.p1)}
+          ${formatDeltaCell(d.p2)}
+          ${formatDeltaCell(d.p3)}
+          ${formatDeltaCell(d.p4)}
+          <td class="py-2.5 px-4 text-right font-black text-slate-900 bg-slate-100/60">
+            ${d.tot > 0 ? '+' : ''}${d.tot.toFixed(1).replace('.', ',')}
+          </td>
+          <td class="py-2.5 px-3 text-center text-slate-600 font-medium">${d.obs}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function cargarComparativa() {
+      const idVar = document.getElementById('selVariante').value;
+      const v = variantesData[idVar];
+
+      document.getElementById('badgeVarId').innerText = v.id;
+      document.getElementById('tituloVar').innerText = v.titulo;
+      document.getElementById('subVarBal').innerText = v.bal;
+      document.getElementById('costoExactoVar').innerHTML = `$ ${v.exacto.toLocaleString('es-CO')} <span class="text-[10px] font-normal">COP</span>`;
+      document.getElementById('deltaExactoVar').innerText = v.deltaExacto;
+      document.getElementById('costoAGVar').innerHTML = `$ ${v.ag.toLocaleString('es-CO')} <span class="text-[10px] font-normal">COP</span>`;
+      document.getElementById('gapAGVar').innerText = v.gapAG;
+
+      renderPlotly(v);
+      renderDeltaTable(v.deltas);
+      lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      cargarComparativa();
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rendimiento en Redes Ampliadas (N×M) — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN COMPLETA) -->
+  <aside class="w-72 bg-slate-900 text-slate-200 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow">
+        <i data-lucide="recycle" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="scale" class="w-4 h-4 text-slate-400"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-emerald-200"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer Perfil -->
+    <div class="p-3 border-t border-slate-800 text-xs text-slate-400 flex items-center space-x-2.5">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">CL</div>
+      <div class="overflow-hidden">
+        <p class="text-white font-medium truncate">Coordinador Logístico</p>
+        <p class="text-[10px] text-slate-500 truncate">Sede Villavicencio · Meta</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <!-- Top Header -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 rounded-lg bg-emerald-50 text-emerald-700">
+          <i data-lucide="maximize-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-800">Rendimiento en Redes Ampliadas (N×M)</h2>
+          <p class="text-xs text-slate-500">Comportamiento computacional y estabilidad de la solución al escalar el tamaño de la red logística</p>
+        </div>
+      </div>
+      
+      <!-- Controles de Encabezado -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2 text-xs bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600">
+          <i data-lucide="cpu" class="w-3.5 h-3.5 text-slate-500"></i>
+          <span>Rango Evaluado: <strong>10×4 hasta 100×15</strong></span>
+        </div>
+
+        <button onclick="window.print()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>Exportar Resultados</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Área de Trabajo -->
+    <div class="p-6 space-y-6">
+
+      <!-- Fila de Tarjetas Resumen de Escalabilidad -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Red Base Actual</span>
+          <div class="text-xl font-black text-slate-800">10 × 4 <span class="text-xs font-normal text-slate-500">(40 variables)</span></div>
+          <p class="text-xs text-slate-400 mt-1">Tiempo Exacto: 0,042 s · Gap: 1,84 %</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Red Máxima Evaluada</span>
+          <div class="text-xl font-black text-slate-800">100 × 15 <span class="text-xs font-normal text-slate-500">(1.500 variables)</span></div>
+          <p class="text-xs text-slate-400 mt-1">Tiempo Exacto: 0,840 s · Gap: 3,42 %</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Crecimiento Tiempo Exacto</span>
+          <div class="text-xl font-black text-emerald-700">Sub-segundo (&lt; 1,0 s)</div>
+          <p class="text-xs text-slate-500 mt-1">Alta eficiencia del solver HiGHS</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Estabilidad del Gap Heurístico</span>
+          <div class="text-xl font-black text-indigo-700">&lt; 3,5 % en todas</div>
+          <p class="text-xs text-slate-500 mt-1">AG conserva proximidad al óptimo</p>
+        </div>
+      </div>
+
+      <!-- Gráficos Plotly.js Lado a Lado -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Gráfica 1: Tiempos de Ejecución -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-800">Tiempo de Ejecución según Tamaño de Red (s)</h3>
+            <span class="text-xs text-slate-400">Escala logarítmica / lineal</span>
+          </div>
+          <div id="plotTiempos" style="height: 270px;"></div>
+        </div>
+
+        <!-- Gráfica 2: Evolución del Gap % -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-800">Evolución de la Desviación (% Gap del AG)</h3>
+            <span class="text-xs text-slate-400">Tolerancia límite: 5 %</span>
+          </div>
+          <div id="plotGap" style="height: 270px;"></div>
+        </div>
+
+      </div>
+
+      <!-- Tabla Comparativa de Escalabilidad -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Matriz de Rendimiento Computacional por Escala de Red</h3>
+            <p class="text-xs text-slate-500">Evaluación empírica de 4 niveles de escala logística en el departamento del Meta</p>
+          </div>
+          <span class="text-xs text-slate-500">Tiempos medidos en CPU Intel Core i7</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                <th class="py-3 px-4">Instancia de Red</th>
+                <th class="py-3 px-3 text-center">Dimensiones (N×M)</th>
+                <th class="py-3 px-3 text-right">Variables xij</th>
+                <th class="py-3 px-3 text-right">Costo Exacto (COP)</th>
+                <th class="py-3 px-3 text-right font-bold text-emerald-800">Tiempo Ex. (s)</th>
+                <th class="py-3 px-3 text-right">Costo AG (COP)</th>
+                <th class="py-3 px-3 text-right font-bold text-indigo-800">Tiempo AG (s)</th>
+                <th class="py-3 px-4 text-right bg-emerald-50 text-emerald-900 font-bold">Desviación (% Gap)</th>
+                <th class="py-3 px-3 text-center">Conclusión</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="bg-emerald-50/20 hover:bg-emerald-50/40 transition">
+                <td class="py-3 px-4 font-bold text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1">INST-01</span> Red Base Departamental
+                </td>
+                <td class="py-3 px-3 text-center font-mono text-slate-700">10 × 4</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-600">40</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 450.250</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-emerald-700">0,042 s</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 458.530</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-indigo-700">0,815 s</td>
+                <td class="py-3 px-4 text-right font-black text-indigo-700 bg-emerald-50/60">+1,84 %</td>
+                <td class="py-3 px-3 text-center text-emerald-700 font-semibold">Excelente</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-medium text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1">INST-02</span> Red Subregional Ampliada
+                </td>
+                <td class="py-3 px-3 text-center font-mono text-slate-700">25 × 6</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-600">150</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 1.120.400</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-emerald-700">0,118 s</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 1.144.500</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-indigo-700">1,940 s</td>
+                <td class="py-3 px-4 text-right font-black text-indigo-700 bg-emerald-50/60">+2,15 %</td>
+                <td class="py-3 px-3 text-center text-emerald-700 font-semibold">Óptimo Rápido</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-medium text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1">INST-03</span> Red Regional Consolidada
+                </td>
+                <td class="py-3 px-3 text-center font-mono text-slate-700">50 × 10</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-600">500</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 2.380.600</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-emerald-700">0,342 s</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 2.447.250</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-indigo-700">4,620 s</td>
+                <td class="py-3 px-4 text-right font-black text-indigo-700 bg-emerald-50/60">+2,80 %</td>
+                <td class="py-3 px-3 text-center text-emerald-700 font-semibold">Estable</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="py-3 px-4 font-medium text-slate-800">
+                  <span class="font-mono text-slate-500 mr-1">INST-04</span> Red Departamental Máxima
+                </td>
+                <td class="py-3 px-3 text-center font-mono text-slate-700">100 × 15</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-600">1.500</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 4.950.000</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-emerald-700">0,840 s</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-800">$ 5.119.300</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-indigo-700">11,250 s</td>
+                <td class="py-3 px-4 text-right font-black text-indigo-700 bg-emerald-50/60">+3,42 %</td>
+                <td class="py-3 px-3 text-center text-emerald-700 font-semibold">Tolerancia Cumplida</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    function renderCharts() {
+      // Gráfica de Tiempos
+      const traceTiemposEx = {
+        x: ['10×4', '25×6', '50×10', '100×15'],
+        y: [0.042, 0.118, 0.342, 0.840],
+        name: 'Método Exacto (s)',
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#059669', width: 3 },
+        marker: { size: 8 }
+      };
+
+      const traceTiemposAG = {
+        x: ['10×4', '25×6', '50×10', '100×15'],
+        y: [0.815, 1.940, 4.620, 11.250],
+        name: 'Algoritmo Genético (s)',
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: '#6366f1', width: 3, dash: 'dot' },
+        marker: { size: 8 }
+      };
+
+      const layoutTiempos = {
+        margin: { t: 20, b: 40, l: 50, r: 20 },
+        font: { family: 'sans-serif', size: 10, color: '#475569' },
+        xaxis: { title: 'Tamaño de Red (Empresas × Plantas)' },
+        yaxis: { title: 'Segundos' },
+        legend: { orientation: 'h', x: 0.15, y: 1.15 }
+      };
+
+      Plotly.newPlot('plotTiempos', [traceTiemposEx, traceTiemposAG], layoutTiempos, { responsive: true, displayModeBar: false });
+
+      // Gráfica de Gap
+      const traceGap = {
+        x: ['10×4', '25×6', '50×10', '100×15'],
+        y: [1.84, 2.15, 2.80, 3.42],
+        name: 'Desviación (% Gap)',
+        type: 'bar',
+        marker: { color: '#818cf8' },
+        text: ['+1,84 %', '+2,15 %', '+2,80 %', '+3,42 %'],
+        textposition: 'auto'
+      };
+
+      const layoutGap = {
+        margin: { t: 20, b: 40, l: 40, r: 20 },
+        font: { family: 'sans-serif', size: 10, color: '#475569' },
+        xaxis: { title: 'Tamaño de Red (Empresas × Plantas)' },
+        yaxis: { title: '% Gap vs. Exacto', range: [0, 5] },
+        shapes: [{
+          type: 'line',
+          x0: -0.5,
+          x1: 3.5,
+          y0: 5,
+          y1: 5,
+          line: { color: '#ef4444', width: 2, dash: 'dash' }
+        }]
+      };
+
+      Plotly.newPlot('plotGap', [traceGap], layoutGap, { responsive: true, displayModeBar: false });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderCharts();
+    });
+  </script>
+</body>
+</html>
+

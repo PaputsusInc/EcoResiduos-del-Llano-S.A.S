@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ecoresiduos-backend
+
+ecoresiduos:
+  python:
+    exact-solver-path: "../python-engines/exact_solver/solver_exacto.py"
+    genetic-solver-path: "../python-engines/genetic_solver/solver_genetico.py"
+  osrm:
+    base-url: "https://router.project-osrm.org"
+    timeout-ms: 4000
+

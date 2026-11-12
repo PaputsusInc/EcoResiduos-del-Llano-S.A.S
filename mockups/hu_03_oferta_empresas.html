@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oferta Semanal de Empresas — EcoResiduos del Llano S.A.S.</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden font-sans">
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN REAL) -->
+  <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 z-20">
+    <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-900/30">
+        <i data-lucide="leaf" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight">EcoResiduos del Llano</h1>
+        <p class="text-[11px] text-emerald-400 font-medium">Planificación Semanal · Meta</p>
+      </div>
+    </div>
+
+    <!-- Navegación por Módulos -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4 text-xs">
+      
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Panel Principal</p>
+        <a href="index.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400"></i>
+          <span>Resumen Operativo</span>
+        </a>
+      </div>
+
+      <!-- 1. Red y Parámetros -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">1. Red y Parámetros</p>
+        <div class="space-y-0.5">
+          <a href="hu_01_empresas_generadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="building-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Empresas Generadoras</span>
+          </a>
+          <a href="hu_02_plantas_procesadoras.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="factory" class="w-4 h-4 text-slate-400"></i>
+            <span>Plantas Procesadoras</span>
+          </a>
+          <a href="hu_03_oferta_empresas.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-emerald-600 text-white font-medium shadow-sm">
+            <i data-lucide="scale" class="w-4 h-4 text-emerald-200"></i>
+            <span>Oferta Semanal (t/sem)</span>
+          </a>
+          <a href="hu_04_capacidad_plantas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="warehouse" class="w-4 h-4 text-slate-400"></i>
+            <span>Capacidad de Plantas</span>
+          </a>
+          <a href="hu_05_distancias_viales.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="milestone" class="w-4 h-4 text-slate-400"></i>
+            <span>Distancias Viales (km)</span>
+          </a>
+          <a href="hu_06_costos_transporte.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="dollar-sign" class="w-4 h-4 text-slate-400"></i>
+            <span>Costos de Transporte</span>
+          </a>
+          <a href="hu_07_validacion_escenario.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="shield-check" class="w-4 h-4 text-slate-400"></i>
+            <span>Verificación de Datos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Optimización y Seguimiento -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">2. Optimización y Seguimiento</p>
+        <div class="space-y-0.5">
+          <a href="hu_08_resolucion_exacta_estados.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Resolución Método Exacto</span>
+          </a>
+          <a href="hu_19_procedimiento_metodo_exacto.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="list-ordered" class="w-4 h-4 text-slate-400"></i>
+            <span>Modelo y Pasos Exactos</span>
+          </a>
+          <a href="hu_16_comparacion_exacto_vs_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="git-compare" class="w-4 h-4 text-slate-400"></i>
+            <span>Comparativa Exacto vs. AG</span>
+          </a>
+          <a href="hu_18_seguimiento_generaciones_ag.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="activity" class="w-4 h-4 text-slate-400"></i>
+            <span>Evolución por Generaciones</span>
+          </a>
+          <a href="hu_09_asignacion_flujos_y_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="network" class="w-4 h-4 text-slate-400"></i>
+            <span>Asignación y Costos</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Simulación de Escenarios -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">3. Simulación de Escenarios</p>
+        <div class="space-y-0.5">
+          <a href="hu_10_sensibilidad_costos.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Costos</span>
+          </a>
+          <a href="hu_11_sensibilidad_ofertas.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="sliders" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Ofertas (±%)</span>
+          </a>
+          <a href="hu_12_sensibilidad_capacidades.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="gauge" class="w-4 h-4 text-slate-400"></i>
+            <span>Variación de Capacidades</span>
+          </a>
+          <a href="hu_13_evaluacion_escenarios.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="split" class="w-4 h-4 text-slate-400"></i>
+            <span>Estabilidad de Escenarios</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Análisis Dual y Escalabilidad -->
+      <div>
+        <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">4. Análisis Dual y Escalabilidad</p>
+        <div class="space-y-0.5">
+          <a href="hu_14_precios_sombra.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="help-circle" class="w-4 h-4 text-slate-400"></i>
+            <span>Precios Sombra</span>
+          </a>
+          <a href="hu_15_rangos_optimalidad.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Rangos de Optimalidad</span>
+          </a>
+          <a href="hu_17_escalabilidad_red.html" class="flex items-center space-x-2.5 px-3 py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <i data-lucide="maximize-2" class="w-4 h-4 text-slate-400"></i>
+            <span>Escalabilidad de Red (N×M)</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Perfil del Operador -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between text-xs">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[11px]">
+          CL
+        </div>
+        <div>
+          <p class="font-medium text-white leading-tight">Coordinador Logístico</p>
+          <p class="text-[10px] text-slate-400">Villavicencio · Meta</p>
+        </div>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-500" title="En línea"></span>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+    
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between shrink-0 shadow-sm">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+          <i data-lucide="scale" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900 leading-tight">Programación de Oferta Semanal a Transportar</h2>
+          <p class="text-xs text-slate-500">Toneladas de biomasa por empresa para la semana activa de planificación</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Indicador de Balance -->
+        <div id="badgeBalance" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-xs text-emerald-800 font-medium">
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+          <span>Oferta Total: <strong id="lblOfertaTotalTop" class="font-mono">115,0 t/sem</strong> &le; Capacidad: <strong class="font-mono">135,0 t/sem</strong></span>
+        </div>
+
+        <button onclick="guardarOfertas()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition">
+          <i data-lucide="save" class="w-3.5 h-3.5"></i>
+          <span>Guardar Cambios</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ALERTA DE EXCESO DE OFERTA (Se muestra sólo si Oferta Total > Capacidad Total) -->
+    <div id="alertaExcesoOferta" class="hidden bg-red-600 text-white px-6 py-2.5 flex items-center justify-between shadow-md shrink-0">
+      <div class="flex items-center space-x-3">
+        <i data-lucide="alert-octagon" class="w-5 h-5"></i>
+        <div>
+          <span class="font-bold text-sm">Capacidad superada por la oferta</span>
+          <span class="text-xs text-red-100 ml-2">La oferta total programada supera la capacidad total de recepción de las plantas (135,0 t/semana). El modelo resultará infactible.</span>
+        </div>
+      </div>
+      <button onclick="restablecerOfertasBase()" class="text-xs bg-white text-red-700 font-bold px-3 py-1 rounded shadow hover:bg-red-50">
+        Restablecer Ofertas Base
+      </button>
+    </div>
+
+    <!-- CUERPO SCROLLABLE -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- TARJETAS DE RESUMEN DE OFERTA -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-slate-500 text-xs">Oferta Semanal Total Acumulada</p>
+          <p id="lblOfertaTotalCard" class="text-2xl font-bold font-mono text-slate-900">115,0 <span class="text-sm font-sans font-medium text-slate-500">t/semana</span></p>
+          <span class="text-[11px] text-slate-400">10 empresas generadoras en programación</span>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-slate-500 text-xs">Capacidad Total de Recepción en Red</p>
+          <p class="text-2xl font-bold font-mono text-slate-900">135,0 <span class="text-sm font-sans font-medium text-slate-500">t/semana</span></p>
+          <span class="text-[11px] text-emerald-600 font-medium">Capacidad agregada suficiente</span>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-slate-500 text-xs">Holgura Libre de la Red</p>
+          <p id="lblHolguraCard" class="text-2xl font-bold font-mono text-emerald-700">20,0 <span class="text-sm font-sans font-medium text-slate-500">t/semana</span></p>
+          <span class="text-[11px] text-slate-400">Margen disponible antes de saturación</span>
+        </div>
+
+      </div>
+
+      <!-- TABLA EDITABLE DE OFERTAS SEMANALES -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden space-y-3 p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Asignación Semanal de Oferta por Empresa</h3>
+            <p class="text-xs text-slate-500">Edita directamente las toneladas para la semana activa. Todos los métodos utilizarán estos valores al resolver.</p>
+          </div>
+          <button onclick="restablecerOfertasBase()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center space-x-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>Restablecer valores nominales</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-700 font-semibold border-b border-slate-200">
+                <th class="py-3 px-4">Código</th>
+                <th class="py-3 px-4">Empresa Generadora</th>
+                <th class="py-3 px-4">Municipio / Origen</th>
+                <th class="py-3 px-4">Tipo Único de Residuo</th>
+                <th class="py-3 px-4 w-48 text-right">Oferta Semanal (t/sem)</th>
+                <th class="py-3 px-4 w-44 text-center">Participación en Red</th>
+                <th class="py-3 px-4 text-center">Estado Requerido</th>
+              </tr>
+            </thead>
+            <tbody id="tablaOfertasBody" class="divide-y divide-slate-100">
+              <!-- Render dinámico vía JavaScript -->
+            </tbody>
+            <tfoot>
+              <tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-200">
+                <td colspan="4" class="py-3 px-4 text-left">TOTAL OFERTA A TRANSPORTAR EN LA SEMANA</td>
+                <td id="lblTotalOfertaPie" class="py-3 px-4 text-right font-mono text-emerald-700 text-sm">115,0 t/sem</td>
+                <td class="py-3 px-4 text-center font-mono">100,0 %</td>
+                <td class="py-3 px-4 text-center">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                    Factible
+                  </span>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT REACTIVO Y CÁLCULOS -->
+  <script>
+    const CAPACIDAD_TOTAL_RED = 135.0; // t/semana
+
+    const OFERTAS_BASE = [
+      { id: 'EMP-01', nombre: 'Palmeras del Llano', municipio: 'Acacías', residuo: 'Palma de aceite', oferta: 25.0 },
+      { id: 'EMP-02', nombre: 'Agropecuaria San Martín', municipio: 'San Martín', residuo: 'Cascarilla de arroz', oferta: 15.0 },
+      { id: 'EMP-03', nombre: 'Hacienda La Cabaña', municipio: 'Cumaral', residuo: 'Palma de aceite', oferta: 18.0 },
+      { id: 'EMP-04', nombre: 'Arrocera del Ariari', municipio: 'Fuente de Oro', residuo: 'Cascarilla de arroz', oferta: 12.0 },
+      { id: 'EMP-05', nombre: 'Frutales y Cítricos Meta', municipio: 'Granada', residuo: 'Residuos cítricos', oferta: 8.0 },
+      { id: 'EMP-06', nombre: 'BioCacao de la Sierra', municipio: 'Villavicencio', residuo: 'Cacao y derivados', oferta: 6.0 },
+      { id: 'EMP-07', nombre: 'AgroForestal La Esperanza', municipio: 'Castilla la Nueva', residuo: 'Forestal maderable', oferta: 10.0 },
+      { id: 'EMP-08', nombre: 'Plantaciones San Rafael', municipio: 'Puerto López', residuo: 'Palma de aceite', oferta: 11.0 },
+      { id: 'EMP-09', nombre: 'Ganadería Sostenible Guamal', municipio: 'Guamal', residuo: 'Estiércol y pecuario', oferta: 5.0 },
+      { id: 'EMP-10', nombre: 'Agropecuaria Cabuyaro', municipio: 'Cabuyaro', residuo: 'Cascarilla de arroz', oferta: 5.0 }
+    ];
+
+    let ofertasActuales = OFERTAS_BASE.map(item => ({ ...item }));
+
+    function renderizarTabla() {
+      const tbody = document.getElementById('tablaOfertasBody');
+      tbody.innerHTML = '';
+
+      const totalOferta = ofertasActuales.reduce((acc, curr) => acc + curr.oferta, 0);
+
+      ofertasActuales.forEach((emp, index) => {
+        const pct = totalOferta > 0 ? ((emp.oferta / totalOferta) * 100).toFixed(1) : 0;
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 font-mono font-bold text-slate-800">${emp.id}</td>
+          <td class="py-2.5 px-4 font-semibold text-slate-900">${emp.nombre}</td>
+          <td class="py-2.5 px-4 text-slate-600">${emp.municipio}</td>
+          <td class="py-2.5 px-4">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+              ${emp.residuo}
+            </span>
+          </td>
+          <td class="py-2.5 px-4 text-right">
+            <div class="inline-flex items-center space-x-1.5">
+              <input type="number" step="0.5" min="0" value="${emp.oferta.toFixed(1)}" 
+                oninput="actualizarOferta(${index}, this.value)"
+                class="w-24 px-2 py-1 text-right text-xs font-mono font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+              <span class="text-[11px] text-slate-400 font-mono">t</span>
+            </div>
+          </td>
+          <td class="py-2.5 px-4">
+            <div class="flex items-center space-x-2">
+              <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-2 rounded-full" style="width: ${pct}%"></div>
+              </div>
+              <span class="font-mono text-[11px] text-slate-600 w-12 text-right">${pct} %</span>
+            </div>
+          </td>
+          <td class="py-2.5 px-4 text-center">
+            <span class="inline-flex items-center space-x-1 text-[11px] text-emerald-700 font-medium">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>100% a distribuir</span>
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      actualizarIndicadores(totalOferta);
+      lucide.createIcons();
+    }
+
+    function actualizarOferta(index, valor) {
+      const valNum = parseFloat(valor);
+      ofertasActuales[index].oferta = isNaN(valNum) || valNum < 0 ? 0 : valNum;
+      
+      const totalOferta = ofertasActuales.reduce((acc, curr) => acc + curr.oferta, 0);
+      actualizarIndicadores(totalOferta);
+    }
+
+    function actualizarIndicadores(totalOferta) {
+      document.getElementById('lblOfertaTotalTop').textContent = `${totalOferta.toFixed(1)} t/sem`;
+      document.getElementById('lblOfertaTotalCard').innerHTML = `${totalOferta.toFixed(1)} <span class="text-sm font-sans font-medium text-slate-500">t/semana</span>`;
+      document.getElementById('lblTotalOfertaPie').textContent = `${totalOferta.toFixed(1)} t/sem`;
+
+      const holgura = CAPACIDAD_TOTAL_RED - totalOferta;
+      const lblHolgura = document.getElementById('lblHolguraCard');
+      const alerta = document.getElementById('alertaExcesoOferta');
+      const badgeBalance = document.getElementById('badgeBalance');
+
+      if (holgura < 0) {
+        // Alerta: Capacidad superada por la oferta
+        alerta.classList.remove('hidden');
+        lblHolgura.className = 'text-2xl font-bold font-mono text-red-600';
+        lblHolgura.innerHTML = `${holgura.toFixed(1)} <span class="text-sm font-sans font-medium text-red-500">t/sem (Déficit)</span>`;
+        
+        badgeBalance.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-red-300 bg-red-50 text-xs text-red-800 font-bold';
+        badgeBalance.innerHTML = `<i data-lucide="alert-octagon" class="w-4 h-4 text-red-600"></i><span>Oferta Total: ${totalOferta.toFixed(1)} t &gt; Capacidad: 135,0 t</span>`;
+      } else {
+        alerta.classList.add('hidden');
+        lblHolgura.className = 'text-2xl font-bold font-mono text-emerald-700';
+        lblHolgura.innerHTML = `${holgura.toFixed(1)} <span class="text-sm font-sans font-medium text-slate-500">t/semana</span>`;
+
+        badgeBalance.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-xs text-emerald-800 font-medium';
+        badgeBalance.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i><span>Oferta Total: <strong class="font-mono">${totalOferta.toFixed(1)} t/sem</strong> &le; Capacidad: <strong class="font-mono">135,0 t/sem</strong></span>`;
+      }
+      lucide.createIcons();
+    }
+
+    function restablecerOfertasBase() {
+      ofertasActuales = OFERTAS_BASE.map(item => ({ ...item }));
+      renderizarTabla();
+    }
+
+    function guardarOfertas() {
+      const total = ofertasActuales.reduce((acc, curr) => acc + curr.oferta, 0);
+      alert(`Programación semanal guardada exitosamente.\nOferta total a transportar: ${total.toFixed(1)} t/semana.`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderizarTabla();
+    });
+  </script>
+</body>
+</html>
