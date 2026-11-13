@@ -70,7 +70,7 @@ La asignación de flujos, el costo, la aptitud y los operadores del AG se calcul
 │   ├── common/         Protocolo JSONL compartido
 │   ├── exact_solver/   Solucionador exacto (solver_exacto.py)
 │   └── genetic_solver/ Algoritmo genético (solver_genetico.py)
-├── docs/               Plan de implementación, historias de usuario y diagramas
+├── docs/               Historias de usuario y diagramas
 ├── mockups/            Maquetas HTML de referencia de la interfaz
 ├── LICENSE
 └── README.md
