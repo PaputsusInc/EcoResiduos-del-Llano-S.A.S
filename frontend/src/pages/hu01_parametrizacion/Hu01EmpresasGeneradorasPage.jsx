@@ -14,7 +14,19 @@ export function Hu01EmpresasGeneradorasPage() {
   const [cargandoGuardar, setCargandoGuardar] = useState(false);
 
   const empresas = escenarioActivo?.empresas || [];
+  const plantas = escenarioActivo?.plantas || [];
+  const rutas = escenarioActivo?.rutas || [];
   const ofertaTotal = empresas.reduce((sum, e) => sum + (e.oferta_t || 0), 0);
+
+  const obtenerPlantasConectadas = (empresaId) => {
+    const rutasEmpresa = rutas.filter(r => r.empresa_id === empresaId);
+    if (rutasEmpresa.length === 0) {
+      return plantas.map(p => p.id);
+    }
+    return rutasEmpresa
+      .filter(r => r.activa !== false && r.compatible !== false)
+      .map(r => r.planta_id);
+  };
 
   const abrirModalNueva = () => {
     const nextNum = empresas.length + 1;
@@ -28,14 +40,30 @@ export function Hu01EmpresasGeneradorasPage() {
       tipo_residuo: 'Palma de aceite',
       oferta_t: 10.0,
       precio_tonelada: 0,
-      plantas_compatibles: ['PLA-01', 'PLA-02', 'PLA-03', 'PLA-04']
+      plantas_compatibles: plantas.map(p => p.id)
     });
     setModalAbierto(true);
   };
 
   const abrirModalEditar = (emp) => {
-    setEmpresaEnEdicion({ ...emp });
+    setEmpresaEnEdicion({
+      ...emp,
+      plantas_compatibles: obtenerPlantasConectadas(emp.id)
+    });
     setModalAbierto(true);
+  };
+
+  const togglePlantaCompatible = (plantaId) => {
+    setEmpresaEnEdicion(prev => {
+      const actuales = Array.isArray(prev.plantas_compatibles) ? prev.plantas_compatibles : [];
+      const existe = actuales.includes(plantaId);
+      return {
+        ...prev,
+        plantas_compatibles: existe
+          ? actuales.filter(id => id !== plantaId)
+          : [...actuales, plantaId]
+      };
+    });
   };
 
   const handleGuardarCoordenadas = (lat, lon) => {
@@ -146,11 +174,14 @@ export function Hu01EmpresasGeneradorasPage() {
                 <th className="px-4 py-3">Tipo de Residuo</th>
                 <th className="px-4 py-3 text-right">Oferta (t/semana)</th>
                 <th className="px-4 py-3 text-right">Adquisición (COP/t)</th>
+                <th className="px-4 py-3 text-center">Plantas Conectadas</th>
                 <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 text-slate-700 font-medium">
-              {empresas.map((emp) => (
+              {empresas.map((emp) => {
+                const conectadas = obtenerPlantasConectadas(emp.id);
+                return (
                 <tr key={emp.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-mono font-bold text-emerald-800">{emp.id}</td>
                   <td className="px-4 py-3 font-bold text-slate-900">{emp.nombre}</td>
@@ -165,6 +196,18 @@ export function Hu01EmpresasGeneradorasPage() {
                   <td className="px-4 py-3 text-right font-black text-slate-900">{emp.oferta_t?.toFixed(1)} t/semana</td>
                   <td className="px-4 py-3 text-right text-slate-700">$ {Number(emp.precio_tonelada || 0).toLocaleString('es-CO')}</td>
                   <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+                        conectadas.length > 0
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                      }`}
+                      title={conectadas.length > 0 ? conectadas.join(', ') : 'Sin conexiones habilitadas'}
+                    >
+                      {conectadas.length} / {plantas.length}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => abrirModalEditar(emp)}
                       className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
@@ -174,7 +217,8 @@ export function Hu01EmpresasGeneradorasPage() {
                     </button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -183,7 +227,7 @@ export function Hu01EmpresasGeneradorasPage() {
       {/* Modal de Edición Completa */}
       {modalAbierto && empresaEnEdicion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col">
             <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
               <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-emerald-600" />
@@ -192,7 +236,7 @@ export function Hu01EmpresasGeneradorasPage() {
               <button onClick={() => setModalAbierto(false)} className="text-slate-400 hover:text-slate-600">✕</button>
             </div>
 
-            <form onSubmit={handleGuardarEmpresa} className="p-6 space-y-4">
+            <form onSubmit={handleGuardarEmpresa} className="p-6 space-y-4 overflow-y-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">ID Empresa:</label>
@@ -264,6 +308,61 @@ export function Hu01EmpresasGeneradorasPage() {
                   onChange={(e) => setEmpresaEnEdicion({ ...empresaEnEdicion, precio_tonelada: e.target.value === '' ? '' : Number(e.target.value) })}
                   className="w-full min-h-11 rounded-lg border border-slate-300 px-3 text-sm focus:ring-2 focus:ring-emerald-500" />
                 <p className="mt-1 text-xs text-slate-500">Se suma al costo logístico por cada tonelada de esta empresa.</p>
+              </div>
+
+              {/* Selector de Conexiones a Plantas Procesadoras */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 block">
+                      Conexiones habilitadas hacia Plantas Procesadoras
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Selecciona a qué plantas puede despachar biomasa esta empresa.
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setEmpresaEnEdicion(prev => ({ ...prev, plantas_compatibles: plantas.map(p => p.id) }))}
+                      className="px-2 py-1 text-[11px] font-semibold rounded bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"
+                    >
+                      Todas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEmpresaEnEdicion(prev => ({ ...prev, plantas_compatibles: [] }))}
+                      className="px-2 py-1 text-[11px] font-semibold rounded bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"
+                    >
+                      Ninguna
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {plantas.map((pla) => {
+                    const marcada = (empresaEnEdicion.plantas_compatibles || []).includes(pla.id);
+                    return (
+                      <label
+                        key={pla.id}
+                        className={`flex items-center gap-2.5 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
+                          marcada
+                            ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950 font-semibold'
+                            : 'bg-white border-slate-200 text-slate-500'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={marcada}
+                          onChange={() => togglePlantaCompatible(pla.id)}
+                          className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className="font-mono font-bold text-[11px] text-emerald-800">{pla.id}</span>
+                        <span className="truncate">{pla.nombre}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Selector de Coordenadas con Mapa Interactivo */}

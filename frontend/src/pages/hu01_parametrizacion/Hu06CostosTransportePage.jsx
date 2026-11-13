@@ -28,11 +28,11 @@ export default function Hu06CostosTransportePage() {
     const nuevaMatriz = empresas.map(emp => {
       return plantas.map(pla => {
         const r = rutas.find(ruta => ruta.empresa_id === emp.id && ruta.planta_id === pla.id);
+        if (r && (Boolean(r.activa) === false || Boolean(r.compatible) === false)) {
+          return null; // Sin ruta transitable
+        }
         if (r && r.costo_unitario_t != null) {
           return r.costo_unitario_t;
-        }
-        if (r && Boolean(r.activa) === false) {
-          return null; // Sin ruta transitable
         }
         return null;
       });

@@ -47,7 +47,8 @@ export class VistaParametrizacionDinamica {
       longitud: Number(datos?.longitud),
       tipo_residuo: datos?.tipo_residuo?.trim(),
       oferta_t: Number(datos?.oferta_t),
-      plantas_compatibles: datos?.plantas_compatibles || []
+      precio_tonelada: Number(datos?.precio_tonelada ?? 0),
+      plantas_compatibles: Array.isArray(datos?.plantas_compatibles) ? datos.plantas_compatibles : []
     };
   }
 
@@ -59,7 +60,9 @@ export class VistaParametrizacionDinamica {
       latitud: Number(datos?.latitud),
       longitud: Number(datos?.longitud),
       capacidad_maxima_t: Number(datos?.capacidad_maxima_t),
-      residuos_admitidos: datos?.residuos_admitidos || []
+      costo_operacion_t: Number(datos?.costo_operacion_t ?? 0),
+      residuos_admitidos: Array.isArray(datos?.residuos_admitidos) ? datos.residuos_admitidos : [],
+      empresas_compatibles: Array.isArray(datos?.empresas_compatibles) ? datos.empresas_compatibles : []
     };
   }
 

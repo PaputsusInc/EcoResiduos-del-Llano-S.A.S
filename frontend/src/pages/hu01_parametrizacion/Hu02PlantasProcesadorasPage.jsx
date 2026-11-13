@@ -14,11 +14,23 @@ export function Hu02PlantasProcesadorasPage() {
   const [cargandoGuardar, setCargandoGuardar] = useState(false);
 
   const plantas = escenarioActivo?.plantas || [];
+  const empresas = escenarioActivo?.empresas || [];
+  const rutas = escenarioActivo?.rutas || [];
   const capacidadTotal = plantas.reduce((sum, p) => sum + (p.capacidad_maxima_t || 0), 0);
-  const ofertaTotal = escenarioActivo?.empresas?.length
-    ? escenarioActivo.empresas.reduce((sum, e) => sum + (e.oferta_t || 0), 0)
+  const ofertaTotal = empresas.length
+    ? empresas.reduce((sum, e) => sum + (e.oferta_t || 0), 0)
     : (escenarioActivo?.oferta_total_t || 115.0);
   const holgura = capacidadTotal - ofertaTotal;
+
+  const obtenerEmpresasConectadas = (plantaId) => {
+    const rutasPlanta = rutas.filter(r => r.planta_id === plantaId);
+    if (rutasPlanta.length === 0) {
+      return empresas.map(e => e.id);
+    }
+    return rutasPlanta
+      .filter(r => r.activa !== false && r.compatible !== false)
+      .map(r => r.empresa_id);
+  };
 
   const abrirModalNueva = () => {
     const nextNum = plantas.length + 1;
@@ -31,14 +43,31 @@ export function Hu02PlantasProcesadorasPage() {
       longitud: -73.76,
       capacidad_maxima_t: 20.0,
       costo_operacion_t: 0,
-      residuos_admitidos: ['Palma de aceite', 'Cascarilla de arroz']
+      residuos_admitidos: ['Palma de aceite', 'Cascarilla de arroz'],
+      empresas_compatibles: empresas.map(e => e.id)
     });
     setModalAbierto(true);
   };
 
   const abrirModalEditar = (pla) => {
-    setPlantaEnEdicion({ ...pla });
+    setPlantaEnEdicion({
+      ...pla,
+      empresas_compatibles: obtenerEmpresasConectadas(pla.id)
+    });
     setModalAbierto(true);
+  };
+
+  const toggleEmpresaCompatible = (empresaId) => {
+    setPlantaEnEdicion(prev => {
+      const actuales = Array.isArray(prev.empresas_compatibles) ? prev.empresas_compatibles : [];
+      const existe = actuales.includes(empresaId);
+      return {
+        ...prev,
+        empresas_compatibles: existe
+          ? actuales.filter(id => id !== empresaId)
+          : [...actuales, empresaId]
+      };
+    });
   };
 
   const handleGuardarPlanta = async (e) => {
@@ -181,11 +210,14 @@ export function Hu02PlantasProcesadorasPage() {
                 <th className="px-4 py-3 text-center">Longitud</th>
                 <th className="px-4 py-3 text-right">Capacidad Máxima (t/semana)</th>
                 <th className="px-4 py-3 text-right">Operación (COP/t)</th>
+                <th className="px-4 py-3 text-center">Empresas Conectadas</th>
                 <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 text-slate-700 font-medium">
-              {plantas.map((pla) => (
+              {plantas.map((pla) => {
+                const conectadas = obtenerEmpresasConectadas(pla.id);
+                return (
                 <tr key={pla.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="px-4 py-3 font-mono font-bold text-emerald-800">{pla.id}</td>
                   <td className="px-4 py-3 font-bold text-slate-900">{pla.nombre}</td>
@@ -194,6 +226,18 @@ export function Hu02PlantasProcesadorasPage() {
                   <td className="px-4 py-3 text-center font-mono text-slate-500">{pla.longitud?.toFixed(4)}</td>
                   <td className="px-4 py-3 text-right font-black text-slate-900">{pla.capacidad_maxima_t?.toFixed(1)} t/semana</td>
                   <td className="px-4 py-3 text-right text-slate-700">$ {Number(pla.costo_operacion_t || 0).toLocaleString('es-CO')}</td>
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+                        conectadas.length > 0
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                      }`}
+                      title={conectadas.length > 0 ? conectadas.join(', ') : 'Sin empresas conectadas'}
+                    >
+                      {conectadas.length} / {empresas.length}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => abrirModalEditar(pla)}
@@ -204,7 +248,8 @@ export function Hu02PlantasProcesadorasPage() {
                     </button>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -213,7 +258,7 @@ export function Hu02PlantasProcesadorasPage() {
       {/* Modal de Edición de Planta */}
       {modalAbierto && plantaEnEdicion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col">
             <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
               <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
                 <Factory className="w-4 h-4 text-emerald-600" />
@@ -222,7 +267,7 @@ export function Hu02PlantasProcesadorasPage() {
               <button onClick={() => setModalAbierto(false)} className="text-slate-400 hover:text-slate-600">✕</button>
             </div>
 
-            <form onSubmit={handleGuardarPlanta} className="p-6 space-y-4">
+            <form onSubmit={handleGuardarPlanta} className="p-6 space-y-4 overflow-y-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">ID Planta:</label>
@@ -277,6 +322,61 @@ export function Hu02PlantasProcesadorasPage() {
                     onChange={(e) => setPlantaEnEdicion({ ...plantaEnEdicion, capacidad_maxima_t: parseFloat(e.target.value) })}
                     className="w-full text-xs font-bold px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
                   />
+                </div>
+              </div>
+
+              {/* Selector de Conexiones desde Empresas Generadoras */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 block">
+                      Conexiones habilitadas desde Empresas Generadoras
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Selecciona qué empresas pueden despachar biomasa hacia esta planta.
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setPlantaEnEdicion(prev => ({ ...prev, empresas_compatibles: empresas.map(e => e.id) }))}
+                      className="px-2 py-1 text-[11px] font-semibold rounded bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"
+                    >
+                      Todas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlantaEnEdicion(prev => ({ ...prev, empresas_compatibles: [] }))}
+                      className="px-2 py-1 text-[11px] font-semibold rounded bg-white border border-slate-300 text-slate-700 hover:bg-slate-100"
+                    >
+                      Ninguna
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
+                  {empresas.map((emp) => {
+                    const marcada = (plantaEnEdicion.empresas_compatibles || []).includes(emp.id);
+                    return (
+                      <label
+                        key={emp.id}
+                        className={`flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
+                          marcada
+                            ? 'bg-emerald-50/70 border-emerald-300 text-emerald-950 font-semibold'
+                            : 'bg-white border-slate-200 text-slate-500'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={marcada}
+                          onChange={() => toggleEmpresaCompatible(emp.id)}
+                          className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        />
+                        <span className="font-mono font-bold text-[11px] text-emerald-800">{emp.id}</span>
+                        <span className="truncate">{emp.nombre}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 

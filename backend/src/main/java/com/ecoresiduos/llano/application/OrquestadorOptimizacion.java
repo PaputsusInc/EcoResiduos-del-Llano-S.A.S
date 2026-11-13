@@ -106,6 +106,20 @@ public class OrquestadorOptimizacion {
                 ? 0.0 : toDouble(datos_empresa.get("precio_tonelada")));
         List<Ruta> afectadas = escenario.guardar_empresa(emp);
 
+        if (datos_empresa.get("plantas_compatibles") instanceof List<?> listaPlantas) {
+            java.util.Set<String> compatibles = new java.util.HashSet<>();
+            for (Object item : listaPlantas) {
+                if (item != null) compatibles.add(String.valueOf(item));
+            }
+            for (Ruta ruta : escenario.getRutas()) {
+                if (Objects.equals(ruta.getEmpresa_id(), emp.getId())) {
+                    boolean habilitada = compatibles.contains(ruta.getPlanta_id());
+                    ruta.setCompatible(habilitada);
+                    ruta.setActiva(habilitada);
+                }
+            }
+        }
+
         // Consultar OSRM para las rutas afectadas
         if (afectadas != null && !afectadas.isEmpty()) {
             consultar_recorridos_viales_osrm(escenario_id, emp.getId(), null);
@@ -135,6 +149,20 @@ public class OrquestadorOptimizacion {
         pla.setCosto_operacion_t(datos_planta.get("costo_operacion_t") == null
                 ? 0.0 : toDouble(datos_planta.get("costo_operacion_t")));
         List<Ruta> afectadas = escenario.guardar_planta(pla);
+
+        if (datos_planta.get("empresas_compatibles") instanceof List<?> listaEmpresas) {
+            java.util.Set<String> compatibles = new java.util.HashSet<>();
+            for (Object item : listaEmpresas) {
+                if (item != null) compatibles.add(String.valueOf(item));
+            }
+            for (Ruta ruta : escenario.getRutas()) {
+                if (Objects.equals(ruta.getPlanta_id(), pla.getId())) {
+                    boolean habilitada = compatibles.contains(ruta.getEmpresa_id());
+                    ruta.setCompatible(habilitada);
+                    ruta.setActiva(habilitada);
+                }
+            }
+        }
 
         // Consultar OSRM para las rutas afectadas
         if (afectadas != null && !afectadas.isEmpty()) {
