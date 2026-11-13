@@ -1,4 +1,4 @@
-"""El ajuste respeta el contrato del AG y no se activa durante una corrida normal."""
+"""El ajuste respeta el contrato del AG y no se activa durante una ejecución normal."""
 
 import sys
 import unittest

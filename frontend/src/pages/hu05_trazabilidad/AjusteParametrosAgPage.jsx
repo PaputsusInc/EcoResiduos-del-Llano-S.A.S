@@ -103,7 +103,7 @@ export default function AjusteParametrosAgPage() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Algoritmo genético · Escenario {escenarioId}</p>
               <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">Ajuste de parámetros del AG</h1>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Define los valores de la búsqueda o solicita una recomendación para el escenario actual. Después podrás iniciar y seguir la corrida en Evolución.</p>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Define los valores de la búsqueda o solicita una recomendación para el escenario actual. Después podrás ejecutar el AG y seguir su evolución.</p>
             </div>
           </div>
         </header>
@@ -113,7 +113,7 @@ export default function AjusteParametrosAgPage() {
             <div className="rounded-lg bg-slate-100 p-2 text-slate-700"><SlidersHorizontal aria-hidden="true" className="h-5 w-5" /></div>
             <div>
               <h2 id="configuracion-titulo" className="text-lg font-bold text-slate-950">Parámetros de búsqueda</h2>
-              <p className="mt-1 text-sm text-slate-600">Los valores que guardes se aplicarán a la próxima corrida de este escenario.</p>
+              <p className="mt-1 text-sm text-slate-600">Los valores que guardes se aplicarán a la próxima ejecución de este escenario.</p>
             </div>
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -132,7 +132,7 @@ export default function AjusteParametrosAgPage() {
                 <Campo id="elitismo" titulo="Planes protegidos" ayuda="Mejores planes que no se reemplazan." valor={config.elitismo} cambiar={(v) => cambiar('elitismo', v)} error={errores.elitismo} min={0} />
                 <Campo id="reemplazos" titulo="Reemplazos por generación" ayuda="Vacío: mitad de los lugares no protegidos." valor={config.reemplazos} cambiar={(v) => cambiar('reemplazos', v)} error={errores.reemplazos} min={1} />
                 <Campo id="limite_sin_mejora" titulo="Parar tras generaciones sin mejora" ayuda="Vacío: continuar hasta el máximo." valor={config.limite_sin_mejora} cambiar={(v) => cambiar('limite_sin_mejora', v)} error={errores.limite_sin_mejora} min={1} />
-                <Campo id="semilla" titulo="Semilla de la corrida" ayuda="Igual semilla permite repetir la búsqueda." valor={config.semilla} cambiar={(v) => cambiar('semilla', v)} error={errores.semilla} min={0} />
+                <Campo id="semilla" titulo="Semilla de la ejecución" ayuda="Igual semilla permite repetir la búsqueda." valor={config.semilla} cambiar={(v) => cambiar('semilla', v)} error={errores.semilla} min={0} />
               </div>
               <div className="mt-5 border-t border-slate-100 pt-4">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Configuración técnica aplicada</p>
@@ -156,7 +156,7 @@ export default function AjusteParametrosAgPage() {
               {ajustando ? 'Buscando configuración…' : 'Ajustar parámetros'}
             </button>
           </div>
-          <p className="mt-3 text-xs leading-5 text-slate-500">El ajuste se ejecuta solo al pulsar «Ajustar parámetros»: prueba 12 configuraciones con dos semillas cada una. No inicia una corrida de seguimiento.</p>
+          <p className="mt-3 text-xs leading-5 text-slate-500">El ajuste se ejecuta solo al pulsar «Ajustar parámetros»: prueba 12 configuraciones con dos semillas cada una. El seguimiento del AG se inicia por separado en Evolución.</p>
         </section>
 
         {ajuste && <section aria-labelledby="ajuste-titulo" className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">

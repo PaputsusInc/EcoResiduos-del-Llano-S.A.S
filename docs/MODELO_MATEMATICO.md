@@ -37,5 +37,5 @@ Las rutas fuera de \(E\) tienen flujo cero. Si la oferta supera la capacidad tot
 
 - Una variación de **costos** escala el componente de transporte \(c^T_{ij}\). Precio y operación permanecen fijos. Los rangos de MODI se reportan sobre el coeficiente total \(c^T_{ij}+p_i+o_j\).
 - Una variación de **oferta** cambia \(s_i\); una de **capacidad** cambia \(u_j\). El laboratorio llama capacidad a la demanda de recepción que puede atender cada planta.
-- El AG decodifica prioridades en flujos que satisfacen estas restricciones. Su aptitud es \(1/(1+Z/C_{ref})\) para una escala positiva \(C_{ref}\). Una solución incompleta indica un error del decodificador y detiene la corrida; no existe un parámetro de penalización sin efecto.
+- El AG decodifica prioridades en flujos que satisfacen estas restricciones. Su aptitud es \(1/(1+Z/C_{ref})\) para una escala positiva \(C_{ref}\). Una solución incompleta indica un error del decodificador y detiene la ejecución; no existe un parámetro de penalización sin efecto.
 - El exacto certifica el mínimo de esta formulación mediante Vogel y MODI. El AG produce una solución factible sin certificar optimalidad. La brecha usa el costo de esta misma función objetivo en ambos motores.

@@ -117,7 +117,7 @@ export default function Hu17EscalabilidadRedPage() {
             <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">{reportes.length} redes completadas</span>
           </div>
           {reportes.map((reporte) => <TarjetaRed key={reporte.escenario_id} reporte={reporte} />)}
-          <p className="rounded-xl border border-slate-200 bg-white p-4 text-xs leading-5 text-slate-600"><Cpu className="mr-1 inline h-4 w-4" aria-hidden="true" />CPU es tiempo acumulado del proceso Python; memoria es su máximo residente. No representan el consumo total del equipo. Los tiempos de una corrida varían entre equipos; para afirmar tendencias de velocidad se necesitan varias repeticiones.</p>
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-xs leading-5 text-slate-600"><Cpu className="mr-1 inline h-4 w-4" aria-hidden="true" />CPU es tiempo acumulado del proceso Python; memoria es su máximo residente. No representan el consumo total del equipo. Los tiempos de una ejecución varían entre equipos; para afirmar tendencias de velocidad se necesitan varias repeticiones.</p>
         </section>}
       </div>
     </main>

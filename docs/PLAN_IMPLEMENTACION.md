@@ -1200,7 +1200,7 @@ Todos los endpoints residen bajo el prefijo `/api` y aceptan/retornan `applicati
 ### 4.2. Contrato de Polling HTTP Asíncrono (`HU-18` y `HU-19`)
 
 1. **Inicio de Ejecución Asíncrona**:
-   - Cuando el Coordinador Logístico inicia una corrida en `HU-18` (Seguimiento AG) o `HU-19` / `HU-08` (Procedimiento Exacto), React envía `POST /api/escenarios/{esc_id}/optimizar` con `"asincrono": true`.
+   - Cuando el Coordinador Logístico inicia una ejecución en `HU-18` (Seguimiento AG) o `HU-19` / `HU-08` (Procedimiento Exacto), React envía `POST /api/escenarios/{esc_id}/optimizar` con `"asincrono": true`.
    - `OrquestadorOptimizacion`:
      1. Valida el escenario (`validar_integridad_escenario`). Si falla, responde inmediatamente `HTTP 422` con la lista de inconsistencias.
      2. Clona y congela la versión efectiva del escenario en sesión (`DD-55`).

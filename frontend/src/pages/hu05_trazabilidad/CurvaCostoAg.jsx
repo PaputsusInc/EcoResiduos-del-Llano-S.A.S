@@ -32,13 +32,13 @@ export default function CurvaCostoAg({ historial, enCurso, onIniciar }) {
               {enCurso ? <Activity aria-hidden="true" className="h-5 w-5 animate-pulse" /> : <Play aria-hidden="true" className="h-5 w-5" />}
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">{soloInicial ? 'Población inicial registrada' : enCurso ? 'Preparando la primera generación' : 'La gráfica comienza con una corrida'}</h3>
+              <h3 className="font-bold text-slate-900">{soloInicial ? 'Población inicial registrada' : enCurso ? 'Preparando la primera generación' : 'Inicia el AG para ver su evolución'}</h3>
               <p className="mt-1 text-sm leading-6 text-slate-600">
                 {soloInicial
                   ? `Generación 0: ${dinero(puntos[0].mejor_costo_acumulado)}. La curva tendrá una tendencia cuando llegue la siguiente generación.`
                     : enCurso
                     ? 'El motor está preparando los primeros candidatos. La evolución aparecerá aquí cuando registre sus costos.'
-                    : 'Aún no hay generaciones de una corrida. Inicia el AG para observar cuándo baja el costo y cuándo deja de mejorar.'}
+                    : 'Aún no hay generaciones registradas. Al ejecutar el AG podrás observar cuándo baja el costo y cuándo deja de mejorar.'}
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function CurvaCostoAg({ historial, enCurso, onIniciar }) {
           <p className="mt-1 text-sm text-slate-600">Cada descenso indica que el AG encontró un plan factible más barato.</p>
         </div>
         <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
-          {enCurso ? 'Actualizando la corrida' : `${numero(puntos.length)} generaciones registradas`}
+          {enCurso ? 'Actualizando la ejecución' : `${numero(puntos.length)} generaciones registradas`}
         </span>
       </div>
 
@@ -117,10 +117,10 @@ export default function CurvaCostoAg({ historial, enCurso, onIniciar }) {
             <button type="button" onClick={() => setVista('detalle')} aria-pressed={detalle}
               className={`min-h-11 rounded-md px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600 ${detalle ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}>Ahorro principal</button>
             <button type="button" onClick={() => setVista('completa')} aria-pressed={!detalle}
-              className={`min-h-11 rounded-md px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600 ${!detalle ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}>Corrida completa</button>
+              className={`min-h-11 rounded-md px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600 ${!detalle ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}>Ejecución completa</button>
           </div>}
         </div>
-        <p className="mt-3 text-xs text-slate-600">Mostrando generaciones {primero.numero}–{finVista} de {resumen.ultimo.numero}. {detalle ? `Al menos el 95 % de la reducción se alcanzó en la generación ${resumen.generacionAhorroPrincipal}; el costo final se ve en «Corrida completa».` : 'La escala horizontal incluye toda la corrida.'}</p>
+        <p className="mt-3 text-xs text-slate-600">Mostrando generaciones {primero.numero}–{finVista} de {resumen.ultimo.numero}. {detalle ? `Al menos el 95 % de la reducción se alcanzó en la generación ${resumen.generacionAhorroPrincipal}; el costo final se ve en «Ejecución completa».` : 'La escala horizontal incluye toda la ejecución.'}</p>
         <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-white">
           <svg viewBox="0 0 920 310" className="min-w-[700px] w-full" role="img"
             aria-label={`Costo inicial ${dinero(resumen.inicial)} y mejor costo ${dinero(resumen.ultimo.mejor_costo_acumulado)}. Última mejora en la generación ${resumen.ultimaMejora}.`}

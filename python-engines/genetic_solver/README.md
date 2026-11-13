@@ -36,7 +36,7 @@ En el software oficial, el backend inicia ese proceso por sí mismo. La API
 `POST /api/escenarios/{id}/optimizar` recibe `metodo: "AG"`,
 `asincrono: true` y `config_ag`. La vista «Ajuste de parámetros AG» permite
 guardar una configuración por escenario; «Evolución del Algoritmo Genético»
-inicia la corrida y muestra cada generación recibida.
+inicia la ejecución y muestra cada generación recibida.
 
 La acción «Ajustar parámetros» llama a
 `POST /api/escenarios/{id}/ag/ajustar`. Optuna TPE prueba 12 configuraciones
@@ -44,8 +44,8 @@ con dos semillas comunes y un presupuesto de 300 a 1200 evaluaciones por
 semilla. Ajusta población, generaciones derivadas del presupuesto, tasas de
 cruce y mutación, torneo, elitismo y reemplazos. Mantiene el operador OX
 y la escala elegida. La puntuación es el costo medio factible
-de las dos corridas; la recomendación puede aplicarse y después ejecutarse
-como corrida normal. Es una búsqueda limitada, no una certificación de
+de las dos ejecuciones; la recomendación puede aplicarse y después ejecutarse
+como ejecución normal. Es una búsqueda limitada, no una certificación de
 optimalidad. No se crea historial ni se modifica el escenario durante el
 ajuste.
 
@@ -63,7 +63,7 @@ ajuste.
 4. **Aptitud.** Se calcula como
    `1 / (1 + costo / escala_costo_referencia)`. La factibilidad se garantiza
    al validar la red y al decodificar las prioridades. Si el decodificador
-   produjera un plan incompleto, la corrida falla con un error explícito.
+   produjera un plan incompleto, la ejecución falla con un error explícito.
 5. **Evolución.** Un torneo escoge padres. La interfaz utiliza cruce OX de dos
    puntos; la API admite también cruce por bloques. Ambos producen
    permutaciones válidas; la mutación intercambia dos genes.
@@ -71,7 +71,7 @@ ajuste.
    cambian por generación.
 6. **Seguimiento.** Se emite la generación 0 y cada generación ejecutada con
    costo, aptitud, número de candidatos factibles, evaluaciones y tiempo
-   transcurrido. La corrida termina en `generaciones` o tras
+   transcurrido. La ejecución termina en `generaciones` o tras
    `limite_sin_mejora` generaciones sin una mejora superior a
    `umbral_mejora_cop`.
 

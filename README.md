@@ -226,7 +226,7 @@ Implementado:
 - Frontend con vistas por módulo, enrutamiento semántico, selector de escenario activo y datos dinámicos por escenario.
 - Validación de escenarios con detección y corrección de inconsistencias.
 - Motores Python funcionales: solución exacta por Vogel–MODI y algoritmo genético por prioridades con seguimiento por generación. El ajuste de parámetros usa Optuna bajo demanda.
-- Sensibilidad comparada de referencia y variante, escalabilidad medida, y recursos del proceso Python por corrida.
+- Sensibilidad comparada de referencia y variante, escalabilidad medida, y recursos del proceso Python por ejecución.
 
 Pendiente:
 

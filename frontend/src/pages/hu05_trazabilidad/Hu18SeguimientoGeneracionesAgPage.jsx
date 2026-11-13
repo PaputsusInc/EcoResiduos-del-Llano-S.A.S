@@ -13,22 +13,23 @@ const dinero = (valor) => Number.isFinite(valor)
   : 'Sin dato';
 const segundos = (valor) => Number.isFinite(valor) ? `${valor.toFixed(2)} s` : '—';
 const numero = (valor) => Number.isFinite(valor) ? valor.toLocaleString('es-CO') : '—';
-const claveUltimaCorrida = (escenarioId) => `ecoresiduos:ag:ultima-corrida:${escenarioId}`;
-function leerUltimaCorrida(escenarioId) {
-  try { return window.localStorage.getItem(claveUltimaCorrida(escenarioId)); } catch { return null; }
+// Conserva la clave previa para recuperar ejecuciones guardadas en el navegador.
+const claveUltimaEjecucion = (escenarioId) => `ecoresiduos:ag:ultima-corrida:${escenarioId}`;
+function leerUltimaEjecucion(escenarioId) {
+  try { return window.localStorage.getItem(claveUltimaEjecucion(escenarioId)); } catch { return null; }
 }
-function guardarUltimaCorrida(escenarioId, ejecucionId) {
-  try { window.localStorage.setItem(claveUltimaCorrida(escenarioId), ejecucionId); } catch { /* La corrida sigue visible en esta sesión. */ }
+function guardarUltimaEjecucion(escenarioId, ejecucionId) {
+  try { window.localStorage.setItem(claveUltimaEjecucion(escenarioId), ejecucionId); } catch { /* La ejecución sigue visible en esta sesión. */ }
 }
-function olvidarUltimaCorrida(escenarioId) {
-  try { window.localStorage.removeItem(claveUltimaCorrida(escenarioId)); } catch { /* El almacenamiento es opcional. */ }
+function olvidarUltimaEjecucion(escenarioId) {
+  try { window.localStorage.removeItem(claveUltimaEjecucion(escenarioId)); } catch { /* El almacenamiento es opcional. */ }
 }
 
 export default function Hu18SeguimientoGeneracionesAgPage() {
   const { escenarioActivo } = useSession();
   const escenarioId = escenarioActivo?.id || 'ESC-01';
   const [config, setConfig] = useState(() => leerConfiguracionAg(escenarioId));
-  const [ejecucionId, setEjecucionId] = useState(() => leerUltimaCorrida(escenarioId));
+  const [ejecucionId, setEjecucionId] = useState(() => leerUltimaEjecucion(escenarioId));
   const [iniciando, setIniciando] = useState(false);
   const [errorAccion, setErrorAccion] = useState(null);
   const [mostrarTodo, setMostrarTodo] = useState(false);
@@ -62,7 +63,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
 
   useEffect(() => { if (errorAccion) errorRef.current?.focus(); }, [errorAccion]);
   useEffect(() => {
-    setEjecucionId(leerUltimaCorrida(escenarioId));
+    setEjecucionId(leerUltimaEjecucion(escenarioId));
     setMostrarTodo(false);
     setConfig(leerConfiguracionAg(escenarioId));
     setErrorAccion(null);
@@ -70,7 +71,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
 
   useEffect(() => {
     if (errorStatus === 404 && ejecucionId) {
-      olvidarUltimaCorrida(escenarioId);
+      olvidarUltimaEjecucion(escenarioId);
       setEjecucionId(null);
     }
   }, [errorStatus, ejecucionId, escenarioId]);
@@ -83,7 +84,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
     return crearConfiguracionAg(config);
   }
 
-  async function iniciarCorrida() {
+  async function iniciarEjecucion() {
     setErrorAccion(null);
     const configAg = configuracionValidada();
     if (!configAg) return;
@@ -96,7 +97,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
         metodo: 'AG', asincrono: true, config_ag: configAg
       });
       if (escenarioActualRef.current === escenarioId) {
-        guardarUltimaCorrida(escenarioId, respuesta.ejecucion_id);
+        guardarUltimaEjecucion(escenarioId, respuesta.ejecucion_id);
         setEjecucionId(respuesta.ejecucion_id);
       }
     } catch (error) {
@@ -116,7 +117,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Optimización · Escenario {escenarioId}</p>
                 <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">Evolución del algoritmo genético</h1>
-                <p className="mt-1 text-sm text-slate-600">Inicia la corrida con los parámetros elegidos y observa cómo mejora el costo generación por generación.</p>
+                <p className="mt-1 text-sm text-slate-600">Inicia la ejecución con los parámetros elegidos y observa cómo mejora el costo generación por generación.</p>
               </div>
             </div>
             <button type="button" onClick={() => window.print()} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600">
@@ -128,9 +129,9 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
         <section aria-labelledby="configuracion-titulo" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Próxima corrida</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Próxima ejecución</p>
               <h2 id="configuracion-titulo" className="mt-1 text-lg font-bold text-slate-950">Parámetros listos para ejecutar</h2>
-              <p className="mt-1 text-sm text-slate-600">La próxima corrida utilizará los valores guardados para {escenarioId}.</p>
+              <p className="mt-1 text-sm text-slate-600">La próxima ejecución utilizará los valores guardados para {escenarioId}.</p>
             </div>
             <Link to="/ajuste-ag" className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 px-4 text-sm font-semibold text-slate-700 hover:border-emerald-600 hover:text-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600">Editar o ajustar parámetros</Link>
           </div>
@@ -147,19 +148,19 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
           {errorAccion && <p ref={errorRef} tabIndex={-1} role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">{errorAccion}</p>}
           {errorSeguimiento && <p role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">{errorSeguimiento}</p>}
           <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5">
-            <button type="button" onClick={iniciarCorrida} disabled={Boolean(enCurso)}
+            <button type="button" onClick={iniciarEjecucion} disabled={Boolean(enCurso)}
               className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-emerald-700 px-5 text-sm font-bold text-white hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-50">
               {enCurso ? <RefreshCw aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Play aria-hidden="true" className="h-4 w-4" />}
               {enCurso ? 'Ejecutando AG…' : 'Iniciar AG'}
             </button>
-            <p className="text-xs text-slate-500">El ajuste de parámetros se realiza en su sección antes de iniciar esta corrida.</p>
+            <p className="text-xs text-slate-500">El ajuste de parámetros se realiza en su sección antes de iniciar esta ejecución.</p>
           </div>
         </section>
 
         <section aria-labelledby="seguimiento-titulo" className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-2">
-            <div><h2 id="seguimiento-titulo" className="text-lg font-bold text-slate-950">Seguimiento de la corrida</h2>
-              <p className="text-sm text-slate-600">Resultados de la última corrida iniciada en este navegador para el escenario.</p></div>
+            <div><h2 id="seguimiento-titulo" className="text-lg font-bold text-slate-950">Seguimiento de la ejecución</h2>
+              <p className="text-sm text-slate-600">Resultados de la última ejecución del AG iniciada aquí para este escenario.</p></div>
             {ejecucionId && <span className="font-mono text-xs text-slate-500">ID {ejecucionId}</span>}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -182,7 +183,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
           </div>}
         </section>
 
-        <CurvaCostoAg historial={historial} enCurso={Boolean(enCurso)} onIniciar={iniciarCorrida} />
+        <CurvaCostoAg historial={historial} enCurso={Boolean(enCurso)} onIniciar={iniciarEjecucion} />
 
         <section aria-labelledby="historial-titulo" className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2 px-6 py-5">

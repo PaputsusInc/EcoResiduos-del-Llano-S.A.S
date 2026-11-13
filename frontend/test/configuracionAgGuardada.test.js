@@ -11,7 +11,7 @@ function almacenamientoMemoria() {
   };
 }
 
-test('conserva por escenario la configuración elegida para la corrida', () => {
+test('conserva por escenario la configuración elegida para la ejecución', () => {
   const almacenamiento = almacenamientoMemoria();
   const elegida = { ...CONFIGURACION_FORMULARIO_INICIAL, tamano_poblacion: '36', generaciones: '25', tasa_mutacion_pct: '12.5' };
   guardarConfiguracionAg('ESC-01', elegida, almacenamiento);

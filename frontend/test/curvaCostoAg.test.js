@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { resumirCurvaCosto } from '../src/pages/hu05_trazabilidad/curvaCostoAg.js';
 
-test('acerca mejoras tempranas y conserva el final de la corrida completa', () => {
+test('acerca mejoras tempranas y conserva el final de la ejecución completa', () => {
   const historial = Array.from({ length: 31 }, (_, numero) => ({
     numero,
     mejor_costo_acumulado: numero === 0 ? 1073850 : numero === 1 ? 1029750 : numero < 4 ? 997650 : 997500

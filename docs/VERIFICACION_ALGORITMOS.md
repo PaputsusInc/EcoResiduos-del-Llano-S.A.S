@@ -27,7 +27,7 @@ ESC-UBICACIONES contiene coordenadas verificadas, pero ofertas, capacidades y ru
 ## Revisión del AG para sustentación (13 de noviembre de 2026)
 
 - 7 pruebas Python del AG, 47 pruebas Java y 10 pruebas del frontend aprobadas. La prueba aleatoria reproducible comprueba al menos 300 planes factibles con balance por empresa, capacidad por planta, uso exclusivo de rutas activas y costo reconstruido desde los flujos.
-- Se verificó el flujo real de la interfaz en ESC-01: la acción de ajuste respondió tras 12 ensayos, la recomendación pasó a la página de evolución y una corrida posterior completó sus 22 generaciones recomendadas.
+- Se verificó el flujo real de la interfaz en ESC-01: la acción de ajuste respondió tras 12 ensayos, la recomendación pasó a la página de evolución y una ejecución posterior completó sus 22 generaciones recomendadas.
 - El ajuste compara opciones dentro de un presupuesto fijo y dos semillas; su resultado es una recomendación para el escenario, no una garantía del óptimo global. El método exacto es el que certifica el mínimo del modelo.
 
 ## Correcciones necesarias encontradas
