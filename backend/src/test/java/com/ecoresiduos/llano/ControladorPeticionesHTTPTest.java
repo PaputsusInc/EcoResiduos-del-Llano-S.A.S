@@ -261,6 +261,36 @@ public class ControladorPeticionesHTTPTest {
                 .andExpect(jsonPath("$.error", notNullValue()));
     }
 
+    @Test
+    @DisplayName("La matriz de costos se confirma completa o conserva todos sus valores")
+    void testMatrizCostosAtomica() throws Exception {
+        double costoOriginal = persistencia.obtener_por_id("ESC-01").getRutas().stream()
+                .filter(r -> "EMP-01->PLA-01".equals(r.getId())).findFirst().orElseThrow().getCosto_unitario_t();
+        mockMvc.perform(put("/api/escenarios/ESC-01/costos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("costos", Map.of(
+                                "EMP-01->PLA-01", 9000.0, "RUTA-INEXISTENTE", 1200.0)))))
+                .andExpect(status().isBadRequest());
+        org.junit.jupiter.api.Assertions.assertEquals(costoOriginal,
+                persistencia.obtener_por_id("ESC-01").getRutas().stream()
+                        .filter(r -> "EMP-01->PLA-01".equals(r.getId())).findFirst().orElseThrow().getCosto_unitario_t());
+        mockMvc.perform(put("/api/escenarios/ESC-01/costos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("costos", Map.of("EMP-01->PLA-01", 9000.0)))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.escenario.rutas[0].costo_unitario_t", is(9000.0)));
+    }
+
+    @Test
+    @DisplayName("La tarifa global recalcula costos en el backend")
+    void testTarifaGlobal() throws Exception {
+        mockMvc.perform(put("/api/escenarios/ESC-01/tarifa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"tarifa_t_km\":350}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.escenario.rutas[0].costo_unitario_t", is(9625.0)));
+    }
+
     // -------------------------------------------------------------------------
     // HU-07: Validación de Escenario (200 y 422)
     // -------------------------------------------------------------------------

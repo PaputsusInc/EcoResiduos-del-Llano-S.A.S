@@ -237,6 +237,12 @@ public class PythonProcessRunner {
                             if (node.hasNonNull("tiempo_ejecucion_s")) {
                                 resultado.setTiempo_ejecucion_s(node.get("tiempo_ejecucion_s").asDouble());
                             }
+                            if (node.hasNonNull("cpu_tiempo_s")) {
+                                resultado.setCpu_tiempo_s(node.get("cpu_tiempo_s").asDouble());
+                            }
+                            if (node.hasNonNull("memoria_pico_mb")) {
+                                resultado.setMemoria_pico_mb(node.get("memoria_pico_mb").asDouble());
+                            }
                             if (node.hasNonNull("estado")) {
                                 resultado.setEstado(node.get("estado").asText());
                             }

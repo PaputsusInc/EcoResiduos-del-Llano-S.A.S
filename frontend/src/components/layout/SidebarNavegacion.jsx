@@ -58,7 +58,8 @@ export function SidebarNavegacion({ abierto = false, alNavegar }) {
     {
       title: "4. Simulación y Sensibilidad",
       items: [
-        { path: "/simulacion", label: "Laboratorio de Escenarios", icon: FlaskConical }
+        { path: "/simulacion", label: "Laboratorio de Escenarios", icon: FlaskConical },
+        { path: "/comparacion-sensibilidad", label: "Comparación de Sensibilidad", icon: GitCompare }
       ]
     }
   ];

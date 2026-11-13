@@ -12,7 +12,6 @@ export class PanelHiperparametrosAG {
     let gens = Number(formulario?.generaciones) || 200;
     let cruce = Number(formulario?.tasa_cruce);
     let mut = Number(formulario?.tasa_mutacion);
-    let pen = Number(formulario?.factor_penalizacion) || 1000.0;
     let sem = formulario?.semilla != null ? Number(formulario.semilla) : 42;
 
     // Normalización de porcentaje [0, 100] -> [0.0, 1.0]
@@ -25,7 +24,6 @@ export class PanelHiperparametrosAG {
       tasa_cruce: cruce ?? 0.80,
       tasa_mutacion: mut ?? 0.05,
       metodo_seleccion: formulario?.metodo_seleccion || "TORNEO",
-      factor_penalizacion: pen,
       semilla: sem
     };
   }
@@ -42,4 +40,3 @@ export class PanelHiperparametrosAG {
     return Array.isArray(errores) ? errores : [String(errores)];
   }
 }
-

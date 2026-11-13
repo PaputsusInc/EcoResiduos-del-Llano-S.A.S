@@ -34,15 +34,16 @@ python3 python-engines/genetic_solver/solver_genetico.py < entrada.json
 
 En el software oficial, el backend inicia ese proceso por sí mismo. La API
 `POST /api/escenarios/{id}/optimizar` recibe `metodo: "AG"`,
-`asincrono: true` y `config_ag`. La vista «Evolución del Algoritmo Genético»
-presenta controles validados y muestra cada generación recibida.
+`asincrono: true` y `config_ag`. La vista «Ajuste de parámetros AG» permite
+guardar una configuración por escenario; «Evolución del Algoritmo Genético»
+inicia la corrida y muestra cada generación recibida.
 
 La acción «Ajustar parámetros» llama a
 `POST /api/escenarios/{id}/ag/ajustar`. Optuna TPE prueba 12 configuraciones
 con dos semillas comunes y un presupuesto de 300 a 1200 evaluaciones por
 semilla. Ajusta población, generaciones derivadas del presupuesto, tasas de
-cruce y mutación, torneo, elitismo y reemplazos. Mantiene el operador OX,
-la penalización y la escala elegidos. La puntuación es el costo medio factible
+cruce y mutación, torneo, elitismo y reemplazos. Mantiene el operador OX
+y la escala elegida. La puntuación es el costo medio factible
 de las dos corridas; la recomendación puede aplicarse y después ejecutarse
 como corrida normal. Es una búsqueda limitada, no una certificación de
 optimalidad. No se crea historial ni se modifica el escenario durante el
@@ -60,12 +61,12 @@ ajuste.
    respetuoso de las prioridades puede reasignar toneladas para no bloquear
    a una empresa con una única planta posible.
 4. **Aptitud.** Se calcula como
-   `1 / (1 + costo / escala_costo_referencia + penalización)`.
-   La penalización es cero en un plan completo; si faltan toneladas, vale
-   `factor_penalizacion × faltante / max(1, oferta_total)`. Los planes
-   factibles tienen preferencia en la selección.
-5. **Evolución.** Un torneo escoge padres. El cruce OX de dos puntos o el cruce
-   por bloques produce permutaciones válidas; la mutación intercambia dos genes.
+   `1 / (1 + costo / escala_costo_referencia)`. La factibilidad se garantiza
+   al validar la red y al decodificar las prioridades. Si el decodificador
+   produjera un plan incompleto, la corrida falla con un error explícito.
+5. **Evolución.** Un torneo escoge padres. La interfaz utiliza cruce OX de dos
+   puntos; la API admite también cruce por bloques. Ambos producen
+   permutaciones válidas; la mutación intercambia dos genes.
    El elitismo protege a los mejores y `reemplazos` controla cuántos miembros
    cambian por generación.
 6. **Seguimiento.** Se emite la generación 0 y cada generación ejecutada con
@@ -93,7 +94,6 @@ ajuste.
     "reemplazos": null,
     "limite_sin_mejora": null,
     "umbral_mejora_cop": 0,
-    "factor_penalizacion": 1000,
     "escala_costo_referencia": 1000000,
     "semilla": 42
   }

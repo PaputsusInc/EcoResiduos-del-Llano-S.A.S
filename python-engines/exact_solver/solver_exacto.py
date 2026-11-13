@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from common.jsonl_protocol import (
     emitir_modelo_formulado, emitir_paso_exacto, emitir_resultado_final,
 )
+from common.costos_modelo import costos_objetivo
 from exact_solver.transporte_vogel_modi import RedInfactibleError, resolver
 from exact_solver.analisis_sensibilidad import AnalisisSensibilidad
 
@@ -112,6 +113,7 @@ def main() -> int:
             )
         oferta_total = math.fsum(float(e["oferta_t"]) for e in empresas)
         capacidad_total = math.fsum(float(p["capacidad_maxima_t"]) for p in plantas)
+        matriz_objetivo = costos_objetivo(empresas, plantas, matriz_costos)
     except (TypeError, ValueError) as error:
         print(f"Variación inválida: {error}", file=sys.stderr)
         return 1
@@ -137,15 +139,17 @@ def main() -> int:
         return 0
 
     modelo = {
-        "funcion_objetivo": "Min Z = sum(c_ij * x_ij)",
+        "funcion_objetivo": "Min Z = sum((transporte_ij + precio_i + operacion_j) * x_ij)",
         "cantidad_empresas": len(empresas),
         "cantidad_plantas": len(plantas),
-        "variables_activas": sum(c is not None for c in matriz_costos.values()),
+        "variables_activas": sum(c is not None for c in matriz_objetivo.values()),
         "oferta_total_t": oferta_total,
         "capacidad_total_t": capacidad_total,
         "holgura_auxiliar_t": max(0.0, capacidad_total - oferta_total),
         "ofertas": {e["id"]: e["oferta_t"] for e in empresas},
         "capacidades": {p["id"]: p["capacidad_maxima_t"] for p in plantas},
+        "precios_tonelada": {e["id"]: e.get("precio_tonelada") or 0 for e in empresas},
+        "costos_operacion_t": {p["id"]: p.get("costo_operacion_t") or 0 for p in plantas},
     }
     emitir_modelo_formulado(ejecucion_id, modelo)
     emitir_paso_exacto(
@@ -155,7 +159,7 @@ def main() -> int:
     )
     try:
         flujos, costo, precios, pasos, analisis = resolver_modelo_transporte_rol_2(
-            empresas, plantas, matriz_costos, tolerancia,
+            empresas, plantas, matriz_objetivo, tolerancia,
         )
     except RedInfactibleError as error:
         _emitir_infactible(

@@ -63,6 +63,10 @@ public class ProcessBuilderIntegrationTest {
         assertEquals("OPTIMO", resultado.getEstado(), "El estado debe ser OPTIMO");
         assertNotNull(resultado.getCosto_total_Z(), "El costo Z no debe ser nulo");
         assertEquals(997500.0, resultado.getCosto_total_Z(), 1e-3, "El costo Z* debe ser exactamente 997.500 COP");
+        assertNotNull(resultado.getCpu_tiempo_s(), "La ejecución debe informar CPU del proceso Python");
+        assertTrue(resultado.getCpu_tiempo_s() >= 0);
+        assertNotNull(resultado.getMemoria_pico_mb(), "La ejecución debe informar memoria pico del proceso Python");
+        assertTrue(resultado.getMemoria_pico_mb() > 0);
 
         // Validar comprobación de flujos de dominio
         Boolean factible = resultado.comprobar_factibilidad_flujos(esc01, 1e-6);
@@ -96,6 +100,25 @@ public class ProcessBuilderIntegrationTest {
     }
 
     @Test
+    void ambosMotoresIncluyenPrecioYOperacionEnElMismoObjetivo() {
+        Escenario escenario = persistencia.obtener_por_id("ESC-01")
+                .clonar_profundo("ESC-COSTOS", "Costos completos");
+        escenario.getEmpresas().forEach(empresa -> empresa.setPrecio_tonelada(200.0));
+        escenario.getPlantas().forEach(planta -> planta.setCosto_operacion_t(300.0));
+
+        ResultadoOptimizacion exacto = adaptadorExacto.resolver(escenario, null);
+        ResultadoOptimizacion ag = adaptadorGenetico.resolver(escenario,
+                new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 42));
+        assertEquals("OPTIMO", exacto.getEstado());
+        assertEquals("FACTIBLE_SIN_CERTIFICAR", ag.getEstado());
+        assertEquals(997500.0 + 115.0 * 500.0, exacto.getCosto_total_Z(), 1e-3);
+        assertTrue(ag.getCosto_total_Z() >= exacto.getCosto_total_Z() - 1e-3);
+        double desglose = exacto.obtener_desglose_asignaciones(escenario).stream()
+                .mapToDouble(fila -> (Double) fila.get("costo_total")).sum();
+        assertEquals(exacto.getCosto_total_Z(), desglose, 1e-3);
+    }
+
+    @Test
     @DisplayName("Debe detectar infactibilidad en ESC-04 (120 t > 100 t) con INFACTIBLE_CERTIFICADO")
     void testSolverExactoEscenario04Infactible() {
         Escenario esc04 = persistencia.obtener_por_id("ESC-04");
@@ -122,7 +145,7 @@ public class ProcessBuilderIntegrationTest {
         Escenario esc01 = persistencia.obtener_por_id("ESC-01");
         assertNotNull(esc01);
 
-        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 1000.0, 42);
+        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 42);
 
         ResultadoOptimizacion resultado = adaptadorGenetico.resolver(esc01, configAg);
 
@@ -131,6 +154,8 @@ public class ProcessBuilderIntegrationTest {
                 "El AG debe terminar con FACTIBLE_SIN_CERTIFICAR cuando encuentra solución factible");
         assertNotNull(resultado.getCosto_total_Z(), "Debe obtener costo Z");
         assertTrue(resultado.getCosto_total_Z() > 0.0, "El costo debe ser positivo");
+        assertNotNull(resultado.getCpu_tiempo_s());
+        assertNotNull(resultado.getMemoria_pico_mb());
 
         // Validar emisión de generaciones 0 a 10 (11 generaciones en total)
         assertNotNull(resultado.getHistorial_generaciones());
@@ -157,7 +182,7 @@ public class ProcessBuilderIntegrationTest {
     @DisplayName("AG debe informar la inviabilidad de ESC-04 sin crear generaciones ficticias")
     void testSolverGeneticoEscenarioInviable() {
         Escenario esc04 = persistencia.obtener_por_id("ESC-04");
-        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 1000.0, 42);
+        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 42);
 
         ResultadoOptimizacion resultado = adaptadorGenetico.resolver(esc04, configAg);
 
@@ -170,7 +195,7 @@ public class ProcessBuilderIntegrationTest {
     @Test
     @DisplayName("Debe integrar OrquestadorOptimizacion para comparar EXACTO vs AG generando ReporteComparativo")
     void testOrquestadorComparacionRendimiento() {
-        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 1000.0, 42);
+        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 42);
 
         ReporteComparativo reporte = orquestador.ejecutar_comparacion_metodos("ESC-01", configAg);
 
@@ -191,7 +216,7 @@ public class ProcessBuilderIntegrationTest {
     void testEscenarioUbicacionesSinVolumen() {
         Escenario escenario = persistencia.obtener_por_id("ESC-UBICACIONES");
         assertNotNull(escenario);
-        ConfiguracionAG configAg = new ConfiguracionAG(4, 1, 0.80, 0.05, "TORNEO", 1000.0, 42);
+        ConfiguracionAG configAg = new ConfiguracionAG(4, 1, 0.80, 0.05, "TORNEO", 42);
 
         ResultadoOptimizacion exacto = adaptadorExacto.resolver(escenario, null);
         ResultadoOptimizacion ag = adaptadorGenetico.resolver(escenario, configAg);

@@ -236,6 +236,9 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
 
     private Escenario construirEscenario02(Escenario ref) {
         Escenario esc02 = ref.clonar_profundo("ESC-02", "Expansión de Oferta (+10%)");
+        esc02.setReferencia_id(ref.getId());
+        esc02.setReferencia_snapshot(ref.clonar_profundo(ref.getId(), ref.getNombre()));
+        esc02.setVariaciones(List.of(Map.of("tipo", "OFERTA", "porcentaje", 10)));
         esc02.setProcedencia_datos("Incremento general del 10% en residuos generados por el sector agroindustrial");
         for (Empresa emp : esc02.getEmpresas()) {
             double nueva = Math.round(emp.getOferta_t() * 1.10 * 10.0) / 10.0;
@@ -248,6 +251,9 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
 
     private Escenario construirEscenario03(Escenario ref) {
         Escenario esc03 = ref.clonar_profundo("ESC-03", "Tarifas Combustible (+15%)");
+        esc03.setReferencia_id(ref.getId());
+        esc03.setReferencia_snapshot(ref.clonar_profundo(ref.getId(), ref.getNombre()));
+        esc03.setVariaciones(List.of(Map.of("tipo", "COSTOS", "porcentaje", 15)));
         esc03.setProcedencia_datos("Alza de fletes y combustible a 345 COP/t·km sobre la red de transporte");
         double tarifaNueva = 345.0;
         for (Ruta r : esc03.getRutas()) {
@@ -377,7 +383,7 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
                 1045200.0, 0.385, new LinkedHashMap<>()
         );
 
-        res.setParametros_usados(new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 1000.0, 42));
+        res.setParametros_usados(new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 42));
 
         Map<String, Double> flujos = res.getMatriz_flujos_optimos();
         flujos.put("EMP-01->PLA-01", 25.0);

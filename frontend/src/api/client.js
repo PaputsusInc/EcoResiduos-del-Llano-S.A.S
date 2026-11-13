@@ -43,6 +43,10 @@ export const api = {
     request(`/escenarios/${escId}/simulaciones/previsualizar`, { method: 'POST', body: JSON.stringify({ variaciones, ...(varianteId ? { variante_id: varianteId } : {}) }) }),
   compararSimulacion: (escId, varianteId) =>
     request(`/escenarios/${escId}/simulaciones/${varianteId}/comparar`, { method: 'POST' }),
+  compararMetodosSimulacion: (escId, varianteId, configAg) =>
+    request(`/escenarios/${escId}/simulaciones/${varianteId}/comparar-metodos`, {
+      method: 'POST', body: JSON.stringify({ config_ag: configAg })
+    }),
 
   // HU-01: Empresas
   guardarEmpresa: (escId, payload) =>
@@ -74,6 +78,10 @@ export const api = {
   // HU-06: Costos de Transporte
   actualizarCostoTransporte: (escId, rutaId, payload) =>
     request(`/escenarios/${escId}/rutas/${rutaId}/costo`, { method: 'PUT', body: JSON.stringify(payload) }),
+  actualizarMatrizCostos: (escId, costos) =>
+    request(`/escenarios/${escId}/costos`, { method: 'PUT', body: JSON.stringify({ costos }) }),
+  aplicarTarifaGlobal: (escId, tarifa_t_km) =>
+    request(`/escenarios/${escId}/tarifa`, { method: 'PUT', body: JSON.stringify({ tarifa_t_km }) }),
 
   // HU-07: Validación
   validarEscenario: (escId) =>

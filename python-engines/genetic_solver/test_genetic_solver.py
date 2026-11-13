@@ -155,6 +155,55 @@ class GeneticSolverTest(unittest.TestCase):
         datos["rutas"] = []
         self.assertIsNotNone(comprobar_factibilidad(preparar_problema(datos, 1e-6)))
 
+    def test_redes_aleatorias_respetan_balance_capacidad_rutas_y_costo(self) -> None:
+        generador = random.Random(29)
+        planes_revisados = 0
+        for _ in range(150):
+            m, n = generador.randint(2, 7), generador.randint(2, 5)
+            ofertas = [generador.randint(0, 12) for _ in range(m)]
+            capacidades = [generador.randint(0, 15) for _ in range(n)]
+            rutas = [
+                ruta(f"E{i}", f"P{j}", generador.randint(0, 20),
+                     activa=generador.random() > 0.1)
+                for i in range(m) for j in range(n)
+                if generador.random() > 0.22
+            ]
+            problema = preparar_problema({
+                "empresas": [{"id": f"E{i}", "oferta_t": oferta}
+                             for i, oferta in enumerate(ofertas)],
+                "plantas": [{"id": f"P{j}", "capacidad_maxima_t": capacidad}
+                            for j, capacidad in enumerate(capacidades)],
+                "rutas": rutas,
+            }, 1e-6)
+            if comprobar_factibilidad(problema) is not None:
+                continue
+            costos_activos = {
+                item["id"]: item["costo_unitario_t"] for item in rutas
+                if item["activa"]
+            }
+            for _ in range(5):
+                cromosoma = list(range(m + n))
+                generador.shuffle(cromosoma)
+                plan = decodificar(problema, tuple(cromosoma))
+                self.assertLessEqual(plan.faltante, 1e-6)
+                for i, oferta in enumerate(ofertas):
+                    self.assertAlmostEqual(
+                        sum(plan.flujos.get(f"E{i}->P{j}", 0) for j in range(n)), oferta
+                    )
+                for j, capacidad in enumerate(capacidades):
+                    self.assertLessEqual(
+                        sum(plan.flujos.get(f"E{i}->P{j}", 0) for i in range(m)),
+                        capacidad + 1e-6,
+                    )
+                self.assertTrue(set(plan.flujos) <= set(costos_activos))
+                self.assertAlmostEqual(
+                    plan.costo,
+                    sum(cantidad * costos_activos[identificador]
+                        for identificador, cantidad in plan.flujos.items()),
+                )
+                planes_revisados += 1
+        self.assertGreaterEqual(planes_revisados, 300)
+
 
 if __name__ == "__main__":
     unittest.main()

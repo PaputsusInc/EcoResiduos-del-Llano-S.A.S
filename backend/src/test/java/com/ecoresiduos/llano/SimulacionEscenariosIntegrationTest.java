@@ -29,6 +29,20 @@ class SimulacionEscenariosIntegrationTest {
     @Autowired AdaptadorPersistencia repositorio;
 
     @Test
+    void escenariosSemillaDeSensibilidadSePuedenCompararSinCreacionManual() throws Exception {
+        assertNotNull(repositorio.obtener_por_id("ESC-02").getReferencia_snapshot());
+        assertNotNull(repositorio.obtener_por_id("ESC-03").getReferencia_snapshot());
+        JsonNode respuesta = json.readTree(mvc.perform(post(
+                "/api/escenarios/ESC-01/simulaciones/ESC-02/comparar-metodos")
+                .contentType(MediaType.APPLICATION_JSON).content("""
+                {"config_ag":{"tamano_poblacion":12,"generaciones":8,"semilla":42}}
+                """))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals("OPTIMO", respuesta.path("referencia").path("resultado_exacto").path("estado").asText());
+        assertEquals("FACTIBLE_SIN_CERTIFICAR", respuesta.path("variante").path("resultado_genetico").path("estado").asText());
+    }
+
+    @Test
     void crearPersistirYCompararConMotorExacto() throws Exception {
         String payload = """
                 {"nombre":"Tarifas y capacidad", "variaciones":[
@@ -57,12 +71,31 @@ class SimulacionEscenariosIntegrationTest {
                 comparado.path("variante").path("costo_total_Z").asDouble(), 1e-6);
         assertTrue(comparado.path("cambios_flujo_t").isObject());
 
+        String configuracion = """
+                {"config_ag":{"tamano_poblacion":12,"generaciones":8,"tasa_cruce":0.8,
+                 "tasa_mutacion":0.05,"tamano_torneo":3,"elitismo":1,"semilla":42}}
+                """;
+        JsonNode metodos = json.readTree(mvc.perform(post(
+                "/api/escenarios/ESC-01/simulaciones/" + id + "/comparar-metodos")
+                .contentType(MediaType.APPLICATION_JSON).content(configuracion))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals("OPTIMO", metodos.path("referencia").path("resultado_exacto").path("estado").asText());
+        assertEquals("FACTIBLE_SIN_CERTIFICAR", metodos.path("variante").path("resultado_genetico").path("estado").asText());
+        assertTrue(metodos.path("variante").path("resultado_exacto").path("cpu_tiempo_s").asDouble() >= 0);
+        assertTrue(metodos.path("variante").path("resultado_genetico").path("memoria_pico_mb").asDouble() > 0);
+
         repositorio.obtener_por_id("ESC-01").actualizar_oferta_empresa("EMP-01", 20.0);
         JsonNode estable = json.readTree(mvc.perform(post(
                 "/api/escenarios/ESC-01/simulaciones/" + id + "/comparar"))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
         assertEquals(comparado.path("referencia").path("costo_total_Z").asDouble(),
                 estable.path("referencia").path("costo_total_Z").asDouble(), 1e-6);
+        JsonNode metodosEstables = json.readTree(mvc.perform(post(
+                "/api/escenarios/ESC-01/simulaciones/" + id + "/comparar-metodos")
+                .contentType(MediaType.APPLICATION_JSON).content(configuracion))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals(metodos.path("referencia").path("resultado_exacto").path("costo_total_Z").asDouble(),
+                metodosEstables.path("referencia").path("resultado_exacto").path("costo_total_Z").asDouble(), 1e-6);
 
         String edicion = """
                 {"nombre":"Tarifas revisadas", "variaciones":[

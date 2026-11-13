@@ -34,6 +34,12 @@ public class ResultadoOptimizacion {
     @JsonProperty("tiempo_ejecucion_s")
     private Double tiempo_ejecucion_s;
 
+    @JsonProperty("cpu_tiempo_s")
+    private Double cpu_tiempo_s;
+
+    @JsonProperty("memoria_pico_mb")
+    private Double memoria_pico_mb;
+
     @JsonProperty("matriz_flujos_optimos")
     private Map<String, Double> matriz_flujos_optimos = new LinkedHashMap<>();
 
@@ -185,6 +191,8 @@ public class ResultadoOptimizacion {
                     empId = parts[0];
                     plaId = parts[1];
                 }
+                final String empresaId = empId;
+                final String plantaId = plaId;
 
                 Double costoUnitario = 0.0;
                 if (escenario.getRutas() != null) {
@@ -197,6 +205,14 @@ public class ResultadoOptimizacion {
                 }
 
                 Double costoTransporte = costoUnitario * toneladas;
+                Double precio = escenario.getEmpresas().stream()
+                        .filter(e -> Objects.equals(e.getId(), empresaId))
+                        .map(e -> e.getPrecio_tonelada() == null ? 0.0 : e.getPrecio_tonelada())
+                        .findFirst().orElse(0.0);
+                Double operacion = escenario.getPlantas().stream()
+                        .filter(p -> Objects.equals(p.getId(), plantaId))
+                        .map(p -> p.getCosto_operacion_t() == null ? 0.0 : p.getCosto_operacion_t())
+                        .findFirst().orElse(0.0);
 
                 Map<String, Object> item = new LinkedHashMap<>();
                 item.put("conexion_id", key);
@@ -205,6 +221,9 @@ public class ResultadoOptimizacion {
                 item.put("toneladas", toneladas);
                 item.put("costo_unitario_t", costoUnitario);
                 item.put("costo_transporte", costoTransporte);
+                item.put("costo_adquisicion", precio * toneladas);
+                item.put("costo_operacion", operacion * toneladas);
+                item.put("costo_total", (costoUnitario + precio + operacion) * toneladas);
                 desglose.add(item);
             }
         }
@@ -289,6 +308,22 @@ public class ResultadoOptimizacion {
 
     public void setTiempo_ejecucion_s(Double tiempo_ejecucion_s) {
         this.tiempo_ejecucion_s = tiempo_ejecucion_s;
+    }
+
+    public Double getCpu_tiempo_s() {
+        return cpu_tiempo_s;
+    }
+
+    public void setCpu_tiempo_s(Double cpu_tiempo_s) {
+        this.cpu_tiempo_s = cpu_tiempo_s;
+    }
+
+    public Double getMemoria_pico_mb() {
+        return memoria_pico_mb;
+    }
+
+    public void setMemoria_pico_mb(Double memoria_pico_mb) {
+        this.memoria_pico_mb = memoria_pico_mb;
     }
 
     public Map<String, Double> getMatriz_flujos_optimos() {

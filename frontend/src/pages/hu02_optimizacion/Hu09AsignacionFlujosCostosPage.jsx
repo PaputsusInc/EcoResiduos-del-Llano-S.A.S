@@ -154,7 +154,7 @@ export default function Hu09AsignacionFlujosCostosPage() {
                 <tr>
                   <th className="p-3 text-left">Conexión</th><th className="p-3">Distancia</th>
                   <th className="p-3">Toneladas</th><th className="p-3">Costo unitario</th>
-                  <th className="p-3">Costo de transporte</th>
+                  <th className="p-3">Transporte</th><th className="p-3">Adquisición</th><th className="p-3">Operación</th><th className="p-3">Total del envío</th>
                 </tr>
               </thead>
               <tbody>
@@ -166,11 +166,14 @@ export default function Hu09AsignacionFlujosCostosPage() {
                       <td className="p-3">{ruta?.distancia_km == null ? '—' : `${numero(ruta.distancia_km, 1)} km`}</td>
                       <td className="p-3">{numero(envio.toneladas)} t</td>
                       <td className="p-3">$ {numero(envio.costo_unitario_t)} COP/t</td>
-                      <td className="p-3 font-bold">$ {numero(envio.costo_transporte)} COP</td>
+                      <td className="p-3">$ {numero(envio.costo_transporte)} COP</td>
+                      <td className="p-3">$ {numero(envio.costo_adquisicion)} COP</td>
+                      <td className="p-3">$ {numero(envio.costo_operacion)} COP</td>
+                      <td className="p-3 font-bold">$ {numero(envio.costo_total)} COP</td>
                     </tr>
                   );
                 })}
-                {envios.length === 0 && <tr><td colSpan={5} className="p-4 text-left text-slate-500">No hay asignaciones.</td></tr>}
+                {envios.length === 0 && <tr><td colSpan={8} className="p-4 text-left text-slate-500">No hay asignaciones.</td></tr>}
               </tbody>
             </table>
           </div>

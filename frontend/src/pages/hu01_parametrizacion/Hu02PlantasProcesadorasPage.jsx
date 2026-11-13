@@ -6,7 +6,7 @@ import { TarjetaKPI } from '../../components/common/TarjetaKPI';
 import { MapaLeafletOSRM } from '../../components/common/MapaLeafletOSRM';
 
 export function Hu02PlantasProcesadorasPage() {
-  const { escenarioActivo, escenarioActivoId, recargarEscenarioActivo, setEscenarioActivo } = useSession();
+  const { escenarioActivo, escenarioActivoId, recargarEscenarioActivo } = useSession();
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [plantaEnEdicion, setPlantaEnEdicion] = useState(null);
@@ -30,6 +30,7 @@ export function Hu02PlantasProcesadorasPage() {
       latitud: 3.98,
       longitud: -73.76,
       capacidad_maxima_t: 20.0,
+      costo_operacion_t: 0,
       residuos_admitidos: ['Palma de aceite', 'Cascarilla de arroz']
     });
     setModalAbierto(true);
@@ -62,52 +63,7 @@ export function Hu02PlantasProcesadorasPage() {
       setModalAbierto(false);
       setMensaje({ tipo: 'exito', texto: `Planta ${plantaEnEdicion.id} guardada exitosamente y rutas viales recalculadas.` });
     } catch (err) {
-      // Fallback local: persistir en memoria de sesión
-      if (escenarioActivo) {
-        const plantasAct = [...plantas];
-        const idx = plantasAct.findIndex(pla => pla.id === plantaEnEdicion.id);
-        if (idx >= 0) {
-          plantasAct[idx] = { ...plantaEnEdicion };
-        } else {
-          plantasAct.push({ ...plantaEnEdicion });
-        }
-
-        const empresas = escenarioActivo.empresas || [];
-        const rutasActuales = (escenarioActivo.rutas || []).filter(r => r.planta_id !== plantaEnEdicion.id);
-        empresas.forEach(emp => {
-          const dLat = Math.abs(emp.latitud - plantaEnEdicion.latitud);
-          const dLon = Math.abs(emp.longitud - plantaEnEdicion.longitud);
-          const distKm = Math.max(9.5, Math.round(Math.sqrt(dLat * dLat + (dLon * 0.998) ** 2) * 111.0 * 1.32 * 10) / 10);
-          rutasActuales.push({
-            id: `${emp.id}->${plantaEnEdicion.id}`,
-            empresa_id: emp.id,
-            planta_id: plantaEnEdicion.id,
-            distancia_km: distKm,
-            proveedor_vial: 'OSRM (provisional)',
-            geometria: [
-              [emp.longitud, emp.latitud],
-              [plantaEnEdicion.longitud, plantaEnEdicion.latitud]
-            ],
-            estado_calculo: 'calculada',
-            tarifa_t_km: 300.0,
-            costo_unitario_t: Math.round(distKm * 300.0),
-            activa: true,
-            compatible: true
-          });
-        });
-
-        const nuevaCapacidad = plantasAct.reduce((s, pla) => s + (pla.capacidad_maxima_t || 0), 0);
-        setEscenarioActivo({
-          ...escenarioActivo,
-          plantas: plantasAct,
-          rutas: rutasActuales,
-          capacidad_total_t: nuevaCapacidad
-        });
-        setModalAbierto(false);
-        setMensaje({ tipo: 'exito', texto: `Planta ${plantaEnEdicion.id} actualizada y rutas viales recalculadas en la sesión.` });
-      } else {
-        setMensaje({ tipo: 'error', texto: err.message || 'Error al guardar planta' });
-      }
+      setMensaje({ tipo: 'error', texto: err.message || 'Error al guardar planta' });
     } finally {
       setCargandoGuardar(false);
     }
@@ -224,6 +180,7 @@ export function Hu02PlantasProcesadorasPage() {
                 <th className="px-4 py-3 text-center">Latitud</th>
                 <th className="px-4 py-3 text-center">Longitud</th>
                 <th className="px-4 py-3 text-right">Capacidad Máxima (t/semana)</th>
+                <th className="px-4 py-3 text-right">Operación (COP/t)</th>
                 <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
@@ -236,6 +193,7 @@ export function Hu02PlantasProcesadorasPage() {
                   <td className="px-4 py-3 text-center font-mono text-slate-500">{pla.latitud?.toFixed(4)}</td>
                   <td className="px-4 py-3 text-center font-mono text-slate-500">{pla.longitud?.toFixed(4)}</td>
                   <td className="px-4 py-3 text-right font-black text-slate-900">{pla.capacidad_maxima_t?.toFixed(1)} t/semana</td>
+                  <td className="px-4 py-3 text-right text-slate-700">$ {Number(pla.costo_operacion_t || 0).toLocaleString('es-CO')}</td>
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => abrirModalEditar(pla)}
@@ -288,6 +246,13 @@ export function Hu02PlantasProcesadorasPage() {
                     className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">Costo de procesamiento (COP/t):</label>
+                <input type="number" min="0" step="1" required value={plantaEnEdicion.costo_operacion_t ?? 0}
+                  onChange={(e) => setPlantaEnEdicion({ ...plantaEnEdicion, costo_operacion_t: e.target.value === '' ? '' : Number(e.target.value) })}
+                  className="w-full min-h-11 rounded-lg border border-slate-300 px-3 text-sm focus:ring-2 focus:ring-emerald-500" />
+                <p className="mt-1 text-xs text-slate-500">Se suma al costo logístico por tonelada recibida en esta planta.</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -415,4 +380,3 @@ export function Hu02PlantasProcesadorasPage() {
 }
 
 export default Hu02PlantasProcesadorasPage;
-

@@ -19,9 +19,6 @@ public class ConfiguracionAG {
     @JsonProperty("metodo_seleccion")
     private String metodo_seleccion = "TORNEO";
 
-    @JsonProperty("factor_penalizacion")
-    private Double factor_penalizacion = 1000.0;
-
     @JsonProperty("semilla")
     private Integer semilla = 42;
 
@@ -53,24 +50,22 @@ public class ConfiguracionAG {
     }
 
     public ConfiguracionAG(Integer tamano_poblacion, Integer generaciones, Double tasa_cruce, Double tasa_mutacion,
-                           String metodo_seleccion, Double factor_penalizacion) {
+                           String metodo_seleccion) {
         this.tamano_poblacion = tamano_poblacion;
         this.generaciones = generaciones;
         this.tasa_cruce = tasa_cruce;
         this.tasa_mutacion = tasa_mutacion;
         this.metodo_seleccion = metodo_seleccion != null ? metodo_seleccion : "TORNEO";
-        this.factor_penalizacion = factor_penalizacion != null ? factor_penalizacion : 1000.0;
         this.semilla = 42;
     }
 
     public ConfiguracionAG(Integer tamano_poblacion, Integer generaciones, Double tasa_cruce, Double tasa_mutacion,
-                           String metodo_seleccion, Double factor_penalizacion, Integer semilla) {
+                           String metodo_seleccion, Integer semilla) {
         this.tamano_poblacion = tamano_poblacion;
         this.generaciones = generaciones;
         this.tasa_cruce = tasa_cruce;
         this.tasa_mutacion = tasa_mutacion;
         this.metodo_seleccion = metodo_seleccion != null ? metodo_seleccion : "TORNEO";
-        this.factor_penalizacion = factor_penalizacion != null ? factor_penalizacion : 1000.0;
         this.semilla = semilla != null ? semilla : 42;
     }
 
@@ -112,14 +107,6 @@ public class ConfiguracionAG {
 
     public void setMetodo_seleccion(String metodo_seleccion) {
         this.metodo_seleccion = metodo_seleccion;
-    }
-
-    public Double getFactor_penalizacion() {
-        return factor_penalizacion;
-    }
-
-    public void setFactor_penalizacion(Double factor_penalizacion) {
-        this.factor_penalizacion = factor_penalizacion;
     }
 
     public Integer getSemilla() {

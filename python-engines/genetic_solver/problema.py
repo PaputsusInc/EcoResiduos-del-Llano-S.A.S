@@ -6,6 +6,7 @@ import math
 from collections import deque
 from dataclasses import dataclass
 from typing import Any
+from common.costos_modelo import costos_objetivo
 
 
 def _numero_no_negativo(valor: Any, nombre: str) -> float:
@@ -112,9 +113,16 @@ def preparar_problema(escenario: dict[str, Any], tolerancia: float) -> ProblemaT
                 costo, f"Costo de {empresa_id}->{planta_id}"
             )
 
+    transporte = {
+        f"{empresa_id}->{planta_id}": costos[i][j]
+        for i, empresa_id in enumerate(ids_empresas)
+        for j, planta_id in enumerate(ids_plantas)
+    }
+    objetivo = costos_objetivo(empresas, plantas, transporte)
     return ProblemaTransporte(
         ids_empresas, ids_plantas, ofertas, capacidades,
-        tuple(tuple(fila) for fila in costos), tolerancia,
+        tuple(tuple(objetivo[f"{empresa_id}->{planta_id}"] for planta_id in ids_plantas)
+              for empresa_id in ids_empresas), tolerancia,
     )
 
 

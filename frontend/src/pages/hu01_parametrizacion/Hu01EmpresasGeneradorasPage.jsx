@@ -6,7 +6,7 @@ import { TarjetaKPI } from '../../components/common/TarjetaKPI';
 import { MapaLeafletOSRM } from '../../components/common/MapaLeafletOSRM';
 
 export function Hu01EmpresasGeneradorasPage() {
-  const { escenarioActivo, escenarioActivoId, recargarEscenarioActivo, setEscenarioActivo } = useSession();
+  const { escenarioActivo, escenarioActivoId, recargarEscenarioActivo } = useSession();
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [empresaEnEdicion, setEmpresaEnEdicion] = useState(null);
@@ -27,6 +27,7 @@ export function Hu01EmpresasGeneradorasPage() {
       longitud: -73.61,
       tipo_residuo: 'Palma de aceite',
       oferta_t: 10.0,
+      precio_tonelada: 0,
       plantas_compatibles: ['PLA-01', 'PLA-02', 'PLA-03', 'PLA-04']
     });
     setModalAbierto(true);
@@ -67,52 +68,7 @@ export function Hu01EmpresasGeneradorasPage() {
       setModalAbierto(false);
       setMensaje({ tipo: 'exito', texto: `Empresa ${empresaEnEdicion.id} guardada exitosamente y rutas viales recalculadas.` });
     } catch (err) {
-      // Si el backend está en fallback local, persistir en memoria de sesión
-      if (escenarioActivo) {
-        const empresasAct = [...empresas];
-        const idx = empresasAct.findIndex(emp => emp.id === empresaEnEdicion.id);
-        if (idx >= 0) {
-          empresasAct[idx] = { ...empresaEnEdicion };
-        } else {
-          empresasAct.push({ ...empresaEnEdicion });
-        }
-
-        const plantas = escenarioActivo.plantas || [];
-        const rutasActuales = (escenarioActivo.rutas || []).filter(r => r.empresa_id !== empresaEnEdicion.id);
-        plantas.forEach(pla => {
-          const dLat = Math.abs(empresaEnEdicion.latitud - pla.latitud);
-          const dLon = Math.abs(empresaEnEdicion.longitud - pla.longitud);
-          const distKm = Math.max(9.5, Math.round(Math.sqrt(dLat * dLat + (dLon * 0.998) ** 2) * 111.0 * 1.32 * 10) / 10);
-          rutasActuales.push({
-            id: `${empresaEnEdicion.id}->${pla.id}`,
-            empresa_id: empresaEnEdicion.id,
-            planta_id: pla.id,
-            distancia_km: distKm,
-            proveedor_vial: 'OSRM (provisional)',
-            geometria: [
-              [empresaEnEdicion.longitud, empresaEnEdicion.latitud],
-              [pla.longitud, pla.latitud]
-            ],
-            estado_calculo: 'calculada',
-            tarifa_t_km: 300.0,
-            costo_unitario_t: Math.round(distKm * 300.0),
-            activa: true,
-            compatible: true
-          });
-        });
-
-        const nuevaOferta = empresasAct.reduce((s, emp) => s + (emp.oferta_t || 0), 0);
-        setEscenarioActivo({
-          ...escenarioActivo,
-          empresas: empresasAct,
-          rutas: rutasActuales,
-          oferta_total_t: nuevaOferta
-        });
-        setModalAbierto(false);
-        setMensaje({ tipo: 'exito', texto: `Empresa ${empresaEnEdicion.id} actualizada y rutas viales recalculadas en la sesión.` });
-      } else {
-        setMensaje({ tipo: 'error', texto: err.message || 'Error al guardar empresa' });
-      }
+      setMensaje({ tipo: 'error', texto: err.message || 'Error al guardar empresa' });
     } finally {
       setCargandoGuardar(false);
     }
@@ -189,6 +145,7 @@ export function Hu01EmpresasGeneradorasPage() {
                 <th className="px-4 py-3 text-center">Longitud</th>
                 <th className="px-4 py-3">Tipo de Residuo</th>
                 <th className="px-4 py-3 text-right">Oferta (t/semana)</th>
+                <th className="px-4 py-3 text-right">Adquisición (COP/t)</th>
                 <th className="px-4 py-3 text-center">Acciones</th>
               </tr>
             </thead>
@@ -206,6 +163,7 @@ export function Hu01EmpresasGeneradorasPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right font-black text-slate-900">{emp.oferta_t?.toFixed(1)} t/semana</td>
+                  <td className="px-4 py-3 text-right text-slate-700">$ {Number(emp.precio_tonelada || 0).toLocaleString('es-CO')}</td>
                   <td className="px-4 py-3 text-center">
                     <button
                       onClick={() => abrirModalEditar(emp)}
@@ -299,6 +257,13 @@ export function Hu01EmpresasGeneradorasPage() {
                   onChange={(e) => setEmpresaEnEdicion({ ...empresaEnEdicion, oferta_t: parseFloat(e.target.value) })}
                   className="w-full text-xs font-bold px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
                 />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">Precio de adquisición (COP/t):</label>
+                <input type="number" min="0" step="1" required value={empresaEnEdicion.precio_tonelada ?? 0}
+                  onChange={(e) => setEmpresaEnEdicion({ ...empresaEnEdicion, precio_tonelada: e.target.value === '' ? '' : Number(e.target.value) })}
+                  className="w-full min-h-11 rounded-lg border border-slate-300 px-3 text-sm focus:ring-2 focus:ring-emerald-500" />
+                <p className="mt-1 text-xs text-slate-500">Se suma al costo logístico por cada tonelada de esta empresa.</p>
               </div>
 
               {/* Selector de Coordenadas con Mapa Interactivo */}
@@ -401,4 +366,3 @@ export function Hu01EmpresasGeneradorasPage() {
 }
 
 export default Hu01EmpresasGeneradorasPage;
-

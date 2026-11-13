@@ -6,6 +6,7 @@ import com.ecoresiduos.llano.domain.model.Escenario;
 import com.ecoresiduos.llano.domain.model.PerturbacionSensibilidad;
 import com.ecoresiduos.llano.domain.model.Planta;
 import com.ecoresiduos.llano.domain.model.Ruta;
+import com.ecoresiduos.llano.domain.port.IPuertoValidadorEscenario;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Component
-public class ValidadorContratosEntrada {
+public class ValidadorContratosEntrada implements IPuertoValidadorEscenario {
 
     public List<String> validar_coordenadas_geograficas(Double latitud, Double longitud) {
         List<String> errores = new ArrayList<>();
@@ -60,6 +61,10 @@ public class ValidadorContratosEntrada {
 
         Double oferta = toDouble(payload.get("oferta_t"));
         errores.addAll(validar_oferta_semanal(oferta));
+        Double precio = payload.get("precio_tonelada") == null ? 0.0 : toDouble(payload.get("precio_tonelada"));
+        if (precio == null || !Double.isFinite(precio) || precio < 0.0) {
+            errores.add("El precio por tonelada debe ser finito y no negativo (COP/t).");
+        }
 
         return errores;
     }
@@ -92,6 +97,10 @@ public class ValidadorContratosEntrada {
 
         Double cap = toDouble(payload.get("capacidad_maxima_t"));
         errores.addAll(validar_capacidad_maxima(cap));
+        Double operacion = payload.get("costo_operacion_t") == null ? 0.0 : toDouble(payload.get("costo_operacion_t"));
+        if (operacion == null || !Double.isFinite(operacion) || operacion < 0.0) {
+            errores.add("El costo de operación debe ser finito y no negativo (COP/t).");
+        }
 
         return errores;
     }
@@ -144,6 +153,9 @@ public class ValidadorContratosEntrada {
             for (Empresa emp : escenario.getEmpresas()) {
                 errores.addAll(validar_coordenadas_geograficas(emp.getLatitud(), emp.getLongitud()));
                 errores.addAll(validar_oferta_semanal(emp.getOferta_t()));
+                if (emp.getPrecio_tonelada() != null && (!Double.isFinite(emp.getPrecio_tonelada()) || emp.getPrecio_tonelada() < 0)) {
+                    errores.add("Empresa " + emp.getId() + ": precio por tonelada inválido.");
+                }
             }
         }
 
@@ -153,6 +165,9 @@ public class ValidadorContratosEntrada {
             for (Planta pla : escenario.getPlantas()) {
                 errores.addAll(validar_coordenadas_geograficas(pla.getLatitud(), pla.getLongitud()));
                 errores.addAll(validar_capacidad_maxima(pla.getCapacidad_maxima_t()));
+                if (pla.getCosto_operacion_t() != null && (!Double.isFinite(pla.getCosto_operacion_t()) || pla.getCosto_operacion_t() < 0)) {
+                    errores.add("Planta " + pla.getId() + ": costo de operación inválido.");
+                }
             }
         }
 
@@ -213,12 +228,6 @@ public class ValidadorContratosEntrada {
             errores.add("La tasa de mutación debe ser un valor entre 0 y 1 (o entre 0% y 100%).");
         } else if (config_ag.getTasa_mutacion() > 1.0) {
             config_ag.setTasa_mutacion(config_ag.getTasa_mutacion() / 100.0);
-        }
-
-        if (config_ag.getFactor_penalizacion() == null
-                || !Double.isFinite(config_ag.getFactor_penalizacion())
-                || config_ag.getFactor_penalizacion() < 0.0) {
-            errores.add("El factor de penalización debe ser no negativo.");
         }
 
         if (!"TORNEO".equals(config_ag.getMetodo_seleccion())) {

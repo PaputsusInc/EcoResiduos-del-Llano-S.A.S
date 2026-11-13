@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GitCompare, Play, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSession } from '../../context/SessionContext';
 import { api } from '../../api/client';
+import { crearConfiguracionAg } from '../hu05_trazabilidad/agConfiguracion';
+import { leerConfiguracionAg } from '../hu05_trazabilidad/configuracionAgGuardada';
 
 const costo = (valor) => valor == null
   ? 'No disponible'
@@ -25,13 +27,18 @@ function ResultadoMetodo({ titulo, resultado }) {
 export default function Hu16ComparacionExactoVsAgPage() {
   const { escenarioActivo } = useSession();
   const escenarioId = escenarioActivo?.id || 'ESC-01';
-  const [poblacion, setPoblacion] = useState(100);
-  const [generaciones, setGeneraciones] = useState(200);
-  const [tasaCruce, setTasaCruce] = useState(80);
-  const [tasaMutacion, setTasaMutacion] = useState(5);
+  const [config, setConfig] = useState(() => leerConfiguracionAg(escenarioId));
   const [ejecutando, setEjecutando] = useState(false);
   const [error, setError] = useState(null);
   const [reporte, setReporte] = useState(null);
+  const escenarioActualRef = useRef(escenarioId);
+  escenarioActualRef.current = escenarioId;
+
+  useEffect(() => {
+    setConfig(leerConfiguracionAg(escenarioId));
+    setReporte(null);
+    setError(null);
+  }, [escenarioId]);
 
   async function ejecutarComparacion() {
     setEjecutando(true);
@@ -40,16 +47,11 @@ export default function Hu16ComparacionExactoVsAgPage() {
     try {
       const respuesta = await api.ejecutarOptimizacion(escenarioId, {
         metodo: 'COMPARATIVO',
-        config_ag: {
-          tamano_poblacion: Number(poblacion),
-          generaciones: Number(generaciones),
-          tasa_cruce: Number(tasaCruce) / 100,
-          tasa_mutacion: Number(tasaMutacion) / 100
-        }
+        config_ag: crearConfiguracionAg(config)
       });
-      setReporte(respuesta.reporte);
+      if (escenarioActualRef.current === escenarioId) setReporte(respuesta.reporte);
     } catch (fallo) {
-      setError(fallo.message);
+      if (escenarioActualRef.current === escenarioId) setError(fallo.message);
     } finally {
       setEjecutando(false);
     }
@@ -70,26 +72,25 @@ export default function Hu16ComparacionExactoVsAgPage() {
             {ejecutando ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
             {ejecutando ? 'Ejecutando…' : 'Comparar'}
           </button>
-          <Link to="/evolucion-ag" className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold">
-            Ajustar AG y ver evolución
+          <Link to="/ajuste-ag" className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold">
+            Ajustar parámetros AG
           </Link>
         </div>
       </div>
 
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <h3 className="text-sm font-bold text-slate-800 mb-3">Parámetros del AG</h3>
+        <h3 className="text-sm font-bold text-slate-800 mb-1">Parámetros del AG para esta comparación</h3>
+        <p className="text-xs text-slate-500 mb-4">Se utilizan los valores guardados para {escenarioId}. Cámbialos en «Ajuste de parámetros AG».</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            ['Población', poblacion, setPoblacion, 2, 1],
-            ['Generaciones', generaciones, setGeneraciones, 1, 1],
-            ['Cruce (%)', tasaCruce, setTasaCruce, 0, 1],
-            ['Mutación (%)', tasaMutacion, setTasaMutacion, 0, 1]
-          ].map(([etiqueta, valor, actualizar, minimo, paso]) => (
-            <label key={etiqueta} className="text-xs font-semibold text-slate-600">
-              {etiqueta}
-              <input type="number" min={minimo} max={etiqueta.includes('%') ? 100 : undefined} step={paso} value={valor} onChange={(evento) => actualizar(evento.target.value)} className="block w-full mt-1 p-2 rounded-lg border border-slate-300" />
-            </label>
-          ))}
+            ['Población', config.tamano_poblacion],
+            ['Generaciones', config.generaciones],
+            ['Cruce', `${config.tasa_cruce_pct} %`],
+            ['Mutación', `${config.tasa_mutacion_pct} %`]
+          ].map(([etiqueta, valor]) => <div key={etiqueta} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-xs font-semibold text-slate-500">{etiqueta}</p>
+            <p className="mt-1 text-base font-bold text-slate-900">{valor}</p>
+          </div>)}
         </div>
         {error && <p role="alert" className="text-sm text-red-700 mt-3">{error}</p>}
       </div>

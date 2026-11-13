@@ -5,13 +5,15 @@ import {
   crearConfiguracionAg, validarConfiguracion
 } from '../src/pages/hu05_trazabilidad/agConfiguracion.js';
 
-test('convierte porcentajes a tasas del contrato y conserva valores técnicos', () => {
+test('convierte porcentajes a tasas del contrato y deja valores técnicos al backend', () => {
   const config = crearConfiguracionAg(CONFIGURACION_FORMULARIO_INICIAL);
   assert.equal(config.tasa_mutacion, 0.05);
   assert.equal(config.tasa_cruce, 0.8);
-  assert.equal(config.metodo_seleccion, 'TORNEO');
-  assert.equal(config.tipo_cruce, 'OX');
-  assert.equal(config.puntos_cruce, 2);
+  assert.equal(Object.hasOwn(config, 'metodo_seleccion'), false);
+  assert.equal(Object.hasOwn(config, 'tipo_cruce'), false);
+  assert.equal(Object.hasOwn(config, 'puntos_cruce'), false);
+  assert.equal(Object.hasOwn(config, 'factor_penalizacion'), false);
+  assert.equal(Object.hasOwn(config, 'escala_costo_referencia'), false);
   assert.equal(config.reemplazos, null);
 });
 
@@ -23,8 +25,8 @@ test('el formulario no expone ni acepta un operador de cruce alternativo', () =>
     tipo_cruce: 'BLOQUES_ORDEN',
     puntos_cruce: '1'
   });
-  assert.equal(config.tipo_cruce, 'OX');
-  assert.equal(config.puntos_cruce, 2);
+  assert.equal(Object.hasOwn(config, 'tipo_cruce'), false);
+  assert.equal(Object.hasOwn(config, 'puntos_cruce'), false);
 });
 
 test('bloquea configuraciones inconsistentes antes de invocar la API', () => {

@@ -10,6 +10,9 @@ public class Empresa extends NodoRed {
     @JsonProperty("oferta_t")
     private Double oferta_t;
 
+    @JsonProperty("precio_tonelada")
+    private Double precio_tonelada = 0.0;
+
     public Empresa() {
         super();
     }
@@ -39,5 +42,7 @@ public class Empresa extends NodoRed {
     public void setOferta_t(Double oferta_t) {
         this.oferta_t = oferta_t;
     }
-}
 
+    public Double getPrecio_tonelada() { return precio_tonelada; }
+    public void setPrecio_tonelada(Double precio_tonelada) { this.precio_tonelada = precio_tonelada; }
+}

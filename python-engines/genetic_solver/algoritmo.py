@@ -29,7 +29,6 @@ def _decimal(valor: Any, nombre: str, minimo: float = 0.0) -> float:
 
 def _tasa(valor: Any, nombre: str) -> float:
     numero = _decimal(valor, nombre)
-    # El backend acepta porcentajes antiguos; internamente solo usamos 0..1.
     if numero > 1:
         numero /= 100
     if numero > 1:
@@ -50,7 +49,6 @@ class Configuracion:
     reemplazos: int
     limite_sin_mejora: int | None
     umbral_mejora_cop: float
-    factor_penalizacion: float
     escala_costo_referencia: float
     semilla: int | None
 
@@ -63,7 +61,7 @@ class Configuracion:
             raise ValueError("config_ag debe ser un objeto JSON")
         claves_validas = {
             "tamano_poblacion", "generaciones", "tasa_cruce", "tasa_mutacion",
-            "metodo_seleccion", "factor_penalizacion", "semilla", "tamano_torneo",
+            "metodo_seleccion", "semilla", "tamano_torneo",
             "tipo_cruce", "puntos_cruce", "elitismo", "reemplazos",
             "limite_sin_mejora", "umbral_mejora_cop", "escala_costo_referencia",
         }
@@ -117,7 +115,6 @@ class Configuracion:
             _tasa(datos.get("tasa_mutacion", 0.05), "tasa_mutacion"),
             torneo, tipo, puntos, elitismo, reemplazos, limite,
             _decimal(datos.get("umbral_mejora_cop", 0), "umbral_mejora_cop"),
-            _decimal(datos.get("factor_penalizacion", 1000), "factor_penalizacion"),
             escala, semilla,
         )
 
@@ -145,13 +142,9 @@ def evaluar(
 ) -> Individuo:
     plan = decodificar(problema, cromosoma)
     factible = plan.faltante <= problema.tolerancia
-    penalizacion = 0.0 if factible else (
-        configuracion.factor_penalizacion
-        * plan.faltante / max(1.0, problema.oferta_total)
-    )
-    aptitud = 1.0 / (
-        1.0 + plan.costo / configuracion.escala_costo_referencia + penalizacion
-    )
+    if not factible:
+        raise ArithmeticError("El decodificador produjo un plan incompleto en una red factible")
+    aptitud = 1.0 / (1.0 + plan.costo / configuracion.escala_costo_referencia)
     return Individuo(cromosoma, plan, aptitud, factible)
 
 

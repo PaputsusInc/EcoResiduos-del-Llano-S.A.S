@@ -9,6 +9,7 @@ export default function Hu06CostosTransportePage() {
   const [matrizCostos, setMatrizCostos] = useState([]);
   const [guardando, setGuardando] = useState(false);
   const [mensajeExito, setMensajeExito] = useState(null);
+  const [error, setError] = useState(null);
 
   const empresas = useMemo(() => escenarioActivo?.empresas || [], [escenarioActivo]);
   const plantas = useMemo(() => escenarioActivo?.plantas || [], [escenarioActivo]);
@@ -33,10 +34,7 @@ export default function Hu06CostosTransportePage() {
         if (r && Boolean(r.activa) === false) {
           return null; // Sin ruta transitable
         }
-        if (r && r.distancia_km != null) {
-          return Math.round(r.distancia_km * tarifaRef);
-        }
-        return 15000.0;
+        return null;
       });
     });
 
@@ -44,104 +42,58 @@ export default function Hu06CostosTransportePage() {
   }, [empresas, plantas, rutas]);
 
   const handleCostoChange = (i, j, valorStr) => {
-    const val = parseFloat(valorStr);
     const nueva = matrizCostos.map(fila => [...fila]);
-    nueva[i][j] = isNaN(val) || val < 0 ? 0 : val;
+    nueva[i][j] = valorStr === '' ? '' : Number(valorStr);
     setMatrizCostos(nueva);
   };
 
-  const aplicarTarifaGlobal = () => {
-    const t = parseFloat(tarifaRef) || 300;
-    const nueva = empresas.map((emp, i) => {
-      return plantas.map((pla, j) => {
-        const r = rutas.find(ruta => ruta.empresa_id === emp.id && ruta.planta_id === pla.id);
-        if (r && Boolean(r.activa) === false) {
-          return null;
-        }
-        let km = r?.distancia_km;
-        if (km == null) {
-          const dLat = Math.abs(emp.latitud - pla.latitud);
-          const dLon = Math.abs(emp.longitud - pla.longitud);
-          km = Math.max(9.5, Math.round(Math.sqrt(dLat * dLat + (dLon * 0.998) ** 2) * 111.0 * 1.32 * 10) / 10);
-        }
-        return Math.round(km * t);
-      });
-    });
-
-    setMatrizCostos(nueva);
-    setMensajeExito(`Tarifa de ${t} COP/(t·km) aplicada a las conexiones activas de la red.`);
-    setTimeout(() => setMensajeExito(null), 4000);
+  const aplicarTarifa = async (tarifa) => {
+    if (!Number.isFinite(tarifa) || tarifa < 0) {
+      setError('Ingresa una tarifa válida, mayor o igual a cero.');
+      return;
+    }
+    setGuardando(true);
+    setError(null);
+    setMensajeExito(null);
+    try {
+      const respuesta = await api.aplicarTarifaGlobal(escenarioActivo.id, tarifa);
+      setEscenarioActivo(respuesta.escenario);
+      setTarifaRef(tarifa);
+      setMensajeExito(`Tarifa de ${tarifa} COP/(t·km) aplicada y guardada.`);
+    } catch (fallo) {
+      setError(fallo.message);
+    } finally {
+      setGuardando(false);
+    }
   };
 
-  const restablecerValoresBase = () => {
-    const t = 300.0;
-    setTarifaRef(300);
-    const nueva = empresas.map((emp) => {
-      return plantas.map((pla) => {
-        const r = rutas.find(ruta => ruta.empresa_id === emp.id && ruta.planta_id === pla.id);
-        if (r && Boolean(r.activa) === false) return null;
-        let km = r?.distancia_km;
-        if (km == null) {
-          const dLat = Math.abs(emp.latitud - pla.latitud);
-          const dLon = Math.abs(emp.longitud - pla.longitud);
-          km = Math.max(9.5, Math.round(Math.sqrt(dLat * dLat + (dLon * 0.998) ** 2) * 111.0 * 1.32 * 10) / 10);
-        }
-        return Math.round(km * t);
-      });
-    });
-    setMatrizCostos(nueva);
-    setMensajeExito('Valores de flete nominales restablecidos correctamente.');
-    setTimeout(() => setMensajeExito(null), 3000);
-  };
+  const aplicarTarifaGlobal = () => aplicarTarifa(Number(tarifaRef));
+  const restablecerValoresBase = () => aplicarTarifa(300);
 
   const guardarCostos = async () => {
     setGuardando(true);
+    setError(null);
+    setMensajeExito(null);
     try {
-      const escId = escenarioActivo ? escenarioActivo.id : 'ESC-01';
-      // Actualizar rutas locales en el contexto
-      if (escenarioActivo && escenarioActivo.rutas) {
-        const nuevasRutas = escenarioActivo.rutas.map(r => {
-          const i = empresas.findIndex(e => e.id === r.empresa_id);
-          const j = plantas.findIndex(p => p.id === r.planta_id);
-          if (i >= 0 && j >= 0 && matrizCostos[i] && matrizCostos[i][j] !== undefined) {
-            const nuevoCosto = matrizCostos[i][j];
-            return {
-              ...r,
-              costo_unitario_t: nuevoCosto,
-              tarifa_t_km: parseFloat(tarifaRef) || 300
-            };
-          }
-          return r;
-        });
-
-        const escenarioActualizado = { ...escenarioActivo, rutas: nuevasRutas };
-        setEscenarioActivo(escenarioActualizado);
-
-        // Guardar individualmente en backend si las rutas existen
-        for (let i = 0; i < empresas.length; i++) {
-          for (let j = 0; j < plantas.length; j++) {
-            const costo = matrizCostos[i]?.[j];
-            if (costo !== null && costo !== undefined) {
-              const rutaId = `${empresas[i].id}->${plantas[j].id}`;
-              try {
-                await api.actualizarCostoTransporte(escId, rutaId, {
-                  costo_unitario_t: costo,
-                  tarifa_t_km: parseFloat(tarifaRef) || 300
-                });
-              } catch (e) {
-                // Si la ruta no está en el backend o falla en lote, se mantiene en memoria
-              }
-            }
-          }
+      if (!escenarioActivo) throw new Error('Selecciona un escenario para guardar los costos.');
+      const costos = {};
+      rutas.forEach((ruta) => {
+        if (ruta.activa === false || ruta.compatible === false) return;
+        const i = empresas.findIndex((empresa) => empresa.id === ruta.empresa_id);
+        const j = plantas.findIndex((planta) => planta.id === ruta.planta_id);
+        const valor = matrizCostos[i]?.[j];
+        if (!Number.isFinite(valor) || valor < 0) {
+          throw new Error(`Revisa el costo de ${ruta.id}; debe ser un número no negativo.`);
         }
-      }
-      setMensajeExito('¡Matriz de costos unitarios de transporte guardada exitosamente!');
-    } catch (err) {
-      console.error(err);
-      setMensajeExito('Matriz actualizada localmente para la sesión actual.');
+        costos[ruta.id] = valor;
+      });
+      const respuesta = await api.actualizarMatrizCostos(escenarioActivo.id, costos);
+      setEscenarioActivo(respuesta.escenario);
+      setMensajeExito('Matriz de costos guardada y confirmada por el servidor.');
+    } catch (fallo) {
+      setError(fallo.message);
     } finally {
       setGuardando(false);
-      setTimeout(() => setMensajeExito(null), 4000);
     }
   };
 
@@ -156,7 +108,7 @@ export default function Hu06CostosTransportePage() {
           <div>
             <h2 className="text-base font-bold text-slate-900 leading-tight">Costos de Transporte</h2>
             <p className="text-xs text-slate-500">
-              Matriz de fletes en COP por tonelada para las {empresas.length} empresas y {plantas.length} plantas del escenario
+              Matriz de fletes en COP por tonelada para las {empresas.length} empresas y {plantas.length} plantas. Adquisición y operación se agregan al optimizar.
             </p>
           </div>
         </div>
@@ -174,11 +126,12 @@ export default function Hu06CostosTransportePage() {
       </div>
 
       {mensajeExito && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium flex items-center justify-between shadow-sm animate-fade-in">
+        <div role="status" className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium flex items-center justify-between shadow-sm animate-fade-in">
           <span>{mensajeExito}</span>
           <button onClick={() => setMensajeExito(null)} className="text-emerald-600 hover:text-emerald-900 font-bold ml-4">✕</button>
         </div>
       )}
+      {error && <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-800">{error}</p>}
 
       {/* CALCULADORA DE TARIFA */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
@@ -208,18 +161,20 @@ export default function Hu06CostosTransportePage() {
 
           <button
             onClick={aplicarTarifaGlobal}
+            disabled={guardando || !escenarioActivo}
             className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg font-semibold flex items-center space-x-1.5 transition"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>Recalcular Matriz con esta Tarifa</span>
+            <span>Aplicar tarifa y guardar</span>
           </button>
 
           <button
             onClick={restablecerValoresBase}
+            disabled={guardando || !escenarioActivo}
             className="px-3 py-1.5 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg font-medium flex items-center space-x-1.5 transition"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Restablecer Valores Base</span>
+            <span>Aplicar tarifa base de 300</span>
           </button>
         </div>
       </div>
@@ -270,6 +225,7 @@ export default function Hu06CostosTransportePage() {
                       <td key={pla.id} className="py-2 px-2">
                         <input
                           type="number"
+                          aria-label={`Costo de ${emp.id} a ${pla.id} en COP por tonelada`}
                           step="50"
                           min="0"
                           value={c}

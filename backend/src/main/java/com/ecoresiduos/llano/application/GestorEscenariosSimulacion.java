@@ -1,38 +1,29 @@
 package com.ecoresiduos.llano.application;
 
 import com.ecoresiduos.llano.domain.model.Escenario;
+import com.ecoresiduos.llano.domain.model.ConfiguracionAG;
+import com.ecoresiduos.llano.domain.model.ReporteComparativo;
 import com.ecoresiduos.llano.domain.model.ResultadoOptimizacion;
+import com.ecoresiduos.llano.domain.port.IPuertoConstructorEscenarios;
 import com.ecoresiduos.llano.domain.port.IPuertoRepositorioEscenarios;
-import com.ecoresiduos.llano.infrastructure.optimizer.PythonProcessRunner;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class GestorEscenariosSimulacion {
     private final IPuertoRepositorioEscenarios repositorio;
     private final OrquestadorOptimizacion orquestador;
-    private final PythonProcessRunner python;
-    private final ObjectMapper json;
-
-    @Value("${ecoresiduos.python.scenario-builder-path:../python-engines/exact_solver/construir_escenario.py}")
-    private String rutaConstructor = "../python-engines/exact_solver/construir_escenario.py";
+    private final IPuertoConstructorEscenarios constructor;
 
     public GestorEscenariosSimulacion(IPuertoRepositorioEscenarios repositorio,
-            OrquestadorOptimizacion orquestador, PythonProcessRunner python, ObjectMapper json) {
+            OrquestadorOptimizacion orquestador, IPuertoConstructorEscenarios constructor) {
         this.repositorio = repositorio;
         this.orquestador = orquestador;
-        this.python = python;
-        this.json = json;
+        this.constructor = constructor;
     }
 
     public Escenario crear(String referenciaId, String nombre, List<Map<String, Object>> variaciones) {
@@ -44,7 +35,7 @@ public class GestorEscenariosSimulacion {
         if (variaciones == null || variaciones.isEmpty() || variaciones.size() > 30) {
             throw new IllegalArgumentException("Indica entre 1 y 30 variaciones");
         }
-        Escenario variante = materializar(referencia, variaciones);
+        Escenario variante = constructor.materializar(referencia, variaciones);
         variante.setId("SIM-" + UUID.randomUUID());
         variante.setNombre(nombre.trim());
         variante.setReferencia_id(referenciaId);
@@ -69,7 +60,7 @@ public class GestorEscenariosSimulacion {
         }
         Escenario base = anterior.getReferencia_snapshot();
         if (base == null) throw new IllegalStateException("La variante no conserva su referencia original");
-        Escenario variante = materializar(base, variaciones);
+        Escenario variante = constructor.materializar(base, variaciones);
         variante.setId(varianteId);
         variante.setNombre(nombre.trim());
         variante.setReferencia_id(referenciaId);
@@ -78,45 +69,6 @@ public class GestorEscenariosSimulacion {
         variante.setProcedencia_datos(anterior.getProcedencia_datos());
         repositorio.guardar(variante);
         return variante;
-    }
-
-    private Escenario materializar(Escenario referencia, List<Map<String, Object>> variaciones) {
-        var script = python.resolverRutaScript(rutaConstructor);
-        if (script == null || !script.isFile()) {
-            throw new IllegalStateException("No se encontró el constructor matemático de escenarios");
-        }
-        Path salida = null;
-        Path errores = null;
-        try {
-            salida = Files.createTempFile("escenario-salida-", ".json");
-            errores = Files.createTempFile("escenario-error-", ".txt");
-            Process proceso = new ProcessBuilder(python.resolverComandoPython(script))
-                    .directory(script.getParentFile())
-                    .redirectOutput(salida.toFile())
-                    .redirectError(errores.toFile())
-                    .start();
-            try (var entrada = proceso.getOutputStream()) {
-                json.writeValue(entrada, Map.of("escenario", referencia, "variaciones", variaciones));
-            }
-            if (!proceso.waitFor(30, TimeUnit.SECONDS)) {
-                proceso.destroyForcibly();
-                throw new IllegalStateException("La construcción del escenario excedió el tiempo permitido");
-            }
-            if (proceso.exitValue() != 0) {
-                throw new IllegalArgumentException(Files.readString(errores).trim());
-            }
-            return json.readValue(salida.toFile(), Escenario.class);
-        } catch (IOException error) {
-            throw new IllegalStateException("No se pudo construir el escenario", error);
-        } catch (InterruptedException error) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException("Construcción interrumpida", error);
-        } finally {
-            try {
-                if (salida != null) Files.deleteIfExists(salida);
-                if (errores != null) Files.deleteIfExists(errores);
-            } catch (IOException ignored) { }
-        }
     }
 
     public Map<String, Object> comparar(String referenciaId, String varianteId) {
@@ -129,6 +81,22 @@ public class GestorEscenariosSimulacion {
         ResultadoOptimizacion base = orquestador.resolverEscenarioExacto(referencia);
         ResultadoOptimizacion simulacion = orquestador.ejecutar_modelo_exacto(varianteId);
         return resumir(base, simulacion);
+    }
+
+    public Map<String, Object> compararMetodos(String referenciaId, String varianteId, ConfiguracionAG configAg) {
+        Escenario variante = repositorio.obtener_por_id(varianteId);
+        if (variante == null || !referenciaId.equals(variante.getReferencia_id())) {
+            throw new IllegalArgumentException("La variante no pertenece a la referencia indicada");
+        }
+        Escenario referencia = variante.getReferencia_snapshot();
+        if (referencia == null) throw new IllegalStateException("La variante no conserva su referencia original");
+        ReporteComparativo base = orquestador.compararEscenario(referencia, configAg);
+        ReporteComparativo simulacion = orquestador.compararEscenario(variante, configAg);
+        Map<String, Object> respuesta = new LinkedHashMap<>();
+        respuesta.put("referencia", base);
+        respuesta.put("variante", simulacion);
+        respuesta.put("variaciones", variante.getVariaciones());
+        return respuesta;
     }
 
     public Map<String, Object> resumir(ResultadoOptimizacion base, ResultadoOptimizacion simulacion) {

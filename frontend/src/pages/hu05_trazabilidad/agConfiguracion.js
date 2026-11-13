@@ -1,21 +1,3 @@
-export const CONFIGURACION_INICIAL = {
-  tamano_poblacion: 100,
-  generaciones: 200,
-  tasa_cruce: 0.8,
-  tasa_mutacion: 0.05,
-  metodo_seleccion: 'TORNEO',
-  tamano_torneo: 3,
-  tipo_cruce: 'OX',
-  puntos_cruce: 2,
-  elitismo: 1,
-  reemplazos: null,
-  limite_sin_mejora: null,
-  umbral_mejora_cop: 0,
-  factor_penalizacion: 1000,
-  escala_costo_referencia: 1000000,
-  semilla: 42
-};
-
 const entero = (valor, minimo) => Number.isInteger(Number(valor)) && valor !== '' && Number(valor) >= minimo;
 const decimal = (valor, minimo, maximo = Infinity) => valor !== '' && Number.isFinite(Number(valor))
   && Number(valor) >= minimo && Number(valor) <= maximo;
@@ -49,7 +31,6 @@ export function crearConfiguracionAg(config) {
   const errores = validarConfiguracion(config);
   if (Object.keys(errores).length) throw new Error('Revisa los campos marcados antes de continuar.');
   return {
-    ...CONFIGURACION_INICIAL,
     tamano_poblacion: Number(config.tamano_poblacion),
     generaciones: Number(config.generaciones),
     tasa_cruce: Number(config.tasa_cruce_pct) / 100,
@@ -63,15 +44,15 @@ export function crearConfiguracionAg(config) {
 }
 
 export const CONFIGURACION_FORMULARIO_INICIAL = {
-  tamano_poblacion: String(CONFIGURACION_INICIAL.tamano_poblacion),
-  generaciones: String(CONFIGURACION_INICIAL.generaciones),
-  tasa_cruce_pct: String(CONFIGURACION_INICIAL.tasa_cruce * 100),
-  tasa_mutacion_pct: String(CONFIGURACION_INICIAL.tasa_mutacion * 100),
-  tamano_torneo: String(CONFIGURACION_INICIAL.tamano_torneo),
-  elitismo: String(CONFIGURACION_INICIAL.elitismo),
+  tamano_poblacion: '100',
+  generaciones: '200',
+  tasa_cruce_pct: '80',
+  tasa_mutacion_pct: '5',
+  tamano_torneo: '3',
+  elitismo: '1',
   reemplazos: '',
   limite_sin_mejora: '',
-  semilla: String(CONFIGURACION_INICIAL.semilla)
+  semilla: '42'
 };
 
 export function aplicarRecomendacion(actual, recomendada) {

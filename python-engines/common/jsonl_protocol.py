@@ -64,6 +64,16 @@ def emitir_resultado_final(resultado: Dict[str, Any]) -> None:
     """
     Emite el evento de cierre definitivo con el ResultadoOptimizacion final.
     """
+    # Consumo del proceso Python completo: CPU acumulada y memoria residente pico.
+    # Windows no ofrece resource; en ese sistema se informa ausencia de medición.
+    try:
+        import resource
+        uso = resource.getrusage(resource.RUSAGE_SELF)
+        resultado["cpu_tiempo_s"] = round(uso.ru_utime + uso.ru_stime, 4)
+        divisor = 1024 * 1024 if sys.platform == "darwin" else 1024
+        resultado["memoria_pico_mb"] = round(uso.ru_maxrss / divisor, 2)
+    except ImportError:
+        resultado["cpu_tiempo_s"] = None
+        resultado["memoria_pico_mb"] = None
     resultado["TIPO"] = "RESULTADO_FINAL"
     emitir_evento(resultado)
-

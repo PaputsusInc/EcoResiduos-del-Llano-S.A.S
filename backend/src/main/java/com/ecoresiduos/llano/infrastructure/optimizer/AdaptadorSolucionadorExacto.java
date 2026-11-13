@@ -3,7 +3,7 @@ package com.ecoresiduos.llano.infrastructure.optimizer;
 import com.ecoresiduos.llano.domain.model.ConfiguracionAG;
 import com.ecoresiduos.llano.domain.model.Escenario;
 import com.ecoresiduos.llano.domain.model.ResultadoOptimizacion;
-import com.ecoresiduos.llano.domain.port.IPuertoOptimizador;
+import com.ecoresiduos.llano.domain.port.IPuertoOptimizadorExacto;
 import com.ecoresiduos.llano.domain.port.IPuertoRepositorioEscenarios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component("adaptadorSolucionadorExacto")
-public class AdaptadorSolucionadorExacto implements IPuertoOptimizador {
+public class AdaptadorSolucionadorExacto implements IPuertoOptimizadorExacto {
 
     private Double tolerancia_numerica = 1e-6;
     private final IPuertoRepositorioEscenarios repositorio_escenarios;

@@ -1,5 +1,7 @@
 # PLAN MAESTRO DE ESPECIFICACIÓN E IMPLEMENTACIÓN — ECORESIDUOS DEL LLANO S.A.S.
 
+> **Documento histórico de planificación.** Para el comportamiento implementado después de la revisión del 13/11/2026, prevalecen `MODELO_MATEMATICO.md`, el contrato HTTP vigente y el código. Las referencias aquí a `factor_penalizacion`, objetivo solo de transporte y pantallas por HU describen el diseño anterior; ya no son parámetros o rutas activos.
+
 > **Rol Emisor**: Arquitecto de Software Principal (Especialista en Arquitectura Hexagonal / Ports & Adapters y Clean Architecture).  
 > **Agente Ejecutor Destinatario**: **Gemini 3.8 High**.  
 > **Fuentes de Verdad Cruzadas**:

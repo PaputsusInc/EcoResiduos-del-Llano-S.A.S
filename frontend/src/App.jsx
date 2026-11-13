@@ -19,6 +19,7 @@ import Hu16ComparacionExactoVsAgPage from './pages/hu02_optimizacion/Hu16Compara
 import Hu19ProcedimientoMetodoExactoPage from './pages/hu02_optimizacion/Hu19ProcedimientoMetodoExactoPage';
 
 import LaboratorioSimulacionPage from './pages/hu03_simulacion/LaboratorioSimulacionPage';
+import ComparacionSensibilidadPage from './pages/hu03_simulacion/ComparacionSensibilidadPage';
 import Hu17EscalabilidadRedPage from './pages/hu04_dual/Hu17EscalabilidadRedPage';
 
 import Hu18SeguimientoGeneracionesAgPage from './pages/hu05_trazabilidad/Hu18SeguimientoGeneracionesAgPage';
@@ -56,12 +57,13 @@ export default function App() {
 
             {/* 4. Simulación y Sensibilidad */}
             <Route path="simulacion" element={<LaboratorioSimulacionPage />} />
+            <Route path="comparacion-sensibilidad" element={<ComparacionSensibilidadPage />} />
             <Route path="sensibilidad-costos" element={<Navigate to="/simulacion" replace />} />
             <Route path="sensibilidad-ofertas" element={<Navigate to="/simulacion" replace />} />
             <Route path="sensibilidad-capacidades" element={<Navigate to="/simulacion" replace />} />
             <Route path="precios-sombra" element={<Navigate to="/simulacion" replace />} />
             <Route path="rangos-optimalidad" element={<Navigate to="/simulacion" replace />} />
-            <Route path="evaluacion-sensibilidad" element={<Navigate to="/simulacion" replace />} />
+            <Route path="evaluacion-sensibilidad" element={<Navigate to="/comparacion-sensibilidad" replace />} />
 
             {/* Redirecciones de compatibilidad hacia rutas semánticas */}
             <Route path="hu-01" element={<Navigate to="/empresas" replace />} />

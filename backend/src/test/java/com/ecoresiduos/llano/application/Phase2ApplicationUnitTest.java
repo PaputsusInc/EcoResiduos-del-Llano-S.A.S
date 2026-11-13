@@ -85,7 +85,7 @@ class Phase2ApplicationUnitTest {
     @Test
     @DisplayName("ValidadorContratosEntrada debe validar y normalizar tasas del AG de porcentaje a proporción [0, 1]")
     void testValidacionYNormalizacionTasasAG() {
-        ConfiguracionAG config = new ConfiguracionAG(100, 200, 80.0, 5.0, "TORNEO", 1000.0);
+        ConfiguracionAG config = new ConfiguracionAG(100, 200, 80.0, 5.0, "TORNEO");
         List<String> errores = validador.validar_hiperparametros_ag(config);
         assertTrue(errores.isEmpty(), "Configuración con tasas en porcentaje [0, 100] debe ser válida");
 
@@ -94,7 +94,7 @@ class Phase2ApplicationUnitTest {
         assertEquals(0.05, config.getTasa_mutacion(), 1e-6, "5 % debe normalizarse a 0.05");
 
         // Configuración con tamaño de población inválido (< 2)
-        ConfiguracionAG configInvalida = new ConfiguracionAG(1, 200, 0.8, 0.05, "TORNEO", 1000.0);
+        ConfiguracionAG configInvalida = new ConfiguracionAG(1, 200, 0.8, 0.05, "TORNEO");
         List<String> erroresPob = validador.validar_hiperparametros_ag(configInvalida);
         assertFalse(erroresPob.isEmpty(), "Población < 2 debe ser rechazada");
     }
@@ -154,4 +154,3 @@ class Phase2ApplicationUnitTest {
                 "El escenario de referencia no debe mutar al crear una variante (DD-43, DD-45)");
     }
 }
-

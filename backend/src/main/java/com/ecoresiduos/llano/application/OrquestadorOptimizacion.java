@@ -8,19 +8,14 @@ import com.ecoresiduos.llano.domain.model.ReporteComparativo;
 import com.ecoresiduos.llano.domain.model.ResultadoOptimizacion;
 import com.ecoresiduos.llano.domain.model.Ruta;
 import com.ecoresiduos.llano.domain.port.IPuertoOptimizador;
+import com.ecoresiduos.llano.domain.port.IPuertoOptimizadorExacto;
 import com.ecoresiduos.llano.domain.port.IPuertoRepositorioEscenarios;
-import com.ecoresiduos.llano.exposition.ValidadorContratosEntrada;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ecoresiduos.llano.domain.port.IPuertoRutasViales;
+import com.ecoresiduos.llano.domain.port.IPuertoValidadorEscenario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,48 +25,66 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import com.ecoresiduos.llano.infrastructure.optimizer.AdaptadorSolucionadorExacto;
-import com.ecoresiduos.llano.infrastructure.optimizer.AdaptadorGenetico;
 
 @Service
 public class OrquestadorOptimizacion {
 
     private final IPuertoRepositorioEscenarios repositorio_escenarios;
-    private final IPuertoOptimizador optimizador_exacto;
+    private final IPuertoOptimizadorExacto optimizador_exacto;
     private final IPuertoOptimizador optimizador_genetico;
     private final MotorComparacionRendimiento motor_comparacion;
-    private final ValidadorContratosEntrada validador;
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+    private final IPuertoValidadorEscenario validador;
+    private final IPuertoRutasViales rutasViales;
 
     public ResultadoOptimizacion analizarVariacionExacta(Escenario escenario, Map<String, Object> variacion) {
-        return ((AdaptadorSolucionadorExacto) optimizador_exacto).analizarVariacion(escenario, variacion);
+        return optimizador_exacto.analizarVariacion(escenario, variacion);
     }
 
     public ResultadoOptimizacion analizarVariacionesExactas(Escenario escenario, List<Map<String, Object>> variaciones) {
-        return ((AdaptadorSolucionadorExacto) optimizador_exacto).analizarVariaciones(escenario, variaciones);
+        return optimizador_exacto.analizarVariaciones(escenario, variaciones);
     }
 
     public ResultadoOptimizacion resolverEscenarioExacto(Escenario escenario) {
         return optimizador_exacto.resolver(escenario, null);
     }
 
+    /** Ejecuta los dos motores sobre el mismo estado, incluso si es una referencia histórica. */
+    public ReporteComparativo compararEscenario(Escenario escenario, ConfiguracionAG configAg) {
+        if (escenario == null) throw new IllegalArgumentException("Escenario no encontrado");
+        List<String> errores = validador.validar_integridad_escenario(escenario);
+        if (!errores.isEmpty()) throw new IllegalArgumentException("Escenario inválido: " + String.join("; ", errores));
+        if (optimizador_exacto == null || optimizador_genetico == null) {
+            throw new IllegalStateException("Los dos motores de optimización deben estar disponibles");
+        }
+        ResultadoOptimizacion exacto = optimizador_exacto.resolver(escenario, null);
+        ResultadoOptimizacion ag = optimizador_genetico.resolver(escenario, configAg);
+        return motor_comparacion.consolidar_reporte_comparativo(escenario, configAg, exacto, ag);
+    }
+
+    public OrquestadorOptimizacion(
+            IPuertoRepositorioEscenarios repositorio_escenarios,
+            IPuertoOptimizadorExacto optimizador_exacto,
+            IPuertoOptimizador optimizador_genetico,
+            MotorComparacionRendimiento motor_comparacion,
+            IPuertoValidadorEscenario validador) {
+        this(repositorio_escenarios, optimizador_exacto, optimizador_genetico,
+                motor_comparacion, validador, null);
+    }
+
     @Autowired
     public OrquestadorOptimizacion(
             IPuertoRepositorioEscenarios repositorio_escenarios,
-            @Qualifier("adaptadorSolucionadorExacto") @Autowired(required = false) IPuertoOptimizador optimizador_exacto,
+            @Qualifier("adaptadorSolucionadorExacto") @Autowired(required = false) IPuertoOptimizadorExacto optimizador_exacto,
             @Qualifier("adaptadorGenetico") @Autowired(required = false) IPuertoOptimizador optimizador_genetico,
             MotorComparacionRendimiento motor_comparacion,
-            ValidadorContratosEntrada validador) {
+            IPuertoValidadorEscenario validador,
+            @Autowired(required = false) IPuertoRutasViales rutasViales) {
         this.repositorio_escenarios = repositorio_escenarios;
         this.optimizador_exacto = optimizador_exacto;
         this.optimizador_genetico = optimizador_genetico;
         this.motor_comparacion = motor_comparacion;
-        this.validador = validador != null ? validador : new ValidadorContratosEntrada();
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(3000))
-                .build();
-        this.objectMapper = new ObjectMapper();
+        this.validador = validador;
+        this.rutasViales = rutasViales;
     }
 
     public Escenario guardar_empresa_y_rutas(String escenario_id, Map<String, Object> datos_empresa) {
@@ -89,6 +102,8 @@ public class OrquestadorOptimizacion {
         Double oferta = toDouble(datos_empresa.get("oferta_t"));
 
         Empresa emp = new Empresa(id, nombre, ubicacion, lat, lon, tipoResiduo, oferta);
+        emp.setPrecio_tonelada(datos_empresa.get("precio_tonelada") == null
+                ? 0.0 : toDouble(datos_empresa.get("precio_tonelada")));
         List<Ruta> afectadas = escenario.guardar_empresa(emp);
 
         // Consultar OSRM para las rutas afectadas
@@ -117,6 +132,8 @@ public class OrquestadorOptimizacion {
         List<String> residuos = (List<String>) datos_planta.get("residuos_admitidos");
 
         Planta pla = new Planta(id, nombre, ubicacion, lat, lon, cap, residuos);
+        pla.setCosto_operacion_t(datos_planta.get("costo_operacion_t") == null
+                ? 0.0 : toDouble(datos_planta.get("costo_operacion_t")));
         List<Ruta> afectadas = escenario.guardar_planta(pla);
 
         // Consultar OSRM para las rutas afectadas
@@ -171,77 +188,14 @@ public class OrquestadorOptimizacion {
                 if (emp.getLatitud() != null && emp.getLongitud() != null &&
                     pla.getLatitud() != null && pla.getLongitud() != null) {
 
-                    consultarRutaOsrmIndividual(ruta, emp.getLatitud(), emp.getLongitud(), pla.getLatitud(), pla.getLongitud());
+                    if (rutasViales != null) rutasViales.consultar(ruta,
+                            emp.getLatitud(), emp.getLongitud(), pla.getLatitud(), pla.getLongitud());
                 }
             }
         }
 
         repositorio_escenarios.guardar(escenario);
         return rutasAFiltrar;
-    }
-
-    private void consultarRutaOsrmIndividual(Ruta ruta, double latO, double lonO, double latD, double lonD) {
-        String url = String.format(Locale.US,
-                "https://router.project-osrm.org/route/v1/driving/%.6f,%.6f;%.6f,%.6f?overview=full&geometries=geojson",
-                lonO, latO, lonD, latD);
-
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .timeout(Duration.ofMillis(3500))
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JsonNode root = objectMapper.readTree(response.body());
-                String code = root.path("code").asText();
-
-                if ("Ok".equalsIgnoreCase(code) && root.has("routes") && !root.path("routes").isEmpty()) {
-                    JsonNode routeNode = root.path("routes").get(0);
-                    double distanciaMetros = routeNode.path("distance").asDouble();
-                    double distanciaKm = Math.round((distanciaMetros / 1000.0) * 10.0) / 10.0;
-
-                    List<List<Double>> geometria = new ArrayList<>();
-                    JsonNode coords = routeNode.path("geometry").path("coordinates");
-                    if (coords.isArray()) {
-                        for (JsonNode pt : coords) {
-                            if (pt.isArray() && pt.size() >= 2) {
-                                geometria.add(List.of(pt.get(0).asDouble(), pt.get(1).asDouble()));
-                            }
-                        }
-                    }
-
-                    ruta.registrar_recorrido_vial(distanciaKm, geometria, "OSRM (provisional)", "calculada");
-                    return;
-                } else if ("NoRoute".equalsIgnoreCase(code)) {
-                    ruta.registrar_recorrido_vial(null, Collections.emptyList(), "OSRM (provisional)", "sin_ruta");
-                    return;
-                }
-            }
-        } catch (Exception ex) {
-            // Fallback seguro ante falta de red / timeout para garantizar tests y ejecución offline
-        }
-
-        // Fallback por estimación Haversine + factor vial
-        if (ruta.getDistancia_km() == null) {
-            double distAprox = calcularDistanciaHaversineKm(latO, lonO, latD, lonD) * 1.35;
-            distAprox = Math.round(distAprox * 10.0) / 10.0;
-            List<List<Double>> geoSimple = List.of(List.of(lonO, latO), List.of(lonD, latD));
-            ruta.registrar_recorrido_vial(distAprox, geoSimple, "OSRM (provisional)", "calculada");
-        }
-    }
-
-    private double calcularDistanciaHaversineKm(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371; // Radio de la Tierra en km
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
     }
 
     public Escenario modificar_costo_transporte(String escenario_id, String ruta_id, Double nuevo_costo_t, Double nueva_tarifa_t_km) {
@@ -265,6 +219,50 @@ public class OrquestadorOptimizacion {
 
         repositorio_escenarios.guardar(escenario);
         return escenario;
+    }
+
+    /** Confirma toda la edición de costos en un único escenario, o no confirma ninguna. */
+    public Escenario modificar_matriz_costos(String escenarioId, Map<String, Double> costos) {
+        Escenario original = repositorio_escenarios.obtener_por_id(escenarioId);
+        if (original == null) throw new IllegalArgumentException("Escenario no encontrado: " + escenarioId);
+        if (costos == null || costos.isEmpty()) throw new IllegalArgumentException("La matriz de costos está vacía");
+        Escenario actualizado = original.clonar_profundo(original.getId(), original.getNombre());
+        for (var cambio : costos.entrySet()) {
+            Ruta ruta = actualizado.getRutas().stream()
+                    .filter(r -> Objects.equals(r.getId(), cambio.getKey()))
+                    .findFirst().orElseThrow(() -> new IllegalArgumentException("Ruta desconocida: " + cambio.getKey()));
+            if (Boolean.FALSE.equals(ruta.getActiva()) || Boolean.FALSE.equals(ruta.getCompatible())) {
+                throw new IllegalArgumentException("La ruta no admite flujos: " + ruta.getId());
+            }
+            Double costo = cambio.getValue();
+            if (costo == null || !Double.isFinite(costo) || costo < 0) {
+                throw new IllegalArgumentException("Costo inválido para " + ruta.getId());
+            }
+            ruta.setCosto_unitario_t(costo);
+            if (ruta.getDistancia_km() != null && ruta.getDistancia_km() > 0) {
+                ruta.setTarifa_t_km(costo / ruta.getDistancia_km());
+            }
+        }
+        repositorio_escenarios.guardar(actualizado);
+        return actualizado;
+    }
+
+    /** Aplica una tarifa común usando solo distancias confirmadas del escenario. */
+    public Escenario aplicar_tarifa_global(String escenarioId, double tarifa) {
+        Escenario original = repositorio_escenarios.obtener_por_id(escenarioId);
+        if (original == null) throw new IllegalArgumentException("Escenario no encontrado: " + escenarioId);
+        if (!Double.isFinite(tarifa) || tarifa < 0) throw new IllegalArgumentException("La tarifa debe ser finita y no negativa");
+        Escenario actualizado = original.clonar_profundo(original.getId(), original.getNombre());
+        for (Ruta ruta : actualizado.getRutas()) {
+            if (Boolean.FALSE.equals(ruta.getActiva()) || Boolean.FALSE.equals(ruta.getCompatible())) continue;
+            if (ruta.getDistancia_km() == null || !Double.isFinite(ruta.getDistancia_km()) || ruta.getDistancia_km() < 0) {
+                throw new IllegalArgumentException("La ruta " + ruta.getId() + " no tiene distancia para aplicar la tarifa");
+            }
+            ruta.setTarifa_t_km(tarifa);
+            ruta.calcular_costo_unitario();
+        }
+        repositorio_escenarios.guardar(actualizado);
+        return actualizado;
     }
 
     public List<String> verificar_consistencia_escenario(String escenario_id) {
@@ -387,7 +385,8 @@ public class OrquestadorOptimizacion {
                         Planta pla = plaOpt.get();
                         if (emp.getLatitud() != null && emp.getLongitud() != null &&
                             pla.getLatitud() != null && pla.getLongitud() != null) {
-                            consultarRutaOsrmIndividual(r, emp.getLatitud(), emp.getLongitud(), pla.getLatitud(), pla.getLongitud());
+                            if (rutasViales != null) rutasViales.consultar(r,
+                                    emp.getLatitud(), emp.getLongitud(), pla.getLatitud(), pla.getLongitud());
                             if (encontrada == null) {
                                 encontrada = r;
                             }
@@ -427,17 +426,9 @@ public class OrquestadorOptimizacion {
         CompletableFuture.runAsync(() -> {
             try {
                 if ("EXACTO".equalsIgnoreCase(metodo)) {
-                    if (optimizador_exacto instanceof AdaptadorSolucionadorExacto ase) {
-                        ase.resolver(escCongelado, null, ejecucionId);
-                    } else if (optimizador_exacto != null) {
-                        optimizador_exacto.resolver(escCongelado, null);
-                    }
+                    if (optimizador_exacto != null) optimizador_exacto.resolver(escCongelado, null, ejecucionId);
                 } else if ("AG".equalsIgnoreCase(metodo)) {
-                    if (optimizador_genetico instanceof AdaptadorGenetico ag) {
-                        ag.resolver(escCongelado, config_ag, ejecucionId);
-                    } else if (optimizador_genetico != null) {
-                        optimizador_genetico.resolver(escCongelado, config_ag);
-                    }
+                    if (optimizador_genetico != null) optimizador_genetico.resolver(escCongelado, config_ag, ejecucionId);
                 }
             } catch (Exception ex) {
                 resultadoInicial.setEstado("ERROR_EJECUCION");

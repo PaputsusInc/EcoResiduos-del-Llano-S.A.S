@@ -26,7 +26,7 @@ public class ControladorPeticionesHTTP {
 
     private static final Set<String> PARAMETROS_AG = Set.of(
             "tamano_poblacion", "generaciones", "tasa_cruce", "tasa_mutacion",
-            "metodo_seleccion", "factor_penalizacion", "semilla", "tamano_torneo",
+            "metodo_seleccion", "semilla", "tamano_torneo",
             "tipo_cruce", "puntos_cruce", "elitismo", "reemplazos",
             "limite_sin_mejora", "umbral_mejora_cop", "escala_costo_referencia"
     );
@@ -129,6 +129,20 @@ public class ControladorPeticionesHTTP {
     public ResponseEntity<Map<String, Object>> post_comparar_simulacion(
             @PathVariable("esc_id") String esc_id, @PathVariable("variante_id") String variante_id) {
         return ResponseEntity.ok(gestorSimulaciones.comparar(esc_id, variante_id));
+    }
+
+    @PostMapping("/escenarios/{esc_id}/simulaciones/{variante_id}/comparar-metodos")
+    public ResponseEntity<Map<String, Object>> post_comparar_metodos_simulacion(
+            @PathVariable("esc_id") String esc_id, @PathVariable("variante_id") String variante_id,
+            @RequestBody(required = false) Map<String, Object> payload) {
+        Escenario variante = repositorio.obtener_por_id(variante_id);
+        if (variante == null || !esc_id.equals(variante.getReferencia_id())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Variante no encontrada para la referencia indicada"));
+        }
+        ConfiguracionAG configAg = extraerConfigAg(payload == null ? null : payload.get("config_ag"));
+        List<String> errores = validarConfigAg(configAg, variante);
+        if (!errores.isEmpty()) return ResponseEntity.badRequest().body(Map.of("error", "Hiperparámetros AG inválidos", "errores", errores));
+        return ResponseEntity.ok(gestorSimulaciones.compararMetodos(esc_id, variante_id, configAg));
     }
 
     private List<Map<String, Object>> leerVariaciones(Object valor) {
@@ -354,6 +368,37 @@ public class ControladorPeticionesHTTP {
     // -------------------------------------------------------------------------
     // HU-06: Actualizar Costos de Transporte
     // -------------------------------------------------------------------------
+
+    @PutMapping("/escenarios/{esc_id}/costos")
+    public ResponseEntity<Map<String, Object>> put_actualizar_matriz_costos(
+            @PathVariable("esc_id") String esc_id, @RequestBody Map<String, Object> payload) {
+        if (payload == null || !(payload.get("costos") instanceof Map<?, ?> entradas) || entradas.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Envía un mapa no vacío de costos por ruta"));
+        }
+        Map<String, Double> costos = new LinkedHashMap<>();
+        for (var entrada : entradas.entrySet()) {
+            if (!(entrada.getKey() instanceof String rutaId) || !(entrada.getValue() instanceof Number numero)) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Cada ruta necesita un costo numérico"));
+            }
+            double costo = numero.doubleValue();
+            if (!Double.isFinite(costo) || costo < 0) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Costo inválido para " + rutaId));
+            }
+            costos.put(rutaId, costo);
+        }
+        Escenario escenario = orquestador.modificar_matriz_costos(esc_id, costos);
+        return ResponseEntity.ok(Map.of("escenario", escenario, "matriz_costos", escenario.obtener_matriz_costos()));
+    }
+
+    @PutMapping("/escenarios/{esc_id}/tarifa")
+    public ResponseEntity<Map<String, Object>> put_aplicar_tarifa_global(
+            @PathVariable("esc_id") String esc_id, @RequestBody Map<String, Object> payload) {
+        if (payload == null || !(payload.get("tarifa_t_km") instanceof Number numero)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Indica una tarifa numérica por tonelada y kilómetro"));
+        }
+        Escenario escenario = orquestador.aplicar_tarifa_global(esc_id, numero.doubleValue());
+        return ResponseEntity.ok(Map.of("escenario", escenario, "matriz_costos", escenario.obtener_matriz_costos()));
+    }
 
     @PutMapping("/escenarios/{esc_id}/rutas/{ruta_id}/costo")
     public ResponseEntity<Map<String, Object>> put_actualizar_costo_transporte(
@@ -692,7 +737,7 @@ public class ControladorPeticionesHTTP {
 
     private ConfiguracionAG extraerConfigAg(Object obj) {
         if (obj == null) {
-            return new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 1000.0, 42);
+            return new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 42);
         }
         if (!(obj instanceof Map<?, ?> datos)) {
             throw new IllegalArgumentException("config_ag debe ser un objeto JSON");

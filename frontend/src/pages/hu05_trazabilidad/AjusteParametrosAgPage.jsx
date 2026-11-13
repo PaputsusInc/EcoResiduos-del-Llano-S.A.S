@@ -139,7 +139,6 @@ export default function AjusteParametrosAgPage() {
                 <dl className="mt-2 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
                   <div><dt className="text-slate-500">Selección</dt><dd className="font-semibold text-slate-800">Torneo</dd></div>
                   <div><dt className="text-slate-500">Cruce</dt><dd className="font-semibold text-slate-800">Orden (OX) · 2 puntos</dd></div>
-                  <div><dt className="text-slate-500">Penalización</dt><dd className="font-semibold text-slate-800">1.000 · umbral de mejora $ 0</dd></div>
                   <div><dt className="text-slate-500">Escala de referencia</dt><dd className="font-semibold text-slate-800">$ 1.000.000 COP</dd></div>
                 </dl>
               </div>

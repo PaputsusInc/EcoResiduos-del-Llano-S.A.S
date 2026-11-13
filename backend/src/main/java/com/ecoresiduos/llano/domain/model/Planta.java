@@ -9,6 +9,9 @@ public class Planta extends NodoRed {
     @JsonProperty("capacidad_maxima_t")
     private Double capacidad_maxima_t;
 
+    @JsonProperty("costo_operacion_t")
+    private Double costo_operacion_t = 0.0;
+
     @JsonProperty("residuos_admitidos")
     private List<String> residuos_admitidos = new ArrayList<>();
 
@@ -40,6 +43,9 @@ public class Planta extends NodoRed {
         this.capacidad_maxima_t = capacidad_maxima_t;
     }
 
+    public Double getCosto_operacion_t() { return costo_operacion_t; }
+    public void setCosto_operacion_t(Double costo_operacion_t) { this.costo_operacion_t = costo_operacion_t; }
+
     public List<String> getResiduos_admitidos() {
         return residuos_admitidos;
     }
@@ -48,4 +54,3 @@ public class Planta extends NodoRed {
         this.residuos_admitidos = residuos_admitidos != null ? new ArrayList<>(residuos_admitidos) : new ArrayList<>();
     }
 }
-

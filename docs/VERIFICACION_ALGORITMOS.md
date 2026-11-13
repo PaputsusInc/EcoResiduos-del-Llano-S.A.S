@@ -22,7 +22,13 @@ ESC-UBICACIONES contiene coordenadas verificadas, pero ofertas, capacidades y ru
 
 - 90 redes generadas de forma reproducible: 45 factibles y 45 inviables; 180 ejecuciones de motores sin errores de estado, oferta, capacidad, rutas o costo. Además, 600 redes adicionales contrastaron Vogel–MODI con un modelo lineal independiente: 322 factibles y 278 inviables, sin diferencias de costo ni violaciones de dualidad. Se incluyeron costos cero y de 100 millones COP/t, rutas ausentes, inactivas e incompatibles, capacidades cero y distintas dimensiones de red.
 - Regresiones puntuales: red de una empresa y una planta, oferta cero, capacidad sobrante, cuellos de botella con capacidad agregada suficiente, rutas bloqueadas con costo presente, cantidades fraccionarias y oferta menor que la tolerancia numérica.
-- 14 pruebas Python y suite Java/Maven completas: aprobadas. Compilación del frontend con Vite: aprobada. Prueba manual local: “Resolver en Vivo” mostró ESC-01 con costo 997.500 COP y la vista de procedimiento mostró la ejecución y sus flujos reales.
+- Suites Python y Java/Maven completas: aprobadas. Compilación del frontend con Vite: aprobada. Prueba manual local: “Resolver en Vivo” mostró ESC-01 con costo 997.500 COP y la vista de procedimiento mostró la ejecución y sus flujos reales.
+
+## Revisión del AG para sustentación (13 de noviembre de 2026)
+
+- 7 pruebas Python del AG, 47 pruebas Java y 10 pruebas del frontend aprobadas. La prueba aleatoria reproducible comprueba al menos 300 planes factibles con balance por empresa, capacidad por planta, uso exclusivo de rutas activas y costo reconstruido desde los flujos.
+- Se verificó el flujo real de la interfaz en ESC-01: la acción de ajuste respondió tras 12 ensayos, la recomendación pasó a la página de evolución y una corrida posterior completó sus 22 generaciones recomendadas.
+- El ajuste compara opciones dentro de un presupuesto fijo y dos semillas; su resultado es una recomendación para el escenario, no una garantía del óptimo global. El método exacto es el que certifica el mínimo del modelo.
 
 ## Correcciones necesarias encontradas
 
@@ -34,3 +40,9 @@ ESC-UBICACIONES contiene coordenadas verificadas, pero ofertas, capacidades y ru
 6. La vista exacta usaba costos de referencia y un método HTTP inexistente. Ahora muestra la respuesta de la API; el procedimiento carga pasos reales de la ejecución.
 
 Esta cobertura verifica todos los escenarios incluidos y un conjunto amplio de casos límite. Ninguna batería finita demuestra corrección para literalmente todas las entradas imaginables. En particular, el AG no certifica el óptimo global.
+
+## Ampliación del modelo y de la interfaz (13 de noviembre de 2026)
+
+Las tablas anteriores siguen siendo válidas para las redes semilla, cuyos nuevos coeficientes de adquisición y operación valen cero. La función objetivo vigente suma transporte, precio de adquisición por empresa y procesamiento por planta; se documenta en `MODELO_MATEMATICO.md`. Una prueba de integración adicional fija ambos coeficientes en 200 y 300 COP/t y comprueba que el exacto agrega 57.500 COP sobre las 115 t de ESC-01, que el AG usa la misma función y que el desglose suma el resultado total.
+
+Las pantallas de escalabilidad y sensibilidad comparada ahora ejecutan los motores reales. CPU y memoria pico se miden para cada proceso Python; no son mediciones de consumo total del equipo ni promedios estadísticos. El factor de penalización del AG se retiró porque el decodificador garantiza planes completos en redes factibles; una violación interna produce un error explícito.
