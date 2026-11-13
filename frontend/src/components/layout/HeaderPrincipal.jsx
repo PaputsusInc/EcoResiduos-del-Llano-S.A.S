@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSession } from '../../context/SessionContext';
-import { Layers, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Layers, AlertTriangle, CheckCircle, Menu } from 'lucide-react';
 
-export function HeaderPrincipal() {
+export function HeaderPrincipal({ abrirMenu }) {
   const { escenarioActivo, escenarioActivoId, cambiarEscenario, setEscenarioActivoId, listaEscenarios } = useSession();
 
   const handleCambiar = (id) => {
@@ -25,10 +25,11 @@ export function HeaderPrincipal() {
   const holgura = capacidad - oferta;
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-xs sticky top-0 z-20">
+    <header className="h-16 bg-white border-b border-slate-200 px-3 md:px-6 flex items-center justify-between gap-3 shadow-xs sticky top-0 z-20">
       {/* Selector de Escenario Activo */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="min-w-0 flex items-center gap-3">
+        <button type="button" onClick={abrirMenu} aria-label="Abrir menú de navegación" className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-slate-700 hover:bg-slate-100 xl:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600"><Menu size={20} aria-hidden="true" /></button>
+        <div className="hidden md:flex items-center gap-2">
           <Layers className="w-5 h-5 text-emerald-600" />
           <span className="text-xs font-semibold uppercase text-slate-500 tracking-wider">Escenario Activo:</span>
         </div>
@@ -36,7 +37,7 @@ export function HeaderPrincipal() {
         <select
           value={escenarioActivoId || escenarioActivo?.id || 'ESC-01'}
           onChange={(e) => handleCambiar(e.target.value)}
-          className="bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-3 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 cursor-pointer shadow-xs"
+          className="min-w-0 max-w-[65vw] bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 cursor-pointer shadow-xs"
         >
           {listaEscenarios.length > 0 ? (
             listaEscenarios.map((esc) => (
@@ -51,7 +52,7 @@ export function HeaderPrincipal() {
       </div>
 
       {/* KPIs Rápidos de Balance */}
-      <div className="flex items-center gap-4 text-xs font-medium">
+      <div className="hidden lg:flex items-center gap-4 text-xs font-medium">
         <div className="px-3 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1.5">
           <span className="text-slate-400">Oferta Total:</span>
           <span className="font-bold text-slate-900">{oferta.toFixed(1)} t/semana</span>

@@ -378,6 +378,22 @@ public class ControladorPeticionesHTTPTest {
     // -------------------------------------------------------------------------
 
     @Test
+    @DisplayName("Sensibilidad exacta reoptimiza tarifas y conserva el escenario original")
+    void testSensibilidadExactaTransitoria() throws Exception {
+        mockMvc.perform(post("/api/escenarios/ESC-01/sensibilidad-exacta")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"tipo\":\"COSTOS\",\"porcentaje\":20}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resultado.estado", is("OPTIMO")))
+                .andExpect(jsonPath("$.resultado.costo_total_Z", is(1197000.0)))
+                .andExpect(jsonPath("$.resultado.analisis_sensibilidad.costos", hasSize(39)));
+
+        mockMvc.perform(get("/api/escenarios/ESC-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.escenario.oferta_total_t", is(115.0)));
+    }
+
+    @Test
     @DisplayName("POST /api/escenarios/ESC-01/sensibilidad debe generar y evaluar variante de sensibilidad con 200")
     void testPostEjecutarSensibilidad() throws Exception {
         Map<String, Object> payload = Map.of(

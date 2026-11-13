@@ -65,7 +65,7 @@ La integración entre Java y Python se realiza mediante `ProcessBuilder`, interc
 
 - Java Development Kit 21
 - Node.js 18 o superior y npm
-- Python 3 con el lanzador `py` (Windows) y las dependencias de `python-engines/requirements.txt` (`numpy`, `scipy`)
+- Python 3.10 o superior con el lanzador `py` (Windows). El ajuste de hiperparámetros requiere Optuna, incluido en `python-engines/requirements.txt`.
 - Maven (se incluye el wrapper `mvnw` en el directorio `backend`)
 
 ## Instalación y ejecución
@@ -73,8 +73,13 @@ La integración entre Java y Python se realiza mediante `ProcessBuilder`, interc
 ### 1. Motores Python
 
 ```bash
-pip install -r python-engines/requirements.txt
+python3 -m venv .venv
+.venv/bin/python -m pip install -r python-engines/requirements.txt
 ```
+
+En Windows, usa `py -3 -m venv .venv` y
+`.venv\Scripts\python -m pip install -r python-engines/requirements.txt`.
+El backend detecta el intérprete de `.venv` en la raíz del proyecto.
 
 ### 2. Backend
 
@@ -142,6 +147,7 @@ Las rutas del frontend utilizan nombres de negocio:
 | `/comparacion-metodos` | Comparación Exacto vs Algoritmo Genético |
 | `/escalabilidad` | Escalabilidad de la Red |
 | `/evolucion-ag` | Evolución del Algoritmo Genético |
+| `/ajuste-ag` | Configuración y ajuste de parámetros del AG |
 | `/procedimiento-exacto` | Procedimiento del Método Exacto |
 
 La ruta raíz `/` redirige automáticamente a `/panel`.

@@ -35,6 +35,14 @@ export const api = {
   // Escenarios
   listarEscenarios: () => request('/escenarios'),
   obtenerEscenario: (escId) => request(`/escenarios/${escId}`),
+  crearSimulacion: (escId, payload) =>
+    request(`/escenarios/${escId}/simulaciones`, { method: 'POST', body: JSON.stringify(payload) }),
+  actualizarSimulacion: (escId, varianteId, payload) =>
+    request(`/escenarios/${escId}/simulaciones/${varianteId}`, { method: 'PUT', body: JSON.stringify(payload) }),
+  previsualizarSimulacion: (escId, variaciones, varianteId) =>
+    request(`/escenarios/${escId}/simulaciones/previsualizar`, { method: 'POST', body: JSON.stringify({ variaciones, ...(varianteId ? { variante_id: varianteId } : {}) }) }),
+  compararSimulacion: (escId, varianteId) =>
+    request(`/escenarios/${escId}/simulaciones/${varianteId}/comparar`, { method: 'POST' }),
 
   // HU-01: Empresas
   guardarEmpresa: (escId, payload) =>
@@ -78,10 +86,14 @@ export const api = {
   // HU-08, HU-09, HU-16..HU-19: Optimización
   ejecutarOptimizacion: (escId, payload) =>
     request(`/escenarios/${escId}/optimizar`, { method: 'POST', body: JSON.stringify(payload) }),
+  ajustarParametrosAg: (escId, configAg) =>
+    request(`/escenarios/${escId}/ag/ajustar`, { method: 'POST', body: JSON.stringify({ config_ag: configAg }) }),
 
   // HU-10..HU-13: Sensibilidad
   ejecutarSensibilidad: (escId, payload) =>
     request(`/escenarios/${escId}/sensibilidad`, { method: 'POST', body: JSON.stringify(payload) }),
+  analizarSensibilidadExacta: (escId, variacion) =>
+    request(`/escenarios/${escId}/sensibilidad-exacta`, { method: 'POST', body: JSON.stringify(variacion) }),
 
   // Polling HU-18 & HU-19
   consultarEvolucionAg: (ejecucionId) =>
@@ -93,4 +105,3 @@ export const api = {
   obtenerEjecucion: (ejecucionId) =>
     request(`/ejecuciones/${ejecucionId}`)
 };
-

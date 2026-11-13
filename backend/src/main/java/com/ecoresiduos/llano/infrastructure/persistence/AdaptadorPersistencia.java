@@ -10,9 +10,15 @@ import com.ecoresiduos.llano.domain.model.RegistroGeneracionAG;
 import com.ecoresiduos.llano.domain.model.ResultadoOptimizacion;
 import com.ecoresiduos.llano.domain.model.Ruta;
 import com.ecoresiduos.llano.domain.port.IPuertoRepositorioEscenarios;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,6 +33,10 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
 
     private final Map<String, Escenario> escenarios_memoria = new ConcurrentHashMap<>();
     private final Map<String, ResultadoOptimizacion> resultados_memoria = new ConcurrentHashMap<>();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${ecoresiduos.escenarios.directorio:data/escenarios}")
+    private String directorioEscenarios = "data/escenarios";
 
     // Catálogo de 30 empresas contextualizadas en el departamento del Meta
     private static final List<EmpresaDef> EMPRESAS_META = List.of(
@@ -110,6 +120,8 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
         // Catálogo geográfico investigado, aislado de los casos simulados.
         Escenario ubicaciones = construirEscenarioUbicacionesVerificadas();
         escenarios_memoria.put(ubicaciones.getId(), ubicaciones);
+
+        cargarEscenariosGuardados();
 
         // 4. Ejecuciones Semilla de Referencia para ESC-01
         ResultadoOptimizacion eje01 = construirResultadoExactoEJE01(esc01);
@@ -400,7 +412,50 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
     @Override
     public void guardar(Escenario escenario) {
         if (escenario != null && escenario.getId() != null) {
+            if (escenario.getId().startsWith("SIM-")) {
+                persistirEscenario(escenario);
+            }
             escenarios_memoria.put(escenario.getId(), escenario);
+        }
+    }
+
+    private void persistirEscenario(Escenario escenario) {
+        if (!escenario.getId().matches("SIM-[a-f0-9-]{36}")) {
+            throw new IllegalArgumentException("Identificador de escenario simulado inválido");
+        }
+        try {
+            Path directorio = Path.of(directorioEscenarios);
+            Files.createDirectories(directorio);
+            Path temporal = Files.createTempFile(directorio, "escenario-", ".tmp");
+            try {
+                objectMapper.writeValue(temporal.toFile(), escenario);
+                Files.move(temporal, directorio.resolve(escenario.getId() + ".json"),
+                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } finally {
+                Files.deleteIfExists(temporal);
+            }
+        } catch (IOException error) {
+            throw new IllegalStateException("No se pudo guardar el escenario: " + error.getMessage(), error);
+        }
+    }
+
+    private void cargarEscenariosGuardados() {
+        Path directorio = Path.of(directorioEscenarios);
+        if (!Files.isDirectory(directorio)) return;
+        try (var archivos = Files.list(directorio)) {
+            archivos.filter(path -> path.getFileName().toString().matches("SIM-[a-f0-9-]{36}\\.json"))
+                    .forEach(path -> {
+                        try {
+                            Escenario escenario = objectMapper.readValue(path.toFile(), Escenario.class);
+                            if ((escenario.getId() + ".json").equals(path.getFileName().toString())) {
+                                escenarios_memoria.put(escenario.getId(), escenario);
+                            }
+                        } catch (IOException error) {
+                            throw new IllegalStateException("No se pudo leer " + path, error);
+                        }
+                    });
+        } catch (IOException error) {
+            throw new IllegalStateException("No se pudieron cargar los escenarios guardados", error);
         }
     }
 

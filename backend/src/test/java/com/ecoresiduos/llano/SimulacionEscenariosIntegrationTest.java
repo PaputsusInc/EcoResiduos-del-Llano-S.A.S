@@ -1,0 +1,92 @@
+package com.ecoresiduos.llano;
+
+import com.ecoresiduos.llano.infrastructure.persistence.AdaptadorPersistencia;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(properties = "ecoresiduos.escenarios.directorio=target/test-escenarios")
+class SimulacionEscenariosIntegrationTest {
+    @Autowired MockMvc mvc;
+    @Autowired ObjectMapper json;
+    @Autowired AdaptadorPersistencia repositorio;
+
+    @Test
+    void crearPersistirYCompararConMotorExacto() throws Exception {
+        String payload = """
+                {"nombre":"Tarifas y capacidad", "variaciones":[
+                  {"tipo":"COSTOS","porcentaje":10},
+                  {"tipo":"CAPACIDAD","nodo_id":"PLA-01","porcentaje":-5}
+                ]}
+                """;
+        JsonNode preview = json.readTree(mvc.perform(post("/api/escenarios/ESC-01/simulaciones/previsualizar")
+                .contentType(MediaType.APPLICATION_JSON).content(payload))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals("OPTIMO", preview.path("variante").path("estado").asText());
+
+        JsonNode creado = json.readTree(mvc.perform(post("/api/escenarios/ESC-01/simulaciones")
+                .contentType(MediaType.APPLICATION_JSON).content(payload))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString());
+        String id = creado.path("escenario").path("id").asText();
+        assertTrue(Files.exists(Path.of("target/test-escenarios", id + ".json")));
+        repositorio.cargar_datos_semilla();
+        assertNotNull(repositorio.obtener_por_id(id));
+
+        JsonNode comparado = json.readTree(mvc.perform(post(
+                "/api/escenarios/ESC-01/simulaciones/" + id + "/comparar"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals("OPTIMO", comparado.path("variante").path("estado").asText());
+        assertEquals(preview.path("variante").path("costo_total_Z").asDouble(),
+                comparado.path("variante").path("costo_total_Z").asDouble(), 1e-6);
+        assertTrue(comparado.path("cambios_flujo_t").isObject());
+
+        repositorio.obtener_por_id("ESC-01").actualizar_oferta_empresa("EMP-01", 20.0);
+        JsonNode estable = json.readTree(mvc.perform(post(
+                "/api/escenarios/ESC-01/simulaciones/" + id + "/comparar"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals(comparado.path("referencia").path("costo_total_Z").asDouble(),
+                estable.path("referencia").path("costo_total_Z").asDouble(), 1e-6);
+
+        String edicion = """
+                {"nombre":"Tarifas revisadas", "variaciones":[
+                  {"tipo":"COSTOS","porcentaje":20}
+                ]}
+                """;
+        JsonNode editado = json.readTree(mvc.perform(put(
+                "/api/escenarios/ESC-01/simulaciones/" + id)
+                .contentType(MediaType.APPLICATION_JSON).content(edicion))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals("Tarifas revisadas", editado.path("escenario").path("nombre").asText());
+        assertEquals(115.0, editado.path("escenario").path("oferta_total_t").asDouble(), 1e-6);
+        assertEquals(id, editado.path("escenario").path("id").asText());
+    }
+
+    @AfterAll
+    static void limpiar() throws Exception {
+        Path directorio = Path.of("target/test-escenarios");
+        if (Files.exists(directorio)) {
+            try (var archivos = Files.walk(directorio)) {
+                archivos.sorted(Comparator.reverseOrder()).forEach(path -> {
+                    try { Files.deleteIfExists(path); } catch (Exception error) { throw new RuntimeException(error); }
+                });
+            }
+        }
+    }
+}

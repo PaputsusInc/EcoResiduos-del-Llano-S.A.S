@@ -9,7 +9,7 @@ ecoresiduos:
   python:
     exact-solver-path: "../python-engines/exact_solver/solver_exacto.py"
     genetic-solver-path: "../python-engines/genetic_solver/solver_genetico.py"
+    genetic-tuner-path: "../python-engines/genetic_solver/ajustar_hiperparametros.py"
   osrm:
     base-url: "https://router.project-osrm.org"
     timeout-ms: 4000
-

@@ -1,1 +1,3 @@
-# Los motores Vogel-MODI y AG usan únicamente la biblioteca estándar de Python.
+# Los motores Vogel-MODI y AG usan la biblioteca estándar.
+# Optuna solo se importa cuando el usuario solicita el ajuste de hiperparámetros.
+optuna>=4.0,<6

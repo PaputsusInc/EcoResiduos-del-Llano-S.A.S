@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
@@ -83,7 +84,12 @@ public class PythonProcessRunner {
             comando.addAll(Arrays.asList(tokens));
         } else {
             boolean isWindows = System.getProperty("os.name", "").toLowerCase().contains("win");
-            if (isWindows) {
+            String interpreteVenv = isWindows ? ".venv/Scripts/python.exe" : ".venv/bin/python";
+            File directorioMotores = scriptFile.getParentFile().getParentFile();
+            File venv = new File(directorioMotores.getParentFile(), interpreteVenv);
+            if (venv.isFile()) {
+                comando.add(venv.getAbsolutePath());
+            } else if (isWindows) {
                 // En Windows, py -3 invoca el launcher oficial que contiene numpy y scipy
                 comando.add("py");
                 comando.add("-3");
@@ -93,6 +99,43 @@ public class PythonProcessRunner {
         }
         comando.add(scriptFile.getAbsolutePath());
         return comando;
+    }
+
+    /**
+     * Ejecuta una solicitud breve de entrada/salida JSON, sin historial ni persistencia.
+     * El ajuste usa este camino solo cuando el usuario lo pide explícitamente.
+     */
+    public Map<String, Object> ejecutarJson(String rutaScript, Map<String, Object> payload, int timeoutSegundos) {
+        File script = resolverRutaScript(rutaScript);
+        if (script == null || !script.isFile()) {
+            throw new IllegalStateException("No se encontró el script de ajuste de parámetros.");
+        }
+        Process proceso = null;
+        try {
+            ProcessBuilder comando = new ProcessBuilder(resolverComandoPython(script));
+            comando.directory(script.getParentFile());
+            proceso = comando.start();
+            try (var entrada = proceso.getOutputStream()) {
+                objectMapper.writeValue(entrada, payload);
+            }
+            if (!proceso.waitFor(timeoutSegundos, TimeUnit.SECONDS)) {
+                proceso.destroyForcibly();
+                throw new IllegalStateException("El ajuste superó el tiempo máximo permitido.");
+            }
+            String salida = new String(proceso.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            String errores = new String(proceso.getErrorStream().readAllBytes(), StandardCharsets.UTF_8).trim();
+            if (proceso.exitValue() != 0) {
+                throw new IllegalStateException(errores.isBlank() ? "Falló el ajuste de parámetros." : errores);
+            }
+            return objectMapper.readValue(salida, new TypeReference<Map<String, Object>>() {});
+        } catch (InterruptedException error) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Se interrumpió el ajuste de parámetros.", error);
+        } catch (java.io.IOException error) {
+            throw new IllegalStateException("No se pudo ejecutar el ajuste de parámetros: " + error.getMessage(), error);
+        } finally {
+            if (proceso != null && proceso.isAlive()) proceso.destroyForcibly();
+        }
     }
 
     public ResultadoOptimizacion ejecutarProceso(
@@ -215,6 +258,12 @@ public class PythonProcessRunner {
                                         new TypeReference<List<PrecioSombraDual>>() {});
                                 resultado.setSensibilidad_dual(duales);
                             }
+                            if (node.has("analisis_sensibilidad")) {
+                                Map<String, Object> analisis = objectMapper.convertValue(
+                                        node.get("analisis_sensibilidad"),
+                                        new TypeReference<Map<String, Object>>() {});
+                                resultado.setAnalisis_sensibilidad(analisis);
+                            }
                             if (node.has("modelo_formulado") && (resultado.getModelo_formulado() == null || resultado.getModelo_formulado().isEmpty())) {
                                 Map<String, Object> mod = objectMapper.convertValue(
                                         node.get("modelo_formulado"),
@@ -241,7 +290,8 @@ public class PythonProcessRunner {
                 resultado.setMotivo_finalizacion("Falla en proceso externo");
             } else {
                 // Verificar consistencia de flujos si el estado fue óptimo o factible
-                if ("OPTIMO".equals(resultado.getEstado()) || "FACTIBLE_SIN_CERTIFICAR".equals(resultado.getEstado())) {
+                if (!payload.containsKey("variacion") &&
+                        ("OPTIMO".equals(resultado.getEstado()) || "FACTIBLE_SIN_CERTIFICAR".equals(resultado.getEstado()))) {
                     Boolean factible = resultado.comprobar_factibilidad_flujos(escenario, toleranciaNumerica);
                     log.info("Comprobación de factibilidad de flujos para {}: {}", resultado.getId(), factible);
                 }

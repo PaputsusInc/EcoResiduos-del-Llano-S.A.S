@@ -45,6 +45,8 @@ class Solucion:
     precios_empresas: list[float]
     precios_plantas: list[float]
     pasos: list[tuple[str, str, dict]]
+    problema: Problema
+    base: set[tuple[int, int]]
 
 
 def preparar(
@@ -91,11 +93,11 @@ def preparar(
             fila.append(None if bruto is None else numero(bruto, f"Costo de {clave}"))
         costos.append(fila)
 
-    auxiliar = None
-    if total_capacidad - total_oferta > epsilon:
-        auxiliar = len(empresas)
-        ofertas.append(total_capacidad - total_oferta)
-        costos.append([0.0] * len(plantas))
+    # La fila auxiliar, incluso con oferta cero, permite analizar cambios
+    # independientes de oferta y capacidad sobre el mismo modelo balanceado.
+    auxiliar = len(empresas)
+    ofertas.append(max(0.0, total_capacidad - total_oferta))
+    costos.append([0.0] * len(plantas))
     return Problema(ids_empresas, ids_plantas, ofertas, capacidades, costos, auxiliar, epsilon)
 
 
@@ -330,7 +332,7 @@ def _camino_base(
 def modi(
     problema: Problema, flujos: list[list[float]],
     registrar: Callable[[tuple[str, str, dict]], None],
-) -> tuple[list[list[float]], list[float], list[float]]:
+) -> tuple[list[list[float]], list[float], list[float], set[tuple[int, int]]]:
     """Aplica pivotes MODI hasta que todos los costos reducidos sean no negativos."""
     m, n = problema.filas, problema.columnas
     base = _base_inicial(problema, flujos)
@@ -358,7 +360,7 @@ def modi(
                 {"submetodo": "MODI", "iteracion": iteracion,
                  "costos_reducidos_no_negativos": True, "es_intermedio": True},
             ))
-            return flujos, u, v
+            return flujos, u, v, base
         camino = _camino_base(problema, base, entrada)
         negativas = camino[::2]
         theta = min(flujos[i][j] for i, j in negativas)
@@ -396,35 +398,14 @@ def resolver(
     """Ejecuta Vogel y MODI, y devuelve flujos, duales y traza verificables."""
     problema = preparar(empresas, plantas, matriz_costos, tolerancia)
     flujos, pasos = vogel(problema)
-    flujos, u, v = modi(problema, flujos, pasos.append)
+    flujos, u, v, base = modi(problema, flujos, pasos.append)
     costo = math.fsum(
         flujos[i][j] * problema.costos[i][j]
         for i in range(len(empresas)) for j in range(problema.columnas)
         if flujos[i][j] > problema.epsilon
     )
 
-    if problema.auxiliar is not None:
-        ajuste = u[problema.auxiliar]
-        precios_empresas = [u[i] - ajuste for i in range(len(empresas))]
-        precios_plantas = [valor + ajuste for valor in v]
-    else:
-        # Si todas las capacidades se usan, el origen de los potenciales es
-        # libre. Elegimos uno que respete precio_capacidad <= 0.
-        componentes = _Componentes(problema.filas + problema.columnas)
-        for i in range(problema.filas):
-            for j in range(problema.columnas):
-                if problema.costos[i][j] is not None:
-                    componentes.unir(i, problema.filas + j)
-        ajustes = {}
-        for j, valor in enumerate(v):
-            raiz = componentes.raiz(problema.filas + j)
-            ajustes[raiz] = max(ajustes.get(raiz, -math.inf), valor)
-        precios_empresas = [
-            u[i] + ajustes.get(componentes.raiz(i), 0.0)
-            for i in range(len(empresas))
-        ]
-        precios_plantas = [
-            v[j] - ajustes[componentes.raiz(problema.filas + j)]
-            for j in range(problema.columnas)
-        ]
-    return Solucion(flujos, costo, precios_empresas, precios_plantas, pasos)
+    ajuste = u[problema.auxiliar]
+    precios_empresas = [u[i] - ajuste for i in range(len(empresas))]
+    precios_plantas = [valor + ajuste for valor in v]
+    return Solucion(flujos, costo, precios_empresas, precios_plantas, pasos, problema, base)

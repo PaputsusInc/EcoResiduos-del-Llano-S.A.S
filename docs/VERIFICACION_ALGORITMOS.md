@@ -22,14 +22,14 @@ ESC-UBICACIONES contiene coordenadas verificadas, pero ofertas, capacidades y ru
 
 - 90 redes generadas de forma reproducible: 45 factibles y 45 inviables; 180 ejecuciones de motores sin errores de estado, oferta, capacidad, rutas o costo. Además, 600 redes adicionales contrastaron Vogel–MODI con un modelo lineal independiente: 322 factibles y 278 inviables, sin diferencias de costo ni violaciones de dualidad. Se incluyeron costos cero y de 100 millones COP/t, rutas ausentes, inactivas e incompatibles, capacidades cero y distintas dimensiones de red.
 - Regresiones puntuales: red de una empresa y una planta, oferta cero, capacidad sobrante, cuellos de botella con capacidad agregada suficiente, rutas bloqueadas con costo presente, cantidades fraccionarias y oferta menor que la tolerancia numérica.
-- 9 pruebas Python y suite Java/Maven completas: aprobadas. Compilación del frontend con Vite: aprobada. Prueba manual local: “Resolver en Vivo” mostró ESC-01 con costo 997.500 COP y la vista de procedimiento mostró la ejecución y sus flujos reales.
+- 14 pruebas Python y suite Java/Maven completas: aprobadas. Compilación del frontend con Vite: aprobada. Prueba manual local: “Resolver en Vivo” mostró ESC-01 con costo 997.500 COP y la vista de procedimiento mostró la ejecución y sus flujos reales.
 
 ## Correcciones necesarias encontradas
 
 1. El motor exacto usaba una ruta inactiva o incompatible si conservaba un costo. Ahora respeta ambas banderas.
 2. Bloqueaba costos válidos a partir de 100 millones COP/t. Las rutas inexistentes se representan con cotas cero, sin costo centinela.
 3. Una red sin conexiones suficientes terminaba sin resultado aunque la capacidad total alcanzara. Ahora informa `INFACTIBLE_CERTIFICADO`.
-4. Los pasos MODI anteriores contenían valores fijos. El motor exacto ahora ejecuta Vogel para construir la base y MODI para pivotar y certificar la optimalidad. Los rangos de sensibilidad no calculados siguen vacíos; los precios sombra proceden de los potenciales duales MODI.
+4. Los pasos MODI anteriores contenían valores fijos. El motor exacto ahora ejecuta Vogel para construir la base y MODI para pivotar y certificar la optimalidad. El análisis de sensibilidad calcula rangos de base óptima, factibilidad y tarifas; los precios sombra proceden de los potenciales duales MODI.
 5. Se preserva la precisión de flujos y costos emitidos. El AG no descarta ofertas positivas pequeñas por usar la tolerancia como umbral de asignación.
 6. La vista exacta usaba costos de referencia y un método HTTP inexistente. Ahora muestra la respuesta de la API; el procedimiento carga pasos reales de la ejecución.
 

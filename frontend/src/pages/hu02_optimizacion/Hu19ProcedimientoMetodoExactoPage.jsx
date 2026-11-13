@@ -45,7 +45,6 @@ export default function Hu19ProcedimientoMetodoExactoPage() {
   const pasos = resultado?.pasos_exactos || [];
   const pasosVogel = pasos.filter((paso) => paso.datos?.submetodo === 'VOGEL');
   const pasosModi = pasos.filter((paso) => paso.datos?.submetodo === 'MODI');
-  const flujos = resultado?.matriz_flujos_optimos || {};
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -103,12 +102,6 @@ export default function Hu19ProcedimientoMetodoExactoPage() {
               <section className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
                 <h3 className="text-sm font-bold text-slate-900">MODI: pivotes y certificación de optimalidad</h3>
                 {pasosModi.map((paso) => <p key={paso.numero} className="text-xs text-slate-700">{paso.operacion}</p>)}
-              </section>
-              <section className="bg-white border border-slate-200 rounded-xl p-5 space-y-3">
-                <h3 className="text-sm font-bold text-slate-900">Asignaciones finales</h3>
-                {Object.entries(flujos).length === 0
-                  ? <p className="text-xs text-slate-500">No hay toneladas asignadas en este escenario.</p>
-                  : <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">{Object.entries(flujos).map(([ruta, toneladas]) => <p key={ruta} className="p-2 bg-slate-50 rounded text-xs font-mono">{ruta}: {numero(toneladas)} t</p>)}</div>}
               </section>
             </>
           )}

@@ -248,57 +248,39 @@ export default function Hu06CostosTransportePage() {
                     <span className="text-[10px] text-slate-500 font-normal">{pla.nombre}</span>
                   </th>
                 ))}
-                <th className="py-3 px-4 text-right">Flete Mínimo</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-mono">
-              {empresas.map((emp, i) => {
-                let minCosto = Infinity;
-                if (matrizCostos[i]) {
-                  matrizCostos[i].forEach(c => {
-                    if (c !== null && c !== undefined && c < minCosto) minCosto = c;
-                  });
-                }
-
-                return (
-                  <tr key={emp.id} className="hover:bg-slate-50 transition">
-                    <td className="py-2.5 px-4 text-left font-mono font-bold text-slate-800">{emp.id}</td>
-                    <td className="py-2.5 px-4 text-left font-semibold text-slate-900 font-sans">
-                      {emp.nombre} <span className="text-slate-400 font-normal">({emp.ubicacion})</span>
-                    </td>
-                    {plantas.map((pla, j) => {
-                      const c = matrizCostos[i]?.[j];
-                      if (c === null || c === undefined) {
-                        return (
-                          <td key={pla.id} className="py-2.5 px-3 text-amber-700 bg-amber-50/40 text-xs font-sans">
-                            No disponible
-                          </td>
-                        );
-                      }
-                      const esMin = c === minCosto;
+              {empresas.map((emp, i) => (
+                <tr key={emp.id} className="hover:bg-slate-50 transition">
+                  <td className="py-2.5 px-4 text-left font-mono font-bold text-slate-800">{emp.id}</td>
+                  <td className="py-2.5 px-4 text-left font-semibold text-slate-900 font-sans">
+                    {emp.nombre} <span className="text-slate-400 font-normal">({emp.ubicacion})</span>
+                  </td>
+                  {plantas.map((pla, j) => {
+                    const c = matrizCostos[i]?.[j];
+                    if (c === null || c === undefined) {
                       return (
-                        <td key={pla.id} className="py-2 px-2">
-                          <input
-                            type="number"
-                            step="50"
-                            min="0"
-                            value={c}
-                            onChange={(e) => handleCostoChange(i, j, e.target.value)}
-                            className={`w-24 px-1.5 py-1 text-right text-xs font-mono rounded border focus:ring-2 focus:ring-emerald-500 ${
-                              esMin
-                                ? 'font-bold text-emerald-700 bg-emerald-50 border-emerald-300'
-                                : 'text-slate-800 border-slate-200'
-                            }`}
-                          />
+                        <td key={pla.id} className="py-2.5 px-3 text-amber-700 bg-amber-50/40 text-xs font-sans">
+                          No disponible
                         </td>
                       );
-                    })}
-                    <td className="py-2.5 px-4 text-right font-bold text-emerald-700 font-mono">
-                      {minCosto !== Infinity ? `$ ${minCosto.toLocaleString('es-CO')}` : '—'}
-                    </td>
-                  </tr>
-                );
-              })}
+                    }
+                    return (
+                      <td key={pla.id} className="py-2 px-2">
+                        <input
+                          type="number"
+                          step="50"
+                          min="0"
+                          value={c}
+                          onChange={(e) => handleCostoChange(i, j, e.target.value)}
+                          className="w-24 px-1.5 py-1 text-right text-xs font-mono rounded border text-slate-800 border-slate-200 focus:ring-2 focus:ring-slate-400"
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

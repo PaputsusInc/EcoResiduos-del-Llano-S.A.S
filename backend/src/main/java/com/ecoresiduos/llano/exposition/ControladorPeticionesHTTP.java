@@ -1,6 +1,8 @@
 package com.ecoresiduos.llano.exposition;
 
 import com.ecoresiduos.llano.application.MotorAnalisisSensibilidad;
+import com.ecoresiduos.llano.application.GestorEscenariosSimulacion;
+import com.ecoresiduos.llano.application.AjustadorHiperparametrosAG;
 import com.ecoresiduos.llano.application.OrquestadorOptimizacion;
 import com.ecoresiduos.llano.domain.model.ConfiguracionAG;
 import com.ecoresiduos.llano.domain.model.Escenario;
@@ -34,6 +36,8 @@ public class ControladorPeticionesHTTP {
     private final ValidadorContratosEntrada validador;
     private final IPuertoRepositorioEscenarios repositorio;
     private final ObjectMapper objectMapper;
+    private final GestorEscenariosSimulacion gestorSimulaciones;
+    private final AjustadorHiperparametrosAG ajustadorAg;
 
     @Autowired
     public ControladorPeticionesHTTP(
@@ -41,12 +45,16 @@ public class ControladorPeticionesHTTP {
             MotorAnalisisSensibilidad motorSensibilidad,
             ValidadorContratosEntrada validador,
             IPuertoRepositorioEscenarios repositorio,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            GestorEscenariosSimulacion gestorSimulaciones,
+            AjustadorHiperparametrosAG ajustadorAg) {
         this.orquestador = orquestador;
         this.motorSensibilidad = motorSensibilidad;
         this.validador = validador;
         this.repositorio = repositorio;
         this.objectMapper = objectMapper != null ? objectMapper : new ObjectMapper();
+        this.gestorSimulaciones = gestorSimulaciones;
+        this.ajustadorAg = ajustadorAg;
     }
 
     // -------------------------------------------------------------------------
@@ -73,6 +81,70 @@ public class ControladorPeticionesHTTP {
         Map<String, Object> resp = new LinkedHashMap<>();
         resp.put("escenario", escenario);
         return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/escenarios/{esc_id}/simulaciones")
+    public ResponseEntity<Map<String, Object>> post_crear_simulacion(
+            @PathVariable("esc_id") String esc_id, @RequestBody Map<String, Object> payload) {
+        String nombre = payload.get("nombre") instanceof String texto ? texto : null;
+        List<Map<String, Object>> variaciones = leerVariaciones(payload.get("variaciones"));
+        Escenario creado = gestorSimulaciones.crear(esc_id, nombre, variaciones);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("escenario", creado));
+    }
+
+    @PutMapping("/escenarios/{esc_id}/simulaciones/{variante_id}")
+    public ResponseEntity<Map<String, Object>> put_actualizar_simulacion(
+            @PathVariable("esc_id") String esc_id, @PathVariable("variante_id") String variante_id,
+            @RequestBody Map<String, Object> payload) {
+        String nombre = payload.get("nombre") instanceof String texto ? texto : null;
+        List<Map<String, Object>> variaciones = leerVariaciones(payload.get("variaciones"));
+        Escenario actualizado = gestorSimulaciones.actualizar(esc_id, variante_id, nombre, variaciones);
+        return ResponseEntity.ok(Map.of("escenario", actualizado));
+    }
+
+    @PostMapping("/escenarios/{esc_id}/simulaciones/previsualizar")
+    public ResponseEntity<Map<String, Object>> post_previsualizar_simulacion(
+            @PathVariable("esc_id") String esc_id, @RequestBody Map<String, Object> payload) {
+        Escenario referencia = repositorio.obtener_por_id(esc_id);
+        if (referencia == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", "Escenario de referencia no encontrado"));
+        if (payload.get("variante_id") instanceof String varianteId) {
+            Escenario guardado = repositorio.obtener_por_id(varianteId);
+            if (guardado == null || !esc_id.equals(guardado.getReferencia_id())
+                    || guardado.getReferencia_snapshot() == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Variante guardada inválida"));
+            }
+            referencia = guardado.getReferencia_snapshot();
+        }
+        List<Map<String, Object>> variaciones = leerVariaciones(payload.get("variaciones"));
+        ResultadoOptimizacion base = orquestador.resolverEscenarioExacto(referencia);
+        ResultadoOptimizacion variante = orquestador.analizarVariacionesExactas(referencia, variaciones);
+        if ("ERROR_EJECUCION".equals(variante.getEstado())) {
+            return ResponseEntity.badRequest().body(Map.of("error", variante.getCausa_estado()));
+        }
+        return ResponseEntity.ok(gestorSimulaciones.resumir(base, variante));
+    }
+
+    @PostMapping("/escenarios/{esc_id}/simulaciones/{variante_id}/comparar")
+    public ResponseEntity<Map<String, Object>> post_comparar_simulacion(
+            @PathVariable("esc_id") String esc_id, @PathVariable("variante_id") String variante_id) {
+        return ResponseEntity.ok(gestorSimulaciones.comparar(esc_id, variante_id));
+    }
+
+    private List<Map<String, Object>> leerVariaciones(Object valor) {
+        if (!(valor instanceof List<?> lista) || lista.isEmpty() || lista.size() > 30) {
+            throw new IllegalArgumentException("Indica entre 1 y 30 variaciones");
+        }
+        List<Map<String, Object>> variaciones = new ArrayList<>();
+        for (Object elemento : lista) {
+            if (!(elemento instanceof Map<?, ?> mapa)) {
+                throw new IllegalArgumentException("Cada variación debe ser un objeto");
+            }
+            Map<String, Object> variacion = new LinkedHashMap<>();
+            mapa.forEach((clave, dato) -> variacion.put(String.valueOf(clave), dato));
+            variaciones.add(variacion);
+        }
+        return variaciones;
     }
 
     @GetMapping("/ejecuciones/{ejecucion_id}")
@@ -395,12 +467,7 @@ public class ControladorPeticionesHTTP {
             return ResponseEntity.badRequest().body(Map.of("error", error.getMessage()));
         }
         if ("AG".equals(metodo) || "COMPARATIVO".equals(metodo)) {
-            List<String> erroresAg = validador.validar_hiperparametros_ag(configAg);
-            int genes = escenario.getEmpresas().size() + escenario.getPlantas().size();
-            if ("BLOQUES_ORDEN".equals(configAg.getTipo_cruce())
-                    && configAg.getPuntos_cruce() != null && configAg.getPuntos_cruce() >= genes) {
-                erroresAg.add("Los puntos de cruce deben ser menores que M + N (" + genes + ").");
-            }
+            List<String> erroresAg = validarConfigAg(configAg, escenario);
             if (!erroresAg.isEmpty()) {
                 return ResponseEntity.badRequest().body(Map.of(
                         "error", "Hiperparámetros AG inválidos", "errores", erroresAg
@@ -454,9 +521,67 @@ public class ControladorPeticionesHTTP {
         }
     }
 
+    @PostMapping("/escenarios/{esc_id}/ag/ajustar")
+    public ResponseEntity<Map<String, Object>> post_ajustar_hiperparametros_ag(
+            @PathVariable("esc_id") String esc_id, @RequestBody Map<String, Object> payload) {
+        Escenario escenario = repositorio.obtener_por_id(esc_id);
+        if (escenario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Escenario no encontrado: " + esc_id));
+        }
+        List<String> inconsistencias = orquestador.verificar_consistencia_escenario(esc_id);
+        if (!inconsistencias.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of(
+                    "error", "El escenario contiene inconsistencias que impiden el ajuste",
+                    "inconsistencias", inconsistencias
+            ));
+        }
+        ConfiguracionAG configuracion;
+        try {
+            configuracion = extraerConfigAg(payload != null ? payload.get("config_ag") : null);
+        } catch (IllegalArgumentException error) {
+            return ResponseEntity.badRequest().body(Map.of("error", error.getMessage()));
+        }
+        List<String> errores = validarConfigAg(configuracion, escenario);
+        if (!errores.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Hiperparámetros AG inválidos", "errores", errores));
+        }
+        try {
+            return ResponseEntity.ok(ajustadorAg.ajustar(esc_id, configuracion));
+        } catch (IllegalStateException | IllegalArgumentException error) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("error", error.getMessage()));
+        }
+    }
+
+    private List<String> validarConfigAg(ConfiguracionAG configAg, Escenario escenario) {
+        List<String> errores = validador.validar_hiperparametros_ag(configAg);
+        int genes = escenario.getEmpresas().size() + escenario.getPlantas().size();
+        if ("BLOQUES_ORDEN".equals(configAg.getTipo_cruce())
+                && configAg.getPuntos_cruce() != null && configAg.getPuntos_cruce() >= genes) {
+            errores.add("Los puntos de cruce deben ser menores que M + N (" + genes + ").");
+        }
+        return errores;
+    }
+
     // -------------------------------------------------------------------------
     // HU-10, HU-11, HU-12, HU-13: Análisis de Sensibilidad
     // -------------------------------------------------------------------------
+
+    @PostMapping("/escenarios/{esc_id}/sensibilidad-exacta")
+    public ResponseEntity<Map<String, Object>> post_analizar_sensibilidad_exacta(
+            @PathVariable("esc_id") String esc_id,
+            @RequestBody Map<String, Object> variacion) {
+        Escenario escenario = repositorio.obtener_por_id(esc_id);
+        if (escenario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Escenario no encontrado: " + esc_id));
+        }
+        if (variacion == null || !(variacion.get("tipo") instanceof String)
+                || !(variacion.get("porcentaje") instanceof Number)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Variación inválida"));
+        }
+        ResultadoOptimizacion resultado = orquestador.analizarVariacionExacta(escenario, variacion);
+        return ResponseEntity.ok(Map.of("resultado", resultado));
+    }
 
     @PostMapping("/escenarios/{esc_id}/sensibilidad")
     public ResponseEntity<Map<String, Object>> post_ejecutar_sensibilidad(

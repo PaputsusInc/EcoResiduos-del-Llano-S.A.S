@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -92,5 +93,31 @@ public class AdaptadorSolucionadorExacto implements IPuertoOptimizador {
                 tolerancia_numerica,
                 repositorio_escenarios
         );
+    }
+
+    public ResultadoOptimizacion analizarVariacion(Escenario escenario, Map<String, Object> variacion) {
+        String ejecucionId = "ANALISIS-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        ResultadoOptimizacion resultado = new ResultadoOptimizacion(
+                ejecucionId, escenario.getId(), "EXACTO", "EN_EJECUCION");
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("ejecucion_id", ejecucionId);
+        payload.put("tolerancia_numerica", tolerancia_numerica);
+        payload.put("escenario", escenario);
+        payload.put("variacion", variacion);
+        return runner.ejecutarProceso(
+                rutaScriptExacto, payload, resultado, escenario, tolerancia_numerica, null);
+    }
+
+    public ResultadoOptimizacion analizarVariaciones(Escenario escenario, List<Map<String, Object>> variaciones) {
+        String ejecucionId = "ANALISIS-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        ResultadoOptimizacion resultado = new ResultadoOptimizacion(
+                ejecucionId, escenario.getId(), "EXACTO", "EN_EJECUCION");
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("ejecucion_id", ejecucionId);
+        payload.put("tolerancia_numerica", tolerancia_numerica);
+        payload.put("escenario", escenario);
+        payload.put("variaciones", variaciones);
+        return runner.ejecutarProceso(
+                rutaScriptExacto, payload, resultado, escenario, tolerancia_numerica, null);
     }
 }

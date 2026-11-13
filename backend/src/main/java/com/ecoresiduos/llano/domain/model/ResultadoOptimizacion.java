@@ -40,6 +40,9 @@ public class ResultadoOptimizacion {
     @JsonProperty("sensibilidad_dual")
     private List<PrecioSombraDual> sensibilidad_dual = new ArrayList<>();
 
+    @JsonProperty("analisis_sensibilidad")
+    private Map<String, Object> analisis_sensibilidad = new LinkedHashMap<>();
+
     @JsonProperty("curva_convergencia_fitness")
     private List<Double> curva_convergencia_fitness = new ArrayList<>();
 
@@ -302,6 +305,15 @@ public class ResultadoOptimizacion {
 
     public void setSensibilidad_dual(List<PrecioSombraDual> sensibilidad_dual) {
         this.sensibilidad_dual = sensibilidad_dual != null ? new ArrayList<>(sensibilidad_dual) : new ArrayList<>();
+    }
+
+    public Map<String, Object> getAnalisis_sensibilidad() {
+        return analisis_sensibilidad;
+    }
+
+    public void setAnalisis_sensibilidad(Map<String, Object> analisis_sensibilidad) {
+        this.analisis_sensibilidad = analisis_sensibilidad != null
+                ? new LinkedHashMap<>(analisis_sensibilidad) : new LinkedHashMap<>();
     }
 
     public List<Double> getCurva_convergencia_fitness() {

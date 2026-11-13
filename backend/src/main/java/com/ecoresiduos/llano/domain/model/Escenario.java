@@ -25,6 +25,15 @@ public class Escenario {
     @JsonProperty("procedencia_datos")
     private String procedencia_datos;
 
+    @JsonProperty("referencia_id")
+    private String referencia_id;
+
+    @JsonProperty("variaciones")
+    private List<Map<String, Object>> variaciones = new ArrayList<>();
+
+    @JsonProperty("referencia_snapshot")
+    private Escenario referencia_snapshot;
+
     @JsonProperty("empresas")
     private List<Empresa> empresas = new ArrayList<>();
 
@@ -282,6 +291,30 @@ public class Escenario {
         this.procedencia_datos = procedencia_datos;
     }
 
+    public String getReferencia_id() {
+        return referencia_id;
+    }
+
+    public void setReferencia_id(String referencia_id) {
+        this.referencia_id = referencia_id;
+    }
+
+    public List<Map<String, Object>> getVariaciones() {
+        return variaciones;
+    }
+
+    public void setVariaciones(List<Map<String, Object>> variaciones) {
+        this.variaciones = variaciones != null ? variaciones : new ArrayList<>();
+    }
+
+    public Escenario getReferencia_snapshot() {
+        return referencia_snapshot;
+    }
+
+    public void setReferencia_snapshot(Escenario referencia_snapshot) {
+        this.referencia_snapshot = referencia_snapshot;
+    }
+
     public List<Empresa> getEmpresas() {
         return empresas;
     }
@@ -338,4 +371,3 @@ public class Escenario {
         this.aviso_capacidad = aviso_capacidad;
     }
 }
-

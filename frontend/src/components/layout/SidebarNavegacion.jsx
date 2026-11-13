@@ -11,19 +11,17 @@ import {
   CheckCircle2,
   CheckSquare,
   Network,
-  Activity,
-  Sliders,
   Maximize2,
   GitCompare,
-  FileSpreadsheet,
   AlertCircle,
-  HelpCircle,
   Clock,
-  Sparkles
+  Sparkles,
+  SlidersHorizontal,
+  FlaskConical
 } from 'lucide-react';
 import { useSession } from '../../context/SessionContext';
 
-export function SidebarNavegacion() {
+export function SidebarNavegacion({ abierto = false, alNavegar }) {
   const { escenarioActivo } = useSession();
   const tieneAviso = Boolean(escenarioActivo?.aviso_capacidad);
 
@@ -41,12 +39,10 @@ export function SidebarNavegacion() {
       ]
     },
     {
-      title: "2. Optimización Exacta y Dualidad",
+      title: "2. Optimización Exacta",
       items: [
         { path: "/resolucion-exacta", label: "Resolución Exacta", icon: CheckSquare },
         { path: "/asignacion-costos", label: "Asignación y Costos", icon: Network },
-        { path: "/precios-sombra", label: "Precios Sombra", icon: HelpCircle },
-        { path: "/rangos-optimalidad", label: "Rangos de Optimalidad", icon: Sliders },
         { path: "/procedimiento-exacto", label: "Procedimiento Exacto", icon: Clock }
       ]
     },
@@ -55,25 +51,23 @@ export function SidebarNavegacion() {
       items: [
         { path: "/comparacion-metodos", label: "Comparación Exacto vs AG", icon: GitCompare },
         { path: "/escalabilidad", label: "Escalabilidad de la Red", icon: Maximize2 },
+        { path: "/ajuste-ag", label: "Ajuste de parámetros AG", icon: SlidersHorizontal },
         { path: "/evolucion-ag", label: "Evolución del Algoritmo Genético", icon: Sparkles }
       ]
     },
     {
       title: "4. Simulación y Sensibilidad",
       items: [
-        { path: "/sensibilidad-costos", label: "Variación de Costos", icon: DollarSign },
-        { path: "/sensibilidad-ofertas", label: "Variación de Ofertas", icon: TrendingUp },
-        { path: "/sensibilidad-capacidades", label: "Variación de Capacidades", icon: Gauge },
-        { path: "/evaluacion-sensibilidad", label: "Evaluación de Sensibilidad", icon: FileSpreadsheet }
+        { path: "/simulacion", label: "Laboratorio de Escenarios", icon: FlaskConical }
       ]
     }
   ];
 
   return (
-    <aside className="w-72 bg-slate-900 text-slate-300 flex flex-col h-screen border-r border-slate-800 flex-shrink-0 select-none">
+    <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col h-screen border-r border-slate-800 flex-shrink-0 select-none transition-transform duration-200 xl:static xl:!translate-x-0 ${abierto ? 'translate-x-0' : '-translate-x-full'}`}>
       {/* Brand Header */}
       <div className="p-4 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
-        <Link to="/panel" className="flex items-center gap-3">
+        <Link to="/panel" onClick={alNavegar} className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold text-lg shadow-inner">
             🌱
           </div>
@@ -89,8 +83,9 @@ export function SidebarNavegacion() {
         <NavLink
           to="/panel"
           end
+          onClick={alNavegar}
           className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+            `flex min-h-11 items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
               isActive
                 ? 'bg-emerald-600 text-white shadow-sm'
                 : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
@@ -124,8 +119,9 @@ export function SidebarNavegacion() {
                   <NavLink
                     key={item.path}
                     to={item.path}
+                    onClick={alNavegar}
                     className={({ isActive }) =>
-                      `flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                      `flex min-h-11 items-center gap-2.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                         isActive
                           ? 'bg-emerald-500/20 text-emerald-300 font-semibold border-l-2 border-emerald-500 pl-2.5'
                           : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'

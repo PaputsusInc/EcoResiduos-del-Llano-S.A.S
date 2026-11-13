@@ -19,10 +19,13 @@ No se modelan viajes, vehículos ni cargas por trayecto.
   cruce, mutación, elitismo y reemplazo.
 - `solver_genetico.py`: recibe JSON por entrada estándar y emite eventos JSONL
   para el backend Java.
+- `ajustar_hiperparametros.py`: compara configuraciones con Optuna únicamente
+  cuando se pulsa «Ajustar parámetros» en el software.
 
 ## Preparación y ejecución
 
-Se necesita Python 3.10 o superior. El AG usa solo la biblioteca estándar.
+Se necesita Python 3.10 o superior. El AG usa solo la biblioteca estándar; el
+ajuste bajo demanda necesita Optuna (`pip install -r python-engines/requirements.txt`).
 Desde la raíz del repositorio:
 
 ```bash
@@ -32,7 +35,18 @@ python3 python-engines/genetic_solver/solver_genetico.py < entrada.json
 En el software oficial, el backend inicia ese proceso por sí mismo. La API
 `POST /api/escenarios/{id}/optimizar` recibe `metodo: "AG"`,
 `asincrono: true` y `config_ag`. La vista «Evolución del Algoritmo Genético»
-permite editar el mismo JSON y muestra cada generación recibida.
+presenta controles validados y muestra cada generación recibida.
+
+La acción «Ajustar parámetros» llama a
+`POST /api/escenarios/{id}/ag/ajustar`. Optuna TPE prueba 12 configuraciones
+con dos semillas comunes y un presupuesto de 300 a 1200 evaluaciones por
+semilla. Ajusta población, generaciones derivadas del presupuesto, tasas de
+cruce y mutación, torneo, elitismo y reemplazos. Mantiene el operador OX,
+la penalización y la escala elegidos. La puntuación es el costo medio factible
+de las dos corridas; la recomendación puede aplicarse y después ejecutarse
+como corrida normal. Es una búsqueda limitada, no una certificación de
+optimalidad. No se crea historial ni se modifica el escenario durante el
+ajuste.
 
 ## Cómo funciona
 

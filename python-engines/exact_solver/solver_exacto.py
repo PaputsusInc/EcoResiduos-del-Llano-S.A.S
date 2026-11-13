@@ -19,6 +19,7 @@ from common.jsonl_protocol import (
     emitir_modelo_formulado, emitir_paso_exacto, emitir_resultado_final,
 )
 from exact_solver.transporte_vogel_modi import RedInfactibleError, resolver
+from exact_solver.analisis_sensibilidad import AnalisisSensibilidad
 
 
 def resolver_modelo_transporte_rol_2(
@@ -26,9 +27,15 @@ def resolver_modelo_transporte_rol_2(
     plantas: list[dict[str, Any]],
     matriz_costos: dict[str, float | None],
     tolerancia: float = 1e-6,
-) -> tuple[dict[str, float], float, list[dict[str, Any]], list[tuple[str, str, dict]]]:
+) -> tuple[dict[str, float], float, list[dict[str, Any]], list[tuple[str, str, dict]], dict]:
     """Conserva el contrato del backend y traduce la solución Vogel–MODI."""
     solucion = resolver(empresas, plantas, matriz_costos, tolerancia)
+    analizador = AnalisisSensibilidad(solucion)
+    analisis = analizador.rango_optimo()
+    factibles = {dato["nodo_id"]: dato for dato in analizador.rango_factible()}
+    for dato in analisis["terminos_independientes"]:
+        dato["rango_factible"] = factibles[dato["nodo_id"]]
+    rangos = {dato["nodo_id"]: dato for dato in analisis["terminos_independientes"]}
     flujos = {
         f"{empresa['id']}->{planta['id']}": cantidad
         for i, empresa in enumerate(empresas)
@@ -47,10 +54,10 @@ def resolver_modelo_transporte_rol_2(
             "valor_vigente": capacidad,
             "precio_sombra": solucion.precios_plantas[j],
             "holgura": max(0.0, capacidad - recibido),
-            "rango_aumento_permitido": None,
-            "rango_reduccion_permitido": None,
-            "limite_inferior": None,
-            "limite_superior": None,
+            "rango_aumento_permitido": None if rangos[planta["id"]]["superior"] is None else max(0.0, rangos[planta["id"]]["superior"] - capacidad),
+            "rango_reduccion_permitido": max(0.0, capacidad - rangos[planta["id"]]["inferior"]),
+            "limite_inferior": str(rangos[planta["id"]]["inferior"]),
+            "limite_superior": None if rangos[planta["id"]]["superior"] is None else str(rangos[planta["id"]]["superior"]),
         })
     for i, empresa in enumerate(empresas):
         precios.append({
@@ -61,12 +68,12 @@ def resolver_modelo_transporte_rol_2(
             "valor_vigente": empresa["oferta_t"],
             "precio_sombra": solucion.precios_empresas[i],
             "holgura": 0.0,
-            "rango_aumento_permitido": None,
-            "rango_reduccion_permitido": None,
-            "limite_inferior": None,
-            "limite_superior": None,
+            "rango_aumento_permitido": None if rangos[empresa["id"]]["superior"] is None else max(0.0, rangos[empresa["id"]]["superior"] - empresa["oferta_t"]),
+            "rango_reduccion_permitido": max(0.0, empresa["oferta_t"] - rangos[empresa["id"]]["inferior"]),
+            "limite_inferior": str(rangos[empresa["id"]]["inferior"]),
+            "limite_superior": None if rangos[empresa["id"]]["superior"] is None else str(rangos[empresa["id"]]["superior"]),
         })
-    return flujos, solucion.costo, precios, solucion.pasos
+    return flujos, solucion.costo, precios, solucion.pasos, analisis
 
 
 def main() -> int:
@@ -81,8 +88,6 @@ def main() -> int:
         rutas = escenario["rutas"]
         ejecucion_id = payload.get("ejecucion_id", "EJE-01")
         tolerancia = float(payload.get("tolerancia_numerica", 1e-6))
-        oferta_total = math.fsum(float(e["oferta_t"]) for e in empresas)
-        capacidad_total = math.fsum(float(p["capacidad_maxima_t"]) for p in plantas)
     except (KeyError, TypeError, ValueError, AttributeError) as error:
         print(f"Entrada inválida para el motor exacto: {error}", file=sys.stderr)
         return 1
@@ -96,6 +101,20 @@ def main() -> int:
         )
         for ruta in rutas
     }
+    try:
+        if payload.get("variaciones") is not None:
+            empresas, plantas, matriz_costos = AnalisisSensibilidad.aplicar_variaciones(
+                empresas, plantas, matriz_costos, payload["variaciones"],
+            )
+        elif payload.get("variacion") is not None:
+            empresas, plantas, matriz_costos = AnalisisSensibilidad.aplicar_variacion(
+                empresas, plantas, matriz_costos, payload["variacion"],
+            )
+        oferta_total = math.fsum(float(e["oferta_t"]) for e in empresas)
+        capacidad_total = math.fsum(float(p["capacidad_maxima_t"]) for p in plantas)
+    except (TypeError, ValueError) as error:
+        print(f"Variación inválida: {error}", file=sys.stderr)
+        return 1
     emitir_paso_exacto(
         ejecucion_id, 1, "PREPARACION",
         f"Lectura de {len(empresas)} empresas, {len(plantas)} plantas, oferta {oferta_total:g} t y capacidad {capacidad_total:g} t.",
@@ -135,7 +154,7 @@ def main() -> int:
         {"modelo": modelo, "es_intermedio": True},
     )
     try:
-        flujos, costo, precios, pasos = resolver_modelo_transporte_rol_2(
+        flujos, costo, precios, pasos, analisis = resolver_modelo_transporte_rol_2(
             empresas, plantas, matriz_costos, tolerancia,
         )
     except RedInfactibleError as error:
@@ -171,6 +190,7 @@ def main() -> int:
         "tiempo_ejecucion_s": round(time.perf_counter() - inicio, 4),
         "matriz_flujos_optimos": flujos,
         "sensibilidad_dual": precios,
+        "analisis_sensibilidad": analisis,
         "modelo_formulado": modelo,
     })
     return 0

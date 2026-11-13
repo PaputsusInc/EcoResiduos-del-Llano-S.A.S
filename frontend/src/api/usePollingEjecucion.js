@@ -9,17 +9,21 @@ export function usePollingEjecucion(ejecucionId, metodo = "EXACTO", intervaloMs 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [errorStatus, setErrorStatus] = useState(null);
   const timerRef = useRef(null);
 
   useEffect(() => {
     if (!ejecucionId) {
       setData(null);
+      setError(null);
+      setErrorStatus(null);
       return;
     }
 
     let isMounted = true;
     setLoading(true);
     setError(null);
+    setErrorStatus(null);
 
     const checkStatus = async () => {
       try {
@@ -32,6 +36,7 @@ export function usePollingEjecucion(ejecucionId, metodo = "EXACTO", intervaloMs 
 
         if (!isMounted) return;
         setData(resp);
+        setErrorStatus(null);
 
         const estado = resp?.resultado?.estado;
         const terminales = [
@@ -53,6 +58,7 @@ export function usePollingEjecucion(ejecucionId, metodo = "EXACTO", intervaloMs 
       } catch (err) {
         if (!isMounted) return;
         setError(err.message || 'Error en consulta de seguimiento');
+        setErrorStatus(err.status || null);
         setLoading(false);
         if (timerRef.current) {
           clearInterval(timerRef.current);
@@ -76,6 +82,5 @@ export function usePollingEjecucion(ejecucionId, metodo = "EXACTO", intervaloMs 
     };
   }, [ejecucionId, metodo, intervaloMs]);
 
-  return { data, loading, error };
+  return { data, loading, error, errorStatus };
 }
-

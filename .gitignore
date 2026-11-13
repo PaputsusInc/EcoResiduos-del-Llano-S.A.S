@@ -5,6 +5,7 @@ frontend/dist/
 # Java / Maven
 target/
 *.class
+backend/data/escenarios/
 
 # Python
 __pycache__/

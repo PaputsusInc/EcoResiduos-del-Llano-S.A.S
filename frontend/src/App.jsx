@@ -18,16 +18,11 @@ import Hu09AsignacionFlujosCostosPage from './pages/hu02_optimizacion/Hu09Asigna
 import Hu16ComparacionExactoVsAgPage from './pages/hu02_optimizacion/Hu16ComparacionExactoVsAgPage';
 import Hu19ProcedimientoMetodoExactoPage from './pages/hu02_optimizacion/Hu19ProcedimientoMetodoExactoPage';
 
-import Hu10SensibilidadCostosPage from './pages/hu03_simulacion/Hu10SensibilidadCostosPage';
-import Hu11SensibilidadOfertasPage from './pages/hu03_simulacion/Hu11SensibilidadOfertasPage';
-import Hu12SensibilidadCapacidadesPage from './pages/hu03_simulacion/Hu12SensibilidadCapacidadesPage';
-import Hu13EvaluacionEscenariosPage from './pages/hu03_simulacion/Hu13EvaluacionEscenariosPage';
-
-import Hu14PreciosSombraPage from './pages/hu04_dual/Hu14PreciosSombraPage';
-import Hu15RangosOptimalidadPage from './pages/hu04_dual/Hu15RangosOptimalidadPage';
+import LaboratorioSimulacionPage from './pages/hu03_simulacion/LaboratorioSimulacionPage';
 import Hu17EscalabilidadRedPage from './pages/hu04_dual/Hu17EscalabilidadRedPage';
 
 import Hu18SeguimientoGeneracionesAgPage from './pages/hu05_trazabilidad/Hu18SeguimientoGeneracionesAgPage';
+import AjusteParametrosAgPage from './pages/hu05_trazabilidad/AjusteParametrosAgPage';
 
 export default function App() {
   return (
@@ -53,18 +48,20 @@ export default function App() {
             <Route path="asignacion-costos" element={<Hu09AsignacionFlujosCostosPage />} />
             <Route path="procedimiento-exacto" element={<Hu19ProcedimientoMetodoExactoPage />} />
 
-            {/* 3. Simulación y Sensibilidad */}
-            <Route path="sensibilidad-costos" element={<Hu10SensibilidadCostosPage />} />
-            <Route path="sensibilidad-ofertas" element={<Hu11SensibilidadOfertasPage />} />
-            <Route path="sensibilidad-capacidades" element={<Hu12SensibilidadCapacidadesPage />} />
-            <Route path="evaluacion-sensibilidad" element={<Hu13EvaluacionEscenariosPage />} />
-
-            {/* 4. Análisis Dual y Escalabilidad */}
-            <Route path="precios-sombra" element={<Hu14PreciosSombraPage />} />
-            <Route path="rangos-optimalidad" element={<Hu15RangosOptimalidadPage />} />
+            {/* 3. Algoritmo Genético y Comparación */}
             <Route path="comparacion-metodos" element={<Hu16ComparacionExactoVsAgPage />} />
             <Route path="escalabilidad" element={<Hu17EscalabilidadRedPage />} />
+            <Route path="ajuste-ag" element={<AjusteParametrosAgPage />} />
             <Route path="evolucion-ag" element={<Hu18SeguimientoGeneracionesAgPage />} />
+
+            {/* 4. Simulación y Sensibilidad */}
+            <Route path="simulacion" element={<LaboratorioSimulacionPage />} />
+            <Route path="sensibilidad-costos" element={<Navigate to="/simulacion" replace />} />
+            <Route path="sensibilidad-ofertas" element={<Navigate to="/simulacion" replace />} />
+            <Route path="sensibilidad-capacidades" element={<Navigate to="/simulacion" replace />} />
+            <Route path="precios-sombra" element={<Navigate to="/simulacion" replace />} />
+            <Route path="rangos-optimalidad" element={<Navigate to="/simulacion" replace />} />
+            <Route path="evaluacion-sensibilidad" element={<Navigate to="/simulacion" replace />} />
 
             {/* Redirecciones de compatibilidad hacia rutas semánticas */}
             <Route path="hu-01" element={<Navigate to="/empresas" replace />} />
@@ -76,12 +73,12 @@ export default function App() {
             <Route path="hu-07" element={<Navigate to="/validacion" replace />} />
             <Route path="hu-08" element={<Navigate to="/resolucion-exacta" replace />} />
             <Route path="hu-09" element={<Navigate to="/asignacion-costos" replace />} />
-            <Route path="hu-10" element={<Navigate to="/sensibilidad-costos" replace />} />
-            <Route path="hu-11" element={<Navigate to="/sensibilidad-ofertas" replace />} />
-            <Route path="hu-12" element={<Navigate to="/sensibilidad-capacidades" replace />} />
-            <Route path="hu-13" element={<Navigate to="/evaluacion-sensibilidad" replace />} />
-            <Route path="hu-14" element={<Navigate to="/precios-sombra" replace />} />
-            <Route path="hu-15" element={<Navigate to="/rangos-optimalidad" replace />} />
+            <Route path="hu-10" element={<Navigate to="/simulacion" replace />} />
+            <Route path="hu-11" element={<Navigate to="/simulacion" replace />} />
+            <Route path="hu-12" element={<Navigate to="/simulacion" replace />} />
+            <Route path="hu-13" element={<Navigate to="/simulacion" replace />} />
+            <Route path="hu-14" element={<Navigate to="/simulacion" replace />} />
+            <Route path="hu-15" element={<Navigate to="/simulacion" replace />} />
             <Route path="hu-16" element={<Navigate to="/comparacion-metodos" replace />} />
             <Route path="hu-17" element={<Navigate to="/escalabilidad" replace />} />
             <Route path="hu-18" element={<Navigate to="/evolucion-ag" replace />} />

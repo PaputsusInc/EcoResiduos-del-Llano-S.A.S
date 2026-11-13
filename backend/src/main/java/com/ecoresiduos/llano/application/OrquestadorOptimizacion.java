@@ -44,6 +44,18 @@ public class OrquestadorOptimizacion {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
+    public ResultadoOptimizacion analizarVariacionExacta(Escenario escenario, Map<String, Object> variacion) {
+        return ((AdaptadorSolucionadorExacto) optimizador_exacto).analizarVariacion(escenario, variacion);
+    }
+
+    public ResultadoOptimizacion analizarVariacionesExactas(Escenario escenario, List<Map<String, Object>> variaciones) {
+        return ((AdaptadorSolucionadorExacto) optimizador_exacto).analizarVariaciones(escenario, variaciones);
+    }
+
+    public ResultadoOptimizacion resolverEscenarioExacto(Escenario escenario) {
+        return optimizador_exacto.resolver(escenario, null);
+    }
+
     @Autowired
     public OrquestadorOptimizacion(
             IPuertoRepositorioEscenarios repositorio_escenarios,
@@ -463,4 +475,3 @@ public class OrquestadorOptimizacion {
         }
     }
 }
-

@@ -71,7 +71,7 @@ export default function Hu16ComparacionExactoVsAgPage() {
             {ejecutando ? 'Ejecutando…' : 'Comparar'}
           </button>
           <Link to="/evolucion-ag" className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold">
-            Ver evolución AG
+            Ajustar AG y ver evolución
           </Link>
         </div>
       </div>
