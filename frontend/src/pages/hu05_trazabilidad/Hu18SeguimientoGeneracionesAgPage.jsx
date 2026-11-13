@@ -1,235 +1,196 @@
-import React, { useState } from 'react';
-import { Activity, CheckCircle, Cpu, Printer, Play, RefreshCw, Sparkles } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Activity, Play, Printer, RefreshCw } from 'lucide-react';
 import { useSession } from '../../context/SessionContext';
 import { usePollingEjecucion } from '../../api/usePollingEjecucion';
 import { api } from '../../api/client';
 
-const HISTORIAL_DEMO = [
-  { gen: 'Gen 0 (Población Inicial)', factibles: '0 de 100 candidatos', costoGen: 'No disponible', costoAcum: 'No disponible', aptitud: '0,4120', obs: 'Inicialización aleatoria. Sin individuos factibles que cumplan todas las restricciones.' },
-  { gen: 'Gen 1', factibles: '42 de 100 candidatos', costoGen: '$ 1.092.300', costoAcum: '$ 1.092.300', aptitud: '0,7840', obs: 'Primera asignación factible identificada mediante operadores de reparación.' },
-  { gen: 'Gen 10', factibles: '68 de 100 candidatos', costoGen: '$ 1.078.100', costoAcum: '$ 1.078.100', aptitud: '0,8450', obs: 'Cruce por orden en dos puntos combina rutas eficientes de la zona central.' },
-  { gen: 'Gen 50', factibles: '82 de 100 candidatos', costoGen: '$ 1.065.400', costoAcum: '$ 1.065.400', aptitud: '0,9120', obs: 'Reducción acelerada del costo en corredores Restrepo y Villavicencio.' },
-  { gen: 'Gen 100', factibles: '89 de 100 candidatos', costoGen: '$ 1.042.200', costoAcum: '$ 1.042.200', aptitud: '0,9580', obs: 'Mutación explora variantes en el corredor Puerto Gaitán.' },
-  { gen: 'Gen 142 (Mejor)', factibles: '94 de 100 candidatos', costoGen: '$ 1.018.400', costoAcum: '$ 1.018.400', aptitud: '0,9819', obs: 'Mínimo global del algoritmo genético alcanzado con convergencia.' },
-  { gen: 'Gen 200 (Final)', factibles: '98 de 100 candidatos', costoGen: '$ 1.018.400', costoAcum: '$ 1.018.400', aptitud: '0,9819', obs: 'Criterio de parada por número máximo de generaciones alcanzado.' }
-];
+const CONFIGURACION_INICIAL = {
+  tamano_poblacion: 100,
+  generaciones: 200,
+  tasa_cruce: 0.8,
+  tasa_mutacion: 0.05,
+  metodo_seleccion: 'TORNEO',
+  tamano_torneo: 3,
+  tipo_cruce: 'OX',
+  puntos_cruce: 2,
+  elitismo: 1,
+  reemplazos: null,
+  limite_sin_mejora: null,
+  umbral_mejora_cop: 0,
+  factor_penalizacion: 1000,
+  escala_costo_referencia: 1000000,
+  semilla: 42
+};
 
-export default function Hu18SeguimientoGeneracionesAgPage() {
-  const { escenarioActivo } = useSession();
-  const [ejecucionId, setEjecucionId] = useState('EJE-02');
-  const [iniciando, setIniciando] = useState(false);
+const dinero = (valor) => valor == null
+  ? 'No disponible'
+  : `$ ${valor.toLocaleString('es-CO', { maximumFractionDigits: 2 })} COP`;
 
-  // Hook reactivo de polling cada 350 ms hacia Spring Boot
-  const { data: evolucion, cargando, terminado } = usePollingEjecucion('ag', ejecucionId, 350);
+const segundos = (valor) => valor == null ? '—' : `${valor.toFixed(3)} s`;
 
-  const iniciarCorridaAsincrona = async () => {
-    setIniciando(true);
-    try {
-      const escId = escenarioActivo?.id || 'ESC-01';
-      const config = {
-        tamano_poblacion: 100,
-        max_generaciones: 200,
-        tasa_cruce: 0.8,
-        tasa_mutacion: 0.05,
-        semilla_aleatoria: 42
-      };
-      // Inicia ejecución asíncrona (HTTP 202)
-      const res = await api.optimizarGenetico(escId, { ...config, asincrono: true });
-      if (res && res.id) {
-        setEjecucionId(res.id);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIniciando(false);
-    }
-  };
+function CurvaCosto({ historial }) {
+  if (historial.length < 2) {
+    return <p className="text-sm text-slate-500">La curva aparecerá al recibir dos generaciones.</p>;
+  }
 
-  const listaRegistros = evolucion?.registro_convergencia && evolucion.registro_convergencia.length > 0
-    ? evolucion.registro_convergencia.map(r => ({
-        gen: `Gen ${r.generacion}${r.generacion === 0 ? ' (Población Inicial)' : ''}`,
-        factibles: `${r.individuos_factibles || (r.generacion === 0 ? 0 : 80)} de 100 candidatos`,
-        costoGen: r.costo_mejor_generacion !== null ? `$ ${r.costo_mejor_generacion.toLocaleString('es-CO')}` : 'No disponible',
-        costoAcum: r.costo_mejor_acumulado !== null ? `$ ${r.costo_mejor_acumulado.toLocaleString('es-CO')}` : 'No disponible',
-        aptitud: (r.aptitud_mejor || 0.4120).toFixed(4).replace('.', ','),
-        obs: r.generacion === 0 ? 'Inicialización aleatoria.' : (r.generacion === 200 ? 'Fin de corrida.' : 'Evolución por cruce y mutación.')
-      }))
-    : HISTORIAL_DEMO;
-
-  const COSTOS_AG_DEFAULT = {
-    'ESC-01': '$ 1.018.400',
-    'ESC-02': '$ 1.115.200',
-    'ESC-03': '$ 1.171.200',
-    'ESC-AMP-20x6': '$ 2.098.000',
-    'ESC-AMP-30x8': '$ 3.189.500'
-  };
-  const escId = escenarioActivo?.id || 'ESC-01';
-  const costoFallback = COSTOS_AG_DEFAULT[escId] || '$ 1.018.400';
-
-  const ultimoRegistro = listaRegistros[listaRegistros.length - 1];
-  const estadoTexto = cargando ? 'En Búsqueda Activa (Polling 350ms)...' : (terminado ? 'Finalizado Factible' : 'Completado');
+  const costos = historial.map((registro) => registro.mejor_costo_acumulado);
+  const minimo = Math.min(...costos);
+  const amplitud = Math.max(...costos) - minimo || 1;
+  const puntos = costos.map((costo, indice) => {
+    const x = 20 + (760 * indice) / (costos.length - 1);
+    const y = 140 - (110 * (costo - minimo)) / amplitud;
+    return `${x},${y}`;
+  }).join(' ');
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6">
-      {/* HEADER */}
-      <div className="bg-white border border-slate-200 rounded-xl px-6 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
-            <Activity className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-bold text-slate-900 leading-tight">Evolución del Algoritmo Genético</h2>
-            <p className="text-xs text-slate-500">Trazabilidad de convergencia generacional, costos factibles y aptitud poblacional</p>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="text-slate-500">Escenario:</span>
-            <span className="font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 font-mono">
-              {escId}
-            </span>
-          </div>
-
-          <button
-            onClick={iniciarCorridaAsincrona}
-            disabled={iniciando || cargando}
-            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition disabled:opacity-50 cursor-pointer"
-          >
-            {iniciando || cargando ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-            <span>{cargando ? 'Buscando en vivo...' : 'Iniciar Corrida AG en Vivo'}</span>
-          </button>
-
-          <button
-            onClick={() => window.print()}
-            className="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition shadow-sm cursor-pointer"
-          >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Exportar Curvas</span>
-          </button>
-        </div>
-      </div>
-
-      {/* FILA DE TARJETAS DE ESTADO */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Estado de la Búsqueda</span>
-          <div className="flex items-center space-x-1.5 text-emerald-700 font-bold text-base mt-0.5">
-            {cargando ? <RefreshCw className="w-4 h-4 animate-spin text-indigo-600" /> : <CheckCircle className="w-4 h-4" />}
-            <span className={cargando ? 'text-indigo-700 text-sm' : ''}>{estadoTexto}</span>
-          </div>
-          <p className="text-xs text-slate-500 mt-1">{listaRegistros.length} hitos registrados · ID: {ejecucionId}</p>
-        </div>
-
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Mejor Costo Factible Acumulado</span>
-          <div className="text-2xl font-black text-slate-800 font-mono">
-            {ultimoRegistro.costoAcum !== 'No disponible' ? ultimoRegistro.costoAcum : costoFallback} <span className="text-xs font-sans text-slate-500 font-normal">COP</span>
-          </div>
-          <p className="text-xs text-indigo-600 font-medium mt-1">Convergencia en población</p>
-        </div>
-
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Mayor Aptitud Alcanzada</span>
-          <div className="text-2xl font-black text-slate-800 font-mono">{ultimoRegistro.aptitud}</div>
-          <p className="text-xs text-slate-400 mt-1">Puntaje adimensional de convergencia</p>
-        </div>
-
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Motivo de Parada</span>
-          <div className="text-sm font-bold text-slate-800 mt-1">Límite de Generaciones</div>
-          <p className="text-xs text-slate-500 mt-0.5">200 iteraciones completadas (0,815 s)</p>
-        </div>
-      </div>
-
-      {/* CURVA / VISUALIZADOR DE CONVERGENCIA */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h3 className="text-sm font-bold text-slate-800">Curvas de Evolución del Costo Factible y Aptitud por Generación</h3>
-            <p className="text-xs text-slate-500">Inspeccione la trayectoria descendente del costo semanal y el incremento de aptitud poblacional</p>
-          </div>
-          <div className="flex items-center space-x-3 text-xs">
-            <span className="flex items-center space-x-1.5"><span className="w-3 h-3 rounded-full bg-indigo-600 inline-block"></span><span className="text-slate-600">Mejor Costo Acumulado</span></span>
-            <span className="flex items-center space-x-1.5"><span className="w-3 h-3 rounded-full bg-slate-400 inline-block"></span><span className="text-slate-600">Mejor Costo de Generación</span></span>
-            <span className="flex items-center space-x-1.5"><span className="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span><span className="text-slate-600">Aptitud Poblacional</span></span>
-          </div>
-        </div>
-
-        {/* Gráfico SVG Simulado de Alta Precisión */}
-        <div className="h-48 w-full bg-slate-50 rounded-xl border border-slate-200 p-4 flex items-end justify-between relative overflow-hidden">
-          <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
-            <div className="border-b border-slate-400 w-full"></div>
-            <div className="border-b border-slate-400 w-full"></div>
-            <div className="border-b border-slate-400 w-full"></div>
-            <div className="border-b border-slate-400 w-full"></div>
-          </div>
-          <svg className="w-full h-full" viewBox="0 0 800 160" preserveAspectRatio="none">
-            {/* Curva Costo Descendente */}
-            <path
-              d="M 50 140 Q 150 70 300 45 T 500 35 T 750 30"
-              fill="none"
-              stroke="#4f46e5"
-              strokeWidth="3"
-            />
-            {/* Curva Aptitud Ascendente */}
-            <path
-              d="M 50 130 Q 150 90 300 60 T 500 40 T 750 35"
-              fill="none"
-              stroke="#059669"
-              strokeWidth="2"
-              strokeDasharray="4 4"
-            />
-          </svg>
-          <div className="absolute bottom-2 left-4 text-[10px] text-slate-400 font-mono">Gen 0 (Población inicial aleatoria)</div>
-          <div className="absolute bottom-2 right-4 text-[10px] text-slate-400 font-mono">Gen 200 (Convergencia óptima alcanzada)</div>
-        </div>
-      </div>
-
-      {/* TABLA DETALLADA DE HISTORIAL POR GENERACIÓN */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
-          <div>
-            <h3 className="text-sm font-bold text-slate-800">Historial de Generaciones de la Sesión</h3>
-            <p className="text-xs text-slate-500">Muestra la población inicial (Gen 0) y el avance hacia la solución final</p>
-          </div>
-          <span className="text-xs text-slate-500 font-mono">Formato normativo: «No disponible» en Gen 0</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
-                <th className="py-3 px-4">N.º Generación</th>
-                <th className="py-3 px-4 text-center">Candidatos Factibles</th>
-                <th className="py-3 px-3 text-right">Mejor Costo de Generación</th>
-                <th className="py-3 px-3 text-right bg-indigo-50/60 text-indigo-950 font-bold">Mejor Costo Acumulado</th>
-                <th className="py-3 px-3 text-right">Mayor Aptitud</th>
-                <th className="py-3 px-4">Observación Operativa</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-mono">
-              {listaRegistros.map((h, idx) => (
-                <tr key={idx} className={idx === 0 ? 'bg-slate-50/60' : 'hover:bg-slate-50 transition'}>
-                  <td className="py-2.5 px-4 font-bold text-slate-800 font-sans">{h.gen}</td>
-                  <td className={`py-2.5 px-4 text-center font-medium ${idx === 0 ? 'text-rose-600 font-bold' : 'text-emerald-700'}`}>
-                    {h.factibles}
-                  </td>
-                  <td className={`py-2.5 px-3 text-right ${h.costoGen === 'No disponible' ? 'text-slate-400 font-sans italic' : 'text-slate-700'}`}>
-                    {h.costoGen}
-                  </td>
-                  <td className={`py-2.5 px-3 text-right font-bold ${h.costoAcum === 'No disponible' ? 'text-slate-400 font-sans italic bg-indigo-50/20' : 'text-indigo-900 bg-indigo-50/30'}`}>
-                    {h.costoAcum}
-                  </td>
-                  <td className="py-2.5 px-3 text-right text-slate-700">{h.aptitud}</td>
-                  <td className="py-2.5 px-4 text-slate-600 font-sans text-[11px]">{h.obs}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <div>
+      <svg className="w-full h-40 bg-slate-50 rounded-lg" viewBox="0 0 800 160" preserveAspectRatio="none" role="img" aria-label="Mejor costo acumulado por generación">
+        <polyline points={puntos} fill="none" stroke="#4f46e5" strokeWidth="3" />
+      </svg>
+      <div className="flex justify-between text-xs text-slate-500">
+        <span>Generación 0</span>
+        <span>Generación {historial[historial.length - 1].numero}</span>
       </div>
     </div>
   );
 }
 
+export default function Hu18SeguimientoGeneracionesAgPage() {
+  const { escenarioActivo } = useSession();
+  const escenarioId = escenarioActivo?.id || 'ESC-01';
+  const [ejecucionId, setEjecucionId] = useState(null);
+  const [configuracionJson, setConfiguracionJson] = useState(
+    JSON.stringify(CONFIGURACION_INICIAL, null, 2)
+  );
+  const [iniciando, setIniciando] = useState(false);
+  const [errorInicio, setErrorInicio] = useState(null);
+  const [inicioLocal, setInicioLocal] = useState(null);
+  const [tiempoLocal, setTiempoLocal] = useState(0);
+  const { data: evolucion, loading, error: errorSeguimiento } = usePollingEjecucion(
+    ejecucionId, 'AG', 350
+  );
+
+  const resultado = evolucion?.resultado?.id === ejecucionId ? evolucion.resultado : null;
+  const historial = resultado?.historial_generaciones || [];
+  const ultimo = historial.at(-1);
+  const enCurso = iniciando || (ejecucionId && !errorSeguimiento
+    && (!resultado || resultado.estado === 'EN_EJECUCION'));
+  const tiempoVisible = enCurso
+    ? Math.max(tiempoLocal, ultimo?.tiempo_transcurrido_s || 0)
+    : resultado?.tiempo_ejecucion_s ?? ultimo?.tiempo_transcurrido_s;
+
+  useEffect(() => {
+    if (!enCurso || inicioLocal == null) return undefined;
+    const reloj = setInterval(() => setTiempoLocal((Date.now() - inicioLocal) / 1000), 100);
+    return () => clearInterval(reloj);
+  }, [enCurso, inicioLocal]);
+
+  async function iniciarCorrida() {
+    setErrorInicio(null);
+    setEjecucionId(null);
+    setIniciando(true);
+    setInicioLocal(Date.now());
+    setTiempoLocal(0);
+    try {
+      const configAg = JSON.parse(configuracionJson);
+      if (!configAg || Array.isArray(configAg) || typeof configAg !== 'object') {
+        throw new Error('La configuración debe ser un objeto JSON.');
+      }
+      const respuesta = await api.ejecutarOptimizacion(escenarioId, {
+        metodo: 'AG',
+        asincrono: true,
+        config_ag: configAg
+      });
+      setEjecucionId(respuesta.ejecucion_id);
+    } catch (error) {
+      setErrorInicio(error.message);
+    } finally {
+      setIniciando(false);
+    }
+  }
+
+  return (
+    <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="bg-white border border-slate-200 rounded-xl px-6 py-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <Activity className="w-6 h-6 text-emerald-700" />
+          <div>
+            <h2 className="text-base font-bold text-slate-900">Evolución del Algoritmo Genético</h2>
+            <p className="text-xs text-slate-500">Escenario {escenarioId} · prioridades de empresas y plantas</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={iniciarCorrida} disabled={Boolean(enCurso)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold disabled:opacity-50 flex gap-2 items-center">
+            {enCurso ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+            {enCurso ? 'Ejecutando…' : 'Iniciar AG'}
+          </button>
+          <button onClick={() => window.print()} className="px-4 py-2 border border-slate-300 rounded-lg text-xs flex gap-2 items-center">
+            <Printer className="w-4 h-4" /> Imprimir
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <label htmlFor="configuracion-ag" className="block text-sm font-bold text-slate-800 mb-2">Configuración del AG (JSON)</label>
+        <p className="text-xs text-slate-500 mb-3">Ajusta torneo, cruce, elitismo, reemplazos y criterio de parada antes de iniciar.</p>
+        <textarea id="configuracion-ag" value={configuracionJson} onChange={(evento) => setConfiguracionJson(evento.target.value)} rows={12} spellCheck={false} className="w-full font-mono text-xs border border-slate-300 rounded-lg p-3" />
+        {(errorInicio || errorSeguimiento) && <p role="alert" className="text-sm text-red-700 mt-2">{errorInicio || errorSeguimiento}</p>}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          ['Estado', resultado?.estado || (loading ? 'Consultando…' : 'Sin ejecución')],
+          ['Mejor costo acumulado', dinero(ultimo?.mejor_costo_acumulado)],
+          ['Generación', ultimo ? `${ultimo.numero} / ${evolucion?.max_generaciones}` : '—'],
+          ['Cronómetro', segundos(tiempoVisible)]
+        ].map(([etiqueta, valor]) => (
+          <div key={etiqueta} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="text-xs font-semibold text-slate-500 uppercase">{etiqueta}</div>
+            <div className="text-base font-bold text-slate-800 mt-1">{valor}</div>
+          </div>
+        ))}
+      </div>
+
+      {resultado && (
+        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm text-slate-700">
+          <div>Corrida: <span className="font-mono">{ejecucionId}</span></div>
+          {(resultado.causa_estado || resultado.motivo_finalizacion) && (
+            <div>Resultado: {resultado.causa_estado || resultado.motivo_finalizacion}</div>
+          )}
+        </div>
+      )}
+
+      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <h3 className="text-sm font-bold text-slate-800 mb-3">Mejor costo factible acumulado</h3>
+        <CurvaCosto historial={historial} />
+      </div>
+
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+        <h3 className="text-sm font-bold text-slate-800 p-4">Historial por generación</h3>
+        <table className="w-full text-left text-xs">
+          <thead className="bg-slate-100 text-slate-700">
+            <tr>
+              <th className="p-3">Generación</th><th className="p-3">Factibles</th>
+              <th className="p-3">Mejor de generación</th><th className="p-3">Mejor acumulado</th>
+              <th className="p-3">Aptitud</th><th className="p-3">Evaluaciones</th><th className="p-3">Tiempo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {historial.map((registro) => (
+              <tr key={registro.numero} className="border-t border-slate-100">
+                <td className="p-3">{registro.numero}</td>
+                <td className="p-3">{registro.candidatos_factibles}</td>
+                <td className="p-3">{dinero(registro.mejor_costo_factible)}</td>
+                <td className="p-3 font-bold">{dinero(registro.mejor_costo_acumulado)}</td>
+                <td className="p-3">{registro.mejor_aptitud?.toFixed(6) ?? '—'}</td>
+                <td className="p-3">{registro.evaluaciones_acumuladas ?? '—'}</td>
+                <td className="p-3">{segundos(registro.tiempo_transcurrido_s)}</td>
+              </tr>
+            ))}
+            {historial.length === 0 && <tr><td colSpan={7} className="p-4 text-slate-500">Sin generaciones registradas.</td></tr>}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

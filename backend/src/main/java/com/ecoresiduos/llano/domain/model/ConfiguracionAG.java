@@ -25,6 +25,30 @@ public class ConfiguracionAG {
     @JsonProperty("semilla")
     private Integer semilla = 42;
 
+    @JsonProperty("tamano_torneo")
+    private Integer tamano_torneo = 3;
+
+    @JsonProperty("tipo_cruce")
+    private String tipo_cruce = "OX";
+
+    @JsonProperty("puntos_cruce")
+    private Integer puntos_cruce = 2;
+
+    @JsonProperty("elitismo")
+    private Integer elitismo = 1;
+
+    @JsonProperty("reemplazos")
+    private Integer reemplazos;
+
+    @JsonProperty("limite_sin_mejora")
+    private Integer limite_sin_mejora;
+
+    @JsonProperty("umbral_mejora_cop")
+    private Double umbral_mejora_cop = 0.0;
+
+    @JsonProperty("escala_costo_referencia")
+    private Double escala_costo_referencia = 1000000.0;
+
     public ConfiguracionAG() {
     }
 
@@ -105,5 +129,28 @@ public class ConfiguracionAG {
     public void setSemilla(Integer semilla) {
         this.semilla = semilla;
     }
-}
 
+    public Integer getTamano_torneo() { return tamano_torneo; }
+    public void setTamano_torneo(Integer valor) { this.tamano_torneo = valor; }
+
+    public String getTipo_cruce() { return tipo_cruce; }
+    public void setTipo_cruce(String valor) { this.tipo_cruce = valor; }
+
+    public Integer getPuntos_cruce() { return puntos_cruce; }
+    public void setPuntos_cruce(Integer valor) { this.puntos_cruce = valor; }
+
+    public Integer getElitismo() { return elitismo; }
+    public void setElitismo(Integer valor) { this.elitismo = valor; }
+
+    public Integer getReemplazos() { return reemplazos; }
+    public void setReemplazos(Integer valor) { this.reemplazos = valor; }
+
+    public Integer getLimite_sin_mejora() { return limite_sin_mejora; }
+    public void setLimite_sin_mejora(Integer valor) { this.limite_sin_mejora = valor; }
+
+    public Double getUmbral_mejora_cop() { return umbral_mejora_cop; }
+    public void setUmbral_mejora_cop(Double valor) { this.umbral_mejora_cop = valor; }
+
+    public Double getEscala_costo_referencia() { return escala_costo_referencia; }
+    public void setEscala_costo_referencia(Double valor) { this.escala_costo_referencia = valor; }
+}

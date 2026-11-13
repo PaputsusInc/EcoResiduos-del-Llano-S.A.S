@@ -22,6 +22,12 @@ public class RegistroGeneracionAG {
     @JsonProperty("mejor_aptitud")
     private Double mejor_aptitud;
 
+    @JsonProperty("evaluaciones_acumuladas")
+    private Integer evaluaciones_acumuladas;
+
+    @JsonProperty("tiempo_transcurrido_s")
+    private Double tiempo_transcurrido_s;
+
     public RegistroGeneracionAG() {
     }
 
@@ -82,5 +88,20 @@ public class RegistroGeneracionAG {
     public void setMejor_aptitud(Double mejor_aptitud) {
         this.mejor_aptitud = mejor_aptitud;
     }
-}
 
+    public Integer getEvaluaciones_acumuladas() {
+        return evaluaciones_acumuladas;
+    }
+
+    public void setEvaluaciones_acumuladas(Integer valor) {
+        this.evaluaciones_acumuladas = valor;
+    }
+
+    public Double getTiempo_transcurrido_s() {
+        return tiempo_transcurrido_s;
+    }
+
+    public void setTiempo_transcurrido_s(Double valor) {
+        this.tiempo_transcurrido_s = valor;
+    }
+}

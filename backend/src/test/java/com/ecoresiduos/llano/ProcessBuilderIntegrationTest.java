@@ -140,6 +140,9 @@ public class ProcessBuilderIntegrationTest {
                 "El primer registro debe ser la generación inicial 0");
         assertEquals(10, resultado.getHistorial_generaciones().get(10).getNumero(),
                 "El último registro debe ser la generación 10");
+        assertEquals(20, resultado.getHistorial_generaciones().get(0).getEvaluaciones_acumuladas());
+        assertEquals(110, resultado.getHistorial_generaciones().get(10).getEvaluaciones_acumuladas());
+        assertNotNull(resultado.getHistorial_generaciones().get(10).getTiempo_transcurrido_s());
 
         // Curva de convergencia
         assertNotNull(resultado.getCurva_convergencia_fitness());
@@ -148,6 +151,20 @@ public class ProcessBuilderIntegrationTest {
         // Comprobar factibilidad de flujos en dominio
         Boolean factible = resultado.comprobar_factibilidad_flujos(esc01, 1e-6);
         assertTrue(factible, "La solución del AG debe satisfacer completamente la oferta y capacidad");
+    }
+
+    @Test
+    @DisplayName("AG debe informar la inviabilidad de ESC-04 sin crear generaciones ficticias")
+    void testSolverGeneticoEscenarioInviable() {
+        Escenario esc04 = persistencia.obtener_por_id("ESC-04");
+        ConfiguracionAG configAg = new ConfiguracionAG(20, 10, 0.80, 0.05, "TORNEO", 1000.0, 42);
+
+        ResultadoOptimizacion resultado = adaptadorGenetico.resolver(esc04, configAg);
+
+        assertEquals("SIN_CANDIDATO_FACTIBLE_AG", resultado.getEstado());
+        assertNull(resultado.getCosto_total_Z());
+        assertTrue(resultado.getHistorial_generaciones().isEmpty());
+        assertTrue(resultado.getCausa_estado().contains("capacidad"));
     }
 
     @Test
@@ -167,5 +184,23 @@ public class ProcessBuilderIntegrationTest {
         assertEquals(997500.0, reporte.getResultado_exacto().getCosto_total_Z(), 1e-3);
         assertNotNull(reporte.getPorcentaje_gap(), "El gap porcentual debe ser calculado");
         assertTrue(reporte.getPorcentaje_gap() >= 0.0, "El gap debe ser no negativo");
+    }
+
+    @Test
+    @DisplayName("Una red sin oferta ni capacidad tiene solución vacía válida en ambos motores")
+    void testEscenarioUbicacionesSinVolumen() {
+        Escenario escenario = persistencia.obtener_por_id("ESC-UBICACIONES");
+        assertNotNull(escenario);
+        ConfiguracionAG configAg = new ConfiguracionAG(4, 1, 0.80, 0.05, "TORNEO", 1000.0, 42);
+
+        ResultadoOptimizacion exacto = adaptadorExacto.resolver(escenario, null);
+        ResultadoOptimizacion ag = adaptadorGenetico.resolver(escenario, configAg);
+
+        assertEquals("OPTIMO", exacto.getEstado());
+        assertEquals("FACTIBLE_SIN_CERTIFICAR", ag.getEstado());
+        assertEquals(0.0, exacto.getCosto_total_Z());
+        assertEquals(0.0, ag.getCosto_total_Z());
+        assertTrue(exacto.comprobar_factibilidad_flujos(escenario, 1e-6));
+        assertTrue(ag.comprobar_factibilidad_flujos(escenario, 1e-6));
     }
 }

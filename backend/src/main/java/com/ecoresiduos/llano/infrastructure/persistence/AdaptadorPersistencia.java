@@ -107,6 +107,10 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
         Escenario esc30x8 = construirEscenarioAmpliado("ESC-AMP-30x8", "Red Ampliada (30 Empresas x 8 Plantas)", 30, 8);
         escenarios_memoria.put(esc30x8.getId(), esc30x8);
 
+        // Catálogo geográfico investigado, aislado de los casos simulados.
+        Escenario ubicaciones = construirEscenarioUbicacionesVerificadas();
+        escenarios_memoria.put(ubicaciones.getId(), ubicaciones);
+
         // 4. Ejecuciones Semilla de Referencia para ESC-01
         ResultadoOptimizacion eje01 = construirResultadoExactoEJE01(esc01);
         resultados_memoria.put(eje01.getId(), eje01);
@@ -122,6 +126,29 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
                 null, 0.015, Collections.emptyMap()
         );
         resultados_memoria.put(eje04.getId(), eje04);
+    }
+
+    private Escenario construirEscenarioUbicacionesVerificadas() {
+        Escenario esc = new Escenario("ESC-UBICACIONES", "Ubicaciones investigadas (sin volúmenes)",
+                "Sin periodo operativo definido", "COP",
+                "Puntos reales del Meta; relaciones históricas documentadas, sin cantidades operativas verificadas");
+        esc.getEmpresas().add(new Empresa("EMP-01", "Cemerca / Llanabastos",
+                "Central de Abastos, Anillo Vial, Villavicencio, Meta",
+                4.121478, -73.611342, "Residuos orgánicos de plaza de mercado", 0.0));
+        esc.getEmpresas().add(new Empresa("EMP-02", "Friogan, planta Villavicencio",
+                "Km 8 vía Caños Negros–Catama, Villavicencio, Meta",
+                4.131304, -73.556356, "Residuos orgánicos (tipo no especificado)", 0.0));
+        esc.getPlantas().add(new Planta("PLA-01", "Bioagrícola del Llano, planta de compostaje PER",
+                "Parque Ecológico Reciclante, km 18 vía Puerto Porfía, vereda San Juan Bosco, Villavicencio, Meta",
+                4.133919, -73.435438, 0.0,
+                List.of("Orgánicos de plaza de mercado", "Residuos vegetales de poda", "Orgánicos de Friogan")));
+        esc.getPlantas().add(new Planta("PLA-02", "Extractora San Sebastiano, compostaje",
+                "Planta extractora, km 38 vía Rubiales y desvío hacia Planas, Puerto Gaitán, Meta",
+                4.098602, -71.915800, 0.0,
+                List.of("Residuos orgánicos de la extracción de palma")));
+        // No se generan rutas operativas sin oferta, capacidad ni transporte vigente acreditado.
+        esc.calcular_totales_red();
+        return esc;
     }
 
     private Escenario construirEscenario01() {
@@ -393,7 +420,7 @@ public class AdaptadorPersistencia implements IPuertoRepositorioEscenarios {
     @Override
     public List<Escenario> listar_escenarios() {
         List<Escenario> lista = new ArrayList<>(escenarios_memoria.values());
-        List<String> ordenPref = List.of("ESC-01", "ESC-02", "ESC-03", "ESC-AMP-30x8", "ESC-04", "ESC-AMP-20x6");
+        List<String> ordenPref = List.of("ESC-01", "ESC-02", "ESC-03", "ESC-AMP-30x8", "ESC-04", "ESC-AMP-20x6", "ESC-UBICACIONES");
         lista.sort((a, b) -> {
             int idxA = ordenPref.indexOf(a.getId());
             int idxB = ordenPref.indexOf(b.getId());

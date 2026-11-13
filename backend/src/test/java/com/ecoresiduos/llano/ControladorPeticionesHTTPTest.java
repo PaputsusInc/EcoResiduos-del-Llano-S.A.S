@@ -357,6 +357,22 @@ public class ControladorPeticionesHTTPTest {
                 .andExpect(jsonPath("$.errores", hasSize(greaterThanOrEqualTo(1))));
     }
 
+    @Test
+    @DisplayName("La configuración AG asíncrona debe rechazar claves desconocidas")
+    void testPostOptimizarAgAsincronoConClaveDesconocida() throws Exception {
+        Map<String, Object> payload = Map.of(
+                "metodo", "AG",
+                "asincrono", true,
+                "config_ag", Map.of("max_generaciones", 10)
+        );
+
+        mockMvc.perform(post("/api/escenarios/ESC-01/optimizar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", containsString("max_generaciones")));
+    }
+
     // -------------------------------------------------------------------------
     // HU-10 a HU-13: Sensibilidad
     // -------------------------------------------------------------------------

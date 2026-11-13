@@ -22,6 +22,13 @@ import java.util.*;
 @RequestMapping("/api")
 public class ControladorPeticionesHTTP {
 
+    private static final Set<String> PARAMETROS_AG = Set.of(
+            "tamano_poblacion", "generaciones", "tasa_cruce", "tasa_mutacion",
+            "metodo_seleccion", "factor_penalizacion", "semilla", "tamano_torneo",
+            "tipo_cruce", "puntos_cruce", "elitismo", "reemplazos",
+            "limite_sin_mejora", "umbral_mejora_cop", "escala_costo_referencia"
+    );
+
     private final OrquestadorOptimizacion orquestador;
     private final MotorAnalisisSensibilidad motorSensibilidad;
     private final ValidadorContratosEntrada validador;
@@ -381,7 +388,25 @@ public class ControladorPeticionesHTTP {
                 : "EXACTO";
 
         boolean asincrono = payload != null && Boolean.TRUE.equals(payload.get("asincrono"));
-        ConfiguracionAG configAg = extraerConfigAg(payload != null ? payload.get("config_ag") : null);
+        ConfiguracionAG configAg;
+        try {
+            configAg = extraerConfigAg(payload != null ? payload.get("config_ag") : null);
+        } catch (IllegalArgumentException error) {
+            return ResponseEntity.badRequest().body(Map.of("error", error.getMessage()));
+        }
+        if ("AG".equals(metodo) || "COMPARATIVO".equals(metodo)) {
+            List<String> erroresAg = validador.validar_hiperparametros_ag(configAg);
+            int genes = escenario.getEmpresas().size() + escenario.getPlantas().size();
+            if ("BLOQUES_ORDEN".equals(configAg.getTipo_cruce())
+                    && configAg.getPuntos_cruce() != null && configAg.getPuntos_cruce() >= genes) {
+                erroresAg.add("Los puntos de cruce deben ser menores que M + N (" + genes + ").");
+            }
+            if (!erroresAg.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "Hiperparámetros AG inválidos", "errores", erroresAg
+                ));
+            }
+        }
 
         // Si se solicita ejecución asíncrona (HU-18 / HU-19 Polling)
         if (asincrono) {
@@ -404,10 +429,6 @@ public class ControladorPeticionesHTTP {
                 return ResponseEntity.ok(resp);
             }
             case "AG": {
-                List<String> erroresAg = validador.validar_hiperparametros_ag(configAg);
-                if (!erroresAg.isEmpty()) {
-                    return ResponseEntity.badRequest().body(Map.of("error", "Hiperparámetros AG inválidos", "errores", erroresAg));
-                }
                 ResultadoOptimizacion resultado = orquestador.ejecutar_algoritmo_genetico(esc_id, configAg);
                 Map<String, Object> resp = new LinkedHashMap<>();
                 resp.put("resultado", resultado);
@@ -452,7 +473,12 @@ public class ControladorPeticionesHTTP {
                 : "COSTOS";
 
         List<PerturbacionSensibilidad> perturbaciones = extraerPerturbaciones(payload != null ? payload.get("perturbaciones") : null);
-        ConfiguracionAG configAg = extraerConfigAg(payload != null ? payload.get("config_ag") : null);
+        ConfiguracionAG configAg;
+        try {
+            configAg = extraerConfigAg(payload != null ? payload.get("config_ag") : null);
+        } catch (IllegalArgumentException error) {
+            return ResponseEntity.badRequest().body(Map.of("error", error.getMessage()));
+        }
 
         Escenario variante;
         switch (tipoVariacion) {
@@ -543,10 +569,18 @@ public class ControladorPeticionesHTTP {
         if (obj == null) {
             return new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 1000.0, 42);
         }
+        if (!(obj instanceof Map<?, ?> datos)) {
+            throw new IllegalArgumentException("config_ag debe ser un objeto JSON");
+        }
+        for (Object clave : datos.keySet()) {
+            if (!PARAMETROS_AG.contains(clave)) {
+                throw new IllegalArgumentException("Parámetro AG desconocido: " + clave);
+            }
+        }
         try {
             return objectMapper.convertValue(obj, ConfiguracionAG.class);
         } catch (Exception e) {
-            return new ConfiguracionAG(100, 200, 0.80, 0.05, "TORNEO", 1000.0, 42);
+            throw new IllegalArgumentException("config_ag debe ser un objeto JSON válido", e);
         }
     }
 

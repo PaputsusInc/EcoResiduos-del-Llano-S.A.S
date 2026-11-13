@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, AlertOctagon, EyeOff, ListOrdered, Play, RefreshCw, Clock, ArrowRight } from 'lucide-react';
+import { CheckCircle, AlertOctagon, EyeOff, ListOrdered, Play, RefreshCw, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSession } from '../../context/SessionContext';
 import { api } from '../../api/client';
-
-const COSTOS_REFERENCIA = {
-  'ESC-01': 997500.0,
-  'ESC-02': 1092300.0,
-  'ESC-03': 1147125.0,
-  'ESC-AMP-20x6': 2054300.0,
-  'ESC-AMP-30x8': 3120800.0
-};
 
 export default function Hu08ResolucionExactaEstadosPage() {
   const { escenarioActivo, escenarioActivoId, cambiarEscenario, seleccionarEscenario, listaEscenarios } = useSession();
@@ -35,13 +27,13 @@ export default function Hu08ResolucionExactaEstadosPage() {
 
   const ofertaTotal = empresas.length > 0
     ? empresas.reduce((s, e) => s + (Number(e.oferta_t) || 0), 0)
-    : (escenarioActivo?.oferta_total_t || 115.0);
+    : (escenarioActivo?.oferta_total_t ?? 0);
 
   const capacidadTotal = plantas.length > 0
     ? plantas.reduce((s, p) => s + (Number(p.capacidad_maxima_t) || 0), 0)
-    : (escenarioActivo?.capacidad_total_t || 135.0);
+    : (escenarioActivo?.capacidad_total_t ?? 0);
 
-  const esInfactible = ofertaTotal > capacidadTotal || escenarioId === 'ESC-04' || Boolean(escenarioActivo?.aviso_capacidad);
+  const esInfactible = resultadoApi?.estado === 'INFACTIBLE_CERTIFICADO';
 
   const handleCambiarEscenario = (nuevoId) => {
     setEscenarioId(nuevoId);
@@ -56,8 +48,8 @@ export default function Hu08ResolucionExactaEstadosPage() {
     setEjecutando(true);
     setErrorApi(null);
     try {
-      const res = await api.optimizarExacto(escenarioId, { asincrono: false });
-      setResultadoApi(res);
+      const res = await api.ejecutarOptimizacion(escenarioId, { metodo: 'EXACTO', asincrono: false });
+      setResultadoApi(res.resultado);
     } catch (err) {
       console.error(err);
       setErrorApi(err.message || 'Error al comunicarse con el motor de optimización.');
@@ -66,18 +58,14 @@ export default function Hu08ResolucionExactaEstadosPage() {
     }
   };
 
-  // Valores dinámicos según el escenario activo
-  const costoTotalZ = resultadoApi?.costo_total_Z ?? (esInfactible ? null : (COSTOS_REFERENCIA[escenarioId] || 997500.0));
-  const tiempoEjecucion = resultadoApi?.tiempo_ejecucion_s ?? (
-    esInfactible ? 0.005 : (escenarioId === 'ESC-AMP-30x8' ? 0.145 : (escenarioId === 'ESC-AMP-20x6' ? 0.088 : 0.042))
-  );
-  const estadoActual = resultadoApi?.estado ?? (esInfactible ? 'INFACTIBLE_CERTIFICADO' : 'OPTIMO');
+  const costoTotalZ = resultadoApi?.costo_total_Z;
+  const tiempoEjecucion = resultadoApi?.tiempo_ejecucion_s;
+  const estadoActual = resultadoApi?.estado;
 
-  // Reparto representativo de recepción en plantas respetando sus capacidades
+  // Recepción calculada a partir de los flujos emitidos por el motor.
   const calcularAsignacionPlantas = () => {
-    if (resultadoApi?.matriz_flujos_optimos) {
-      return plantas.map(pla => {
-        const recibido = Object.entries(resultadoApi.matriz_flujos_optimos)
+    return plantas.map(pla => {
+        const recibido = Object.entries(resultadoApi?.matriz_flujos_optimos || {})
           .filter(([k]) => k.endsWith('->' + pla.id))
           .reduce((sum, [, v]) => sum + (Number(v) || 0), 0);
         const holgura = Math.max(0, (pla.capacidad_maxima_t || 0) - recibido);
@@ -88,43 +76,6 @@ export default function Hu08ResolucionExactaEstadosPage() {
           saturada: holgura < 0.05
         };
       });
-    }
-
-    if (escenarioId === 'ESC-01') {
-      const asignaciones = { 'PLA-01': 45.0, 'PLA-02': 19.0, 'PLA-03': 35.0, 'PLA-04': 16.0 };
-      return plantas.map(p => {
-        const rec = asignaciones[p.id] !== undefined ? asignaciones[p.id] : Math.min(p.capacidad_maxima_t, 20.0);
-        const holgura = Math.max(0, p.capacidad_maxima_t - rec);
-        return { ...p, recibido: rec, holgura, saturada: holgura === 0 };
-      });
-    }
-
-    if (escenarioId === 'ESC-02') {
-      const asignaciones = { 'PLA-01': 45.0, 'PLA-02': 21.0, 'PLA-03': 35.0, 'PLA-04': 25.5 };
-      return plantas.map(p => {
-        const rec = asignaciones[p.id] !== undefined ? asignaciones[p.id] : Math.min(p.capacidad_maxima_t, 25.0);
-        const holgura = Math.max(0, p.capacidad_maxima_t - rec);
-        return { ...p, recibido: rec, holgura, saturada: holgura === 0 };
-      });
-    }
-
-    // Reparto general proporcional
-    let restante = ofertaTotal;
-    return plantas.map((p, idx) => {
-      const factor = idx % 2 === 0 ? 0.95 : 0.75;
-      const rec = idx === plantas.length - 1
-        ? Math.min(p.capacidad_maxima_t, restante)
-        : Math.min(p.capacidad_maxima_t * factor, restante);
-      const recRedondeado = Math.round(rec * 10) / 10;
-      restante = Math.max(0, restante - recRedondeado);
-      const holgura = Math.max(0, p.capacidad_maxima_t - recRedondeado);
-      return {
-        ...p,
-        recibido: recRedondeado,
-        holgura,
-        saturada: holgura < 0.1
-      };
-    });
   };
 
   const plantasAsignadas = calcularAsignacionPlantas();
@@ -176,7 +127,7 @@ export default function Hu08ResolucionExactaEstadosPage() {
           </button>
 
           <Link
-            to="/procedimiento-exacto"
+            to={resultadoApi?.id ? `/procedimiento-exacto?ejecucion=${encodeURIComponent(resultadoApi.id)}` : '/procedimiento-exacto'}
             className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition"
           >
             <ListOrdered className="w-3.5 h-3.5" />
@@ -192,8 +143,20 @@ export default function Hu08ResolucionExactaEstadosPage() {
         </div>
       )}
 
+      {!resultadoApi && !ejecutando && !errorApi && (
+        <div className="bg-white p-6 rounded-xl border border-slate-200 text-sm text-slate-600">
+          Ejecuta el método exacto para ver el resultado calculado para este escenario.
+        </div>
+      )}
+
+      {estadoActual && !['OPTIMO', 'INFACTIBLE_CERTIFICADO'].includes(estadoActual) && (
+        <div role="alert" className="bg-red-50 border border-red-200 p-4 rounded-xl text-sm text-red-800">
+          {resultadoApi?.causa_estado || resultadoApi?.motivo_finalizacion || estadoActual}
+        </div>
+      )}
+
       {/* CASO 1: ÓPTIMO CERTIFICADO */}
-      {!esInfactible && estadoActual === 'OPTIMO' && (
+      {estadoActual === 'OPTIMO' && (
         <div className="space-y-6 animate-fade-in">
           {/* Banner Óptimo Dinámico */}
           <div className="bg-gradient-to-r from-emerald-900 to-slate-900 text-white p-5 rounded-xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -204,9 +167,11 @@ export default function Hu08ResolucionExactaEstadosPage() {
                 </span>
                 <span className="font-mono text-xs text-slate-400">Escenario {escenarioId} · Modelo de Transporte Exacto</span>
               </div>
-              <h3 className="text-lg font-bold text-white">Solución Óptima Global Obtenida y Comprobada</h3>
+              <h3 className="text-lg font-bold text-white">{ofertaTotal === 0 ? 'Sin volúmenes operativos para asignar' : 'Solución Óptima Global Obtenida y Comprobada'}</h3>
               <p className="text-xs text-slate-300 max-w-2xl">
-                Se ha distribuido el 100% de la oferta semanal de las {empresas.length} empresas generadoras ({ofertaTotal.toFixed(1)} t/semana) respetando estrictamente la capacidad máxima de las {plantas.length} plantas procesadoras ({capacidadTotal.toFixed(1)} t/semana).
+                {ofertaTotal === 0
+                  ? 'El costo matemático es cero porque todavía no se han registrado ofertas semanales. Esta ejecución no representa una operación de transporte.'
+                  : `Se ha distribuido el 100% de la oferta semanal de las ${empresas.length} empresas generadoras (${ofertaTotal.toFixed(1)} t/semana) respetando la capacidad de las ${plantas.length} plantas procesadoras (${capacidadTotal.toFixed(1)} t/semana).`}
               </p>
             </div>
 
@@ -306,7 +271,7 @@ export default function Hu08ResolucionExactaEstadosPage() {
       )}
 
       {/* CASO 2: INFACTIBLE CERTIFICADO */}
-      {(esInfactible || estadoActual === 'INFACTIBLE_CERTIFICADO') && (
+      {esInfactible && (
         <div className="space-y-6 animate-fade-in">
           <div className="bg-red-600 text-white p-6 rounded-xl shadow-lg space-y-3">
             <div className="flex items-center space-x-3">
@@ -317,16 +282,18 @@ export default function Hu08ResolucionExactaEstadosPage() {
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-800 text-red-100 uppercase tracking-wider">
                   Estado: Infactible certificado
                 </span>
-                <h3 className="text-xl font-bold mt-0.5">Capacidad superada por la oferta</h3>
+                <h3 className="text-xl font-bold mt-0.5">{resultadoApi?.causa_estado || 'Red infactible'}</h3>
               </div>
             </div>
 
             <p className="text-xs text-red-100 leading-relaxed max-w-3xl">
-              La suma de las ofertas semanales requeridas (<strong>{ofertaTotal.toFixed(1)} t/semana</strong>) es estrictamente mayor que la suma de las capacidades máximas de procesamiento de las plantas (<strong>{capacidadTotal.toFixed(1)} t/semana</strong>). El solucionador matemático certifica que <strong>no existe ninguna asignación factible</strong> capaz de cumplir con las restricciones de la red.
+              {resultadoApi?.motivo_finalizacion}
             </p>
 
             <div className="pt-2 flex items-center space-x-4 text-xs font-mono">
-              <span>Déficit global: <strong>{(capacidadTotal - ofertaTotal).toFixed(1)} t/semana</strong></span>
+              {ofertaTotal > capacidadTotal
+                ? <span>Déficit global: <strong>{(ofertaTotal - capacidadTotal).toFixed(1)} t/semana</strong></span>
+                : <span>Revise rutas activas y capacidades de cada planta.</span>}
               <span>·</span>
               <span>Asignaciones generadas: <strong>0 (Ocultas por inviabilidad)</strong></span>
             </div>

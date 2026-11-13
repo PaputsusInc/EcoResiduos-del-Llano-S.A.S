@@ -215,8 +215,52 @@ public class ValidadorContratosEntrada {
             config_ag.setTasa_mutacion(config_ag.getTasa_mutacion() / 100.0);
         }
 
-        if (config_ag.getFactor_penalizacion() != null && config_ag.getFactor_penalizacion() < 0.0) {
+        if (config_ag.getFactor_penalizacion() == null
+                || !Double.isFinite(config_ag.getFactor_penalizacion())
+                || config_ag.getFactor_penalizacion() < 0.0) {
             errores.add("El factor de penalización debe ser no negativo.");
+        }
+
+        if (!"TORNEO".equals(config_ag.getMetodo_seleccion())) {
+            errores.add("El único método de selección disponible es TORNEO.");
+        }
+        Integer poblacion = config_ag.getTamano_poblacion();
+        Integer torneo = config_ag.getTamano_torneo();
+        if (torneo == null || torneo < 1 || (poblacion != null && torneo > poblacion)) {
+            errores.add("El tamaño del torneo debe estar entre 1 y el tamaño de la población.");
+        }
+        String tipoCruce = config_ag.getTipo_cruce();
+        Integer puntos = config_ag.getPuntos_cruce();
+        if (!"OX".equals(tipoCruce) && !"BLOQUES_ORDEN".equals(tipoCruce)) {
+            errores.add("El tipo de cruce debe ser OX o BLOQUES_ORDEN.");
+        } else if (puntos == null || puntos < 1
+                || ("OX".equals(tipoCruce) && puntos != 2)) {
+            errores.add("OX requiere dos puntos; BLOQUES_ORDEN requiere al menos uno.");
+        }
+        Integer elitismo = config_ag.getElitismo();
+        if (elitismo == null || elitismo < 0 || (poblacion != null && elitismo >= poblacion)) {
+            errores.add("El elitismo debe estar entre 0 y el tamaño de la población menos uno.");
+        }
+        Integer reemplazos = config_ag.getReemplazos();
+        if (reemplazos != null && (reemplazos < 1
+                || (poblacion != null && elitismo != null
+                && reemplazos > poblacion - elitismo))) {
+            errores.add("Los reemplazos deben caber en los lugares no protegidos por elitismo.");
+        }
+        Integer limite = config_ag.getLimite_sin_mejora();
+        if (limite != null && limite < 1) {
+            errores.add("El límite sin mejora debe ser positivo o nulo.");
+        }
+        Double umbral = config_ag.getUmbral_mejora_cop();
+        if (umbral == null || !Double.isFinite(umbral) || umbral < 0.0) {
+            errores.add("El umbral de mejora debe ser finito y no negativo.");
+        }
+        Double escala = config_ag.getEscala_costo_referencia();
+        if (escala != null && (!Double.isFinite(escala) || escala <= 0.0)) {
+            errores.add("La escala de costo debe ser positiva o nula para cálculo automático.");
+        }
+        if (config_ag.getSemilla() != null && config_ag.getSemilla() < 0) {
+            errores.add("La semilla debe ser un entero no negativo o nulo.");
         }
 
         return errores;
@@ -255,4 +299,3 @@ public class ValidadorContratosEntrada {
         }
     }
 }
-

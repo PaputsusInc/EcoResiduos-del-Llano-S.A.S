@@ -147,7 +147,7 @@ export function Hu05DistanciasVialesPage() {
                 Matriz de Distancias Viales (10 Empresas × 4 Plantas)
               </h3>
               <p className="text-[11px] text-slate-500">
-                Se resalta en verde esmeralda la planta vial más cercana por fila. En ámbar las conexiones bloqueadas («No disponible»).
+                Distancia vial de cada conexión. En ámbar, las conexiones bloqueadas («No disponible»).
               </p>
             </div>
             <span className="text-xs text-slate-500 font-semibold">Unidad: <strong>km</strong></span>
@@ -167,41 +167,30 @@ export function Hu05DistanciasVialesPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 font-medium">
-                {empresas.map((emp) => {
-                  // Hallar el mínimo de la fila para destacarlo
-                  const distanciasFila = plantas.map(p => obtenerDistancia(emp.id, p.id)).filter(d => d != null);
-                  const minDist = distanciasFila.length > 0 ? Math.min(...distanciasFila) : null;
-
-                  return (
-                    <tr key={emp.id} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="px-4 py-3 text-left">
-                        <strong className="text-slate-900">{emp.id}</strong>
-                        <span className="text-slate-500 text-[11px] ml-2">({emp.nombre})</span>
-                      </td>
-                      {plantas.map(pla => {
-                        const dist = obtenerDistancia(emp.id, pla.id);
-                        const esMin = dist != null && dist === minDist;
-                        return (
-                          <td key={pla.id} className="px-4 py-3">
-                            {dist != null ? (
-                              <span className={`px-2.5 py-1 rounded-md font-bold font-mono ${
-                                esMin
-                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                                  : 'text-slate-700'
-                              }`}>
-                                {dist.toFixed(1)} km
-                              </span>
-                            ) : (
-                              <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[11px] font-semibold border border-amber-200">
-                                No disponible
-                              </span>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+                {empresas.map((emp) => (
+                  <tr key={emp.id} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="px-4 py-3 text-left">
+                      <strong className="text-slate-900">{emp.id}</strong>
+                      <span className="text-slate-500 text-[11px] ml-2">({emp.nombre})</span>
+                    </td>
+                    {plantas.map(pla => {
+                      const dist = obtenerDistancia(emp.id, pla.id);
+                      return (
+                        <td key={pla.id} className="px-4 py-3">
+                          {dist != null ? (
+                            <span className="px-2.5 py-1 rounded-md font-bold font-mono text-slate-700">
+                              {dist.toFixed(1)} km
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 text-[11px] font-semibold border border-amber-200">
+                              No disponible
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -345,4 +334,3 @@ export function Hu05DistanciasVialesPage() {
 }
 
 export default Hu05DistanciasVialesPage;
-

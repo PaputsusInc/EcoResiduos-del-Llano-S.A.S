@@ -253,12 +253,37 @@ export const ESCENARIO_AMP_20x6 = {
   rutas: rutasEsc20x6
 };
 
+// Puntos investigados. Las cantidades se dejan en 0 porque no hay oferta ni
+// capacidad semanal vigente verificable; este escenario sirve para ubicar nodos.
+export const ESCENARIO_UBICACIONES_VERIFICADAS = {
+  id: 'ESC-UBICACIONES',
+  nombre: 'Ubicaciones investigadas (sin volúmenes)',
+  descripcion: 'Puntos reales del Meta; relaciones históricas documentadas, sin cantidades operativas verificadas',
+  procedencia_datos: 'Puntos reales del Meta; relaciones históricas documentadas, sin cantidades operativas verificadas',
+  periodo: 'Sin periodo operativo definido',
+  horizonte_temporal: 'Sin periodo operativo definido',
+  moneda: 'COP',
+  oferta_total_t: 0,
+  capacidad_total_t: 0,
+  aviso_capacidad: false,
+  empresas: [
+    { id: 'EMP-01', nombre: 'Cemerca / Llanabastos', ubicacion: 'Central de Abastos, Anillo Vial, Villavicencio, Meta', latitud: 4.121478, longitud: -73.611342, tipo_residuo: 'Residuos orgánicos de plaza de mercado', oferta_t: 0 },
+    { id: 'EMP-02', nombre: 'Friogan, planta Villavicencio', ubicacion: 'Km 8 vía Caños Negros–Catama, Villavicencio, Meta', latitud: 4.131304, longitud: -73.556356, tipo_residuo: 'Residuos orgánicos (tipo no especificado)', oferta_t: 0 }
+  ],
+  plantas: [
+    { id: 'PLA-01', nombre: 'Bioagrícola del Llano, planta de compostaje PER', ubicacion: 'Parque Ecológico Reciclante, km 18 vía Puerto Porfía, vereda San Juan Bosco, Villavicencio, Meta', latitud: 4.133919, longitud: -73.435438, capacidad_maxima_t: 0, residuos_admitidos: ['Orgánicos de plaza de mercado', 'Residuos vegetales de poda', 'Orgánicos de Friogan'] },
+    { id: 'PLA-02', nombre: 'Extractora San Sebastiano, compostaje', ubicacion: 'Planta extractora, km 38 vía Rubiales y desvío hacia Planas, Puerto Gaitán, Meta', latitud: 4.098602, longitud: -71.915800, capacidad_maxima_t: 0, residuos_admitidos: ['Residuos orgánicos de la extracción de palma'] }
+  ],
+  // Sin rutas activas: las fuentes no publican contratos, volúmenes ni tarifas vigentes.
+  rutas: []
+};
+
 export const CATALOGO_ESCENARIOS_SEMILLA = [
   ESCENARIO_01,
   ESCENARIO_02,
   ESCENARIO_03,
   ESCENARIO_AMP_30x8,
   ESCENARIO_04,
-  ESCENARIO_AMP_20x6
+  ESCENARIO_AMP_20x6,
+  ESCENARIO_UBICACIONES_VERIFICADAS
 ];
-

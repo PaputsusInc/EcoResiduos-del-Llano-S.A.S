@@ -104,7 +104,7 @@ public class ResultadoOptimizacion {
     }
 
     public Boolean comprobar_factibilidad_flujos(Escenario escenario, Double tolerancia) {
-        if (escenario == null || this.matriz_flujos_optimos == null || this.matriz_flujos_optimos.isEmpty()) {
+        if (escenario == null || this.matriz_flujos_optimos == null) {
             return false;
         }
         double tol = tolerancia != null ? tolerancia : 1e-6;
