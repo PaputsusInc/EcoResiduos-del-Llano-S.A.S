@@ -42,7 +42,7 @@ function TarjetaRed({ reporte }) {
 
       {exacto.costo_total_Z != null && ag.costo_total_Z != null && <BarrasMetodos titulo="Costo logístico" exacto={exacto.costo_total_Z} ag={ag.costo_total_Z} formato={dinero} />}
       <div className="grid gap-5 border-t border-slate-100 pt-4 xl:grid-cols-3">
-        <BarrasMetodos titulo="Tiempo de ejecución" exacto={exacto.tiempo_ejecucion_s} ag={ag.tiempo_ejecucion_s} unidad="s" />
+        <BarrasMetodos titulo="Tiempo del método" exacto={exacto.tiempo_ejecucion_s} ag={ag.tiempo_ejecucion_s} unidad="s" />
         <BarrasMetodos titulo="CPU del proceso" exacto={exacto.cpu_tiempo_s} ag={ag.cpu_tiempo_s} unidad="s" />
         <BarrasMetodos titulo="Memoria residente pico" exacto={exacto.memoria_pico_mb} ag={ag.memoria_pico_mb} unidad="MB" />
       </div>
@@ -117,7 +117,7 @@ export default function Hu17EscalabilidadRedPage() {
             <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">{reportes.length} redes completadas</span>
           </div>
           {reportes.map((reporte) => <TarjetaRed key={reporte.escenario_id} reporte={reporte} />)}
-          <p className="rounded-xl border border-slate-200 bg-white p-4 text-xs leading-5 text-slate-600"><Cpu className="mr-1 inline h-4 w-4" aria-hidden="true" />CPU es tiempo acumulado del proceso Python; memoria es su máximo residente. No representan el consumo total del equipo. Los tiempos de una ejecución varían entre equipos; para afirmar tendencias de velocidad se necesitan varias repeticiones.</p>
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-xs leading-5 text-slate-600"><Cpu className="mr-1 inline h-4 w-4" aria-hidden="true" />El tiempo del método mide Vogel–MODI o la evolución del AG; excluye la preparación de la solicitud y el análisis posterior. CPU y memoria pico abarcan el proceso Python completo. Los tiempos varían entre equipos; para afirmar tendencias de velocidad se necesitan varias repeticiones.</p>
         </section>}
       </div>
     </main>

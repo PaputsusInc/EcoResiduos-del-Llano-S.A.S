@@ -17,7 +17,7 @@ function ResultadoMetodo({ titulo, resultado }) {
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <div><dt className="text-slate-500">Estado</dt><dd className="font-semibold">{resultado?.estado || '—'}</dd></div>
         <div><dt className="text-slate-500">Costo</dt><dd className="font-semibold">{costo(resultado?.costo_total_Z)}</dd></div>
-        <div><dt className="text-slate-500">Tiempo</dt><dd>{resultado?.tiempo_ejecucion_s?.toFixed(3) ?? '—'} s</dd></div>
+        <div><dt className="text-slate-500">Tiempo del método</dt><dd>{resultado?.tiempo_ejecucion_s == null ? '—' : `${resultado.tiempo_ejecucion_s.toFixed(3)} s`}</dd></div>
         <div><dt className="text-slate-500">Motivo</dt><dd>{resultado?.causa_estado || resultado?.motivo_finalizacion || '—'}</dd></div>
       </dl>
     </div>
@@ -105,6 +105,7 @@ export default function Hu16ComparacionExactoVsAgPage() {
             <span className="font-bold">GAP del AG frente al óptimo: </span>
             {reporte.porcentaje_gap == null ? 'No disponible' : `${reporte.porcentaje_gap.toFixed(2)} %`}
             {reporte.diferencia_costo != null && ` · Diferencia: ${costo(reporte.diferencia_costo)}`}
+            <p className="mt-2 text-xs text-slate-500">El tiempo del método mide Vogel–MODI o la evolución del AG; excluye la preparación de la solicitud y el análisis posterior.</p>
           </div>
         </>
       ) : (

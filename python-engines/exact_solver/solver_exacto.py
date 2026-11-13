@@ -28,9 +28,11 @@ def resolver_modelo_transporte_rol_2(
     plantas: list[dict[str, Any]],
     matriz_costos: dict[str, float | None],
     tolerancia: float = 1e-6,
-) -> tuple[dict[str, float], float, list[dict[str, Any]], list[tuple[str, str, dict]], dict]:
+) -> tuple[dict[str, float], float, list[dict[str, Any]], list[tuple[str, str, dict]], dict, float]:
     """Conserva el contrato del backend y traduce la solución Vogel–MODI."""
+    inicio_metodo = time.perf_counter()
     solucion = resolver(empresas, plantas, matriz_costos, tolerancia)
+    tiempo_metodo_s = time.perf_counter() - inicio_metodo
     analizador = AnalisisSensibilidad(solucion)
     analisis = analizador.rango_optimo()
     factibles = {dato["nodo_id"]: dato for dato in analizador.rango_factible()}
@@ -74,11 +76,10 @@ def resolver_modelo_transporte_rol_2(
             "limite_inferior": str(rangos[empresa["id"]]["inferior"]),
             "limite_superior": None if rangos[empresa["id"]]["superior"] is None else str(rangos[empresa["id"]]["superior"]),
         })
-    return flujos, solucion.costo, precios, solucion.pasos, analisis
+    return flujos, solucion.costo, precios, solucion.pasos, analisis, tiempo_metodo_s
 
 
 def main() -> int:
-    inicio = time.perf_counter()
     try:
         payload = json.load(sys.stdin)
         if not isinstance(payload, dict):
@@ -134,7 +135,7 @@ def main() -> int:
         )
         _emitir_infactible(
             ejecucion_id, "Capacidad superada por la oferta",
-            "La oferta total semanal supera la capacidad agregada.", inicio,
+            "La oferta total semanal supera la capacidad agregada.",
         )
         return 0
 
@@ -158,13 +159,13 @@ def main() -> int:
         {"modelo": modelo, "es_intermedio": True},
     )
     try:
-        flujos, costo, precios, pasos, analisis = resolver_modelo_transporte_rol_2(
+        flujos, costo, precios, pasos, analisis, tiempo_metodo_s = resolver_modelo_transporte_rol_2(
             empresas, plantas, matriz_objetivo, tolerancia,
         )
     except RedInfactibleError as error:
         _emitir_infactible(
             ejecucion_id, str(error),
-            "No existe flujo que cubra la oferta con las rutas disponibles.", inicio,
+            "No existe flujo que cubra la oferta con las rutas disponibles.",
         )
         return 0
     except (ValueError, ArithmeticError) as error:
@@ -191,7 +192,7 @@ def main() -> int:
         "causa_estado": "",
         "motivo_finalizacion": "Óptimo certificado por MODI desde una solución inicial de Vogel, cumpliendo oferta, capacidad y rutas",
         "costo_total_Z": costo,
-        "tiempo_ejecucion_s": round(time.perf_counter() - inicio, 4),
+        "tiempo_ejecucion_s": round(tiempo_metodo_s, 4),
         "matriz_flujos_optimos": flujos,
         "sensibilidad_dual": precios,
         "analisis_sensibilidad": analisis,
@@ -200,9 +201,7 @@ def main() -> int:
     return 0
 
 
-def _emitir_infactible(
-    ejecucion_id: str, causa: str, motivo: str, inicio: float,
-) -> None:
+def _emitir_infactible(ejecucion_id: str, causa: str, motivo: str) -> None:
     emitir_resultado_final({
         "ejecucion_id": ejecucion_id,
         "metodo_usado": "EXACTO",
@@ -210,7 +209,7 @@ def _emitir_infactible(
         "causa_estado": causa,
         "motivo_finalizacion": motivo,
         "costo_total_Z": None,
-        "tiempo_ejecucion_s": round(time.perf_counter() - inicio, 4),
+        "tiempo_ejecucion_s": None,
         "matriz_flujos_optimos": {},
         "sensibilidad_dual": [],
     })

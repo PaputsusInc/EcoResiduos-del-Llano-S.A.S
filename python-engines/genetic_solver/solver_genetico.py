@@ -21,9 +21,7 @@ from genetic_solver.algoritmo import Configuracion, ejecutar
 from genetic_solver.problema import comprobar_factibilidad, preparar_problema
 
 
-def _resultado_sin_candidato(
-    ejecucion_id: str, causa: str, inicio: float,
-) -> dict[str, Any]:
+def _resultado_sin_candidato(ejecucion_id: str, causa: str) -> dict[str, Any]:
     """El AG informa la causa sin atribuirse una certificación matemática."""
     return {
         "ejecucion_id": ejecucion_id,
@@ -32,7 +30,7 @@ def _resultado_sin_candidato(
         "causa_estado": causa,
         "motivo_finalizacion": "La red no permite construir un candidato que cubra toda la oferta",
         "costo_total_Z": None,
-        "tiempo_ejecucion_s": round(time.perf_counter() - inicio, 4),
+        "tiempo_ejecucion_s": None,
         "matriz_flujos_optimos": {},
         "sensibilidad_dual": [],
     }
@@ -40,7 +38,6 @@ def _resultado_sin_candidato(
 
 def resolver(payload: dict[str, Any]) -> None:
     """Valida, evoluciona y emite resultados con el contrato de EcoResiduos."""
-    inicio = time.perf_counter()
     ejecucion_id = payload.get("ejecucion_id", "EJE-02")
     problema = preparar_problema(
         payload.get("escenario"), payload.get("tolerancia_numerica", 1e-6)
@@ -51,13 +48,15 @@ def resolver(payload: dict[str, Any]) -> None:
     )
     causa = comprobar_factibilidad(problema)
     if causa is not None:
-        emitir_resultado_final(_resultado_sin_candidato(ejecucion_id, causa, inicio))
+        emitir_resultado_final(_resultado_sin_candidato(ejecucion_id, causa))
         return
 
     def informar_generacion(datos: dict[str, Any]) -> None:
         emitir_evento({"TIPO": "GENERACION_AG", "ejecucion_id": ejecucion_id, **datos})
 
-    resultado = ejecutar(problema, configuracion, informar_generacion, inicio)
+    # El tiempo del AG empieza al iniciar su población, tras validar la red.
+    inicio_ag = time.perf_counter()
+    resultado = ejecutar(problema, configuracion, informar_generacion, inicio_ag)
     emitir_resultado_final({
         "ejecucion_id": ejecucion_id,
         "metodo_usado": "AG",

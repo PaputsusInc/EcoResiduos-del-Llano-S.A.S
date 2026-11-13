@@ -351,6 +351,8 @@ return 100.0 * (costo_ag - costo_exacto) / costo_exacto;
 
 En el ejemplo, $Z^*=7.000$ COP y un AG que entregue el plan de 23.000 COP tendría $\operatorname{GAP}=228,57\%$. Si entrega el plan de 7.000 COP, el GAP es $0\%$. Cuando no hay óptimo certificado, $Z^*=0$ o el AG no produjo un plan factible, el porcentaje queda «No disponible». El cálculo está en [`MotorComparacionRendimiento`](backend/src/main/java/com/ecoresiduos/llano/application/MotorComparacionRendimiento.java), no en React.
 
+**Medición.** `tiempo_ejecucion_s` mide la resolución Vogel–MODI o, en el AG, la creación de la población y su evolución. La comprobación inicial de factibilidad del AG queda fuera de ese cronómetro; también quedan fuera la preparación de la solicitud y el análisis de sensibilidad posterior del exacto. En un escenario infactible no se informa tiempo del método. `cpu_tiempo_s` y `memoria_pico_mb` describen el proceso Python completo, incluida su preparación. Son medidas distintas y se identifican por separado en la interfaz.
+
 ## Módulos funcionales
 
 Las rutas del frontend utilizan nombres de negocio:

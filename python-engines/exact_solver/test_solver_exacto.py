@@ -65,6 +65,7 @@ class SolverExactoTest(unittest.TestCase):
         _, resultado = ejecutar(datos)
         self.assertEqual(resultado["estado"], "INFACTIBLE_CERTIFICADO")
         self.assertIsNone(resultado["costo_total_Z"])
+        self.assertIsNone(resultado["tiempo_ejecucion_s"])
 
     def test_vogel_y_modi_ejecutan_pivote_real_hasta_el_optimo(self):
         datos = escenario([1, 1, 1], [3, 7, 2],

@@ -222,6 +222,9 @@ def comprobar_factibilidad(problema: ProblemaTransporte) -> str | None:
     """Devuelve la causa de inviabilidad o ``None`` si la red puede cubrirse."""
     if problema.oferta_total > math.fsum(problema.capacidades) + problema.tolerancia:
         return "La oferta total supera la capacidad total"
+    if all(costo is not None for fila in problema.costos for costo in fila):
+        # En una red completa, la capacidad agregada basta para cubrir la oferta.
+        return None
     conexiones = [
         (i, j) for i, fila in enumerate(problema.costos)
         for j, costo in enumerate(fila) if costo is not None

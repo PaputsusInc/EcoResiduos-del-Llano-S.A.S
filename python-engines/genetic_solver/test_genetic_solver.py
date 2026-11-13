@@ -7,6 +7,7 @@ import sys
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -16,6 +17,7 @@ from genetic_solver.algoritmo import (
 from genetic_solver.problema import (
     comprobar_factibilidad, decodificar, preparar_problema,
 )
+from genetic_solver import solver_genetico
 
 
 def escenario(rutas: list[dict], capacidad_y: float = 2) -> dict:
@@ -43,6 +45,32 @@ def ruta(empresa: str, planta: str, costo: float, **opciones: object) -> dict:
 
 
 class GeneticSolverTest(unittest.TestCase):
+    def test_validacion_no_se_cuenta_como_tiempo_del_ag(self) -> None:
+        datos = escenario([
+            ruta("A", "X", 1), ruta("A", "Y", 8),
+            ruta("B", "X", 7), ruta("B", "Y", 2),
+        ])
+        reloj = [0.0]
+        eventos = []
+
+        def validar(problema):
+            reloj[0] = 7.0
+            return comprobar_factibilidad(problema)
+
+        with patch.object(solver_genetico, "comprobar_factibilidad", side_effect=validar) as comprobacion, \
+             patch.object(solver_genetico.time, "perf_counter", side_effect=lambda: reloj[0]), \
+             patch.object(solver_genetico, "emitir_evento", side_effect=eventos.append), \
+             patch.object(solver_genetico, "emitir_resultado_final", side_effect=eventos.append):
+            solver_genetico.resolver({
+                "escenario": datos,
+                "config_ag": {"tamano_poblacion": 4, "generaciones": 1, "semilla": 42},
+            })
+
+        self.assertEqual(comprobacion.call_count, 1)
+        self.assertEqual(eventos[0]["numero"], 0)
+        self.assertEqual(eventos[0]["tiempo_transcurrido_s"], 0.0)
+        self.assertEqual(eventos[-1]["tiempo_ejecucion_s"], 0.0)
+
     def test_red_parcial_conserva_factibilidad_y_respeta_rutas(self) -> None:
         problema = preparar_problema(escenario([
             ruta("A", "X", 3),
@@ -71,6 +99,14 @@ class GeneticSolverTest(unittest.TestCase):
             ruta("A", "X", 3), ruta("B", "Y", 6),
         ], capacidad_y=1), 1e-6)
         self.assertIn("capacidad", comprobar_factibilidad(sin_capacidad))
+
+    def test_red_completa_no_necesita_flujo_auxiliar_para_validarse(self) -> None:
+        problema = preparar_problema(escenario([
+            ruta("A", "X", 1), ruta("A", "Y", 8),
+            ruta("B", "X", 7), ruta("B", "Y", 2),
+        ]), 1e-6)
+        with patch("genetic_solver.problema._distribuir_con_flujo", side_effect=AssertionError("Flujo innecesario")):
+            self.assertIsNone(comprobar_factibilidad(problema))
 
     def test_operadores_configurables_y_generaciones(self) -> None:
         problema = preparar_problema(escenario([

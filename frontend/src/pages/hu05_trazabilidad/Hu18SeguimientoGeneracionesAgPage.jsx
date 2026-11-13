@@ -33,8 +33,6 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
   const [iniciando, setIniciando] = useState(false);
   const [errorAccion, setErrorAccion] = useState(null);
   const [mostrarTodo, setMostrarTodo] = useState(false);
-  const [inicioLocal, setInicioLocal] = useState(null);
-  const [tiempoLocal, setTiempoLocal] = useState(0);
   const errorRef = useRef(null);
   const escenarioActualRef = useRef(escenarioId);
   escenarioActualRef.current = escenarioId;
@@ -43,8 +41,7 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
   const historial = resultado?.historial_generaciones || [];
   const ultimo = historial.at(-1);
   const enCurso = iniciando || (ejecucionId && !errorSeguimiento && (!resultado || resultado.estado === 'EN_EJECUCION'));
-  const tiempoVisible = enCurso ? Math.max(tiempoLocal, ultimo?.tiempo_transcurrido_s || 0)
-    : resultado?.tiempo_ejecucion_s ?? ultimo?.tiempo_transcurrido_s;
+  const tiempoVisible = resultado?.tiempo_ejecucion_s ?? ultimo?.tiempo_transcurrido_s;
   const progreso = ultimo && evolucion?.max_generaciones
     ? Math.min(100, (ultimo.numero / evolucion.max_generaciones) * 100) : 0;
   const filas = mostrarTodo ? [...historial].reverse() : historial.slice(-8).reverse();
@@ -54,12 +51,6 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
     SIN_CANDIDATO_FACTIBLE_AG: 'Sin plan factible',
     ERROR_EJECUCION: 'Error de ejecución'
   };
-
-  useEffect(() => {
-    if (!enCurso || inicioLocal == null) return undefined;
-    const reloj = setInterval(() => setTiempoLocal((Date.now() - inicioLocal) / 1000), 100);
-    return () => clearInterval(reloj);
-  }, [enCurso, inicioLocal]);
 
   useEffect(() => { if (errorAccion) errorRef.current?.focus(); }, [errorAccion]);
   useEffect(() => {
@@ -89,8 +80,6 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
     const configAg = configuracionValidada();
     if (!configAg) return;
     setIniciando(true);
-    setInicioLocal(Date.now());
-    setTiempoLocal(0);
     setMostrarTodo(false);
     try {
       const respuesta = await api.ejecutarOptimizacion(escenarioId, {
@@ -168,12 +157,13 @@ export default function Hu18SeguimientoGeneracionesAgPage() {
               ['Estado', resultado ? estados[resultado.estado] || resultado.estado : (loading ? 'Consultando…' : 'Sin ejecutar'), Activity],
               ['Mejor costo', dinero(ultimo?.mejor_costo_acumulado), ArrowDownRight],
               ['Generación', ultimo ? `${ultimo.numero} de ${evolucion?.max_generaciones || '—'}` : '—', SlidersHorizontal],
-              ['Tiempo transcurrido', segundos(tiempoVisible), Clock3]
+              ['Tiempo del AG', segundos(tiempoVisible), Clock3]
             ].map(([etiqueta, valor, Icono]) => <div key={etiqueta} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex items-center gap-2 text-slate-500"><Icono aria-hidden="true" className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-wide">{etiqueta}</span></div>
               <p className="mt-3 text-lg font-bold leading-tight text-slate-950">{valor}</p>
             </div>)}
           </div>
+          <p className="text-xs text-slate-500">El tiempo del AG comienza al crear la población inicial, después de validar el escenario, y se actualiza con cada generación.</p>
           {ejecucionId && <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex justify-between text-sm"><span className="font-semibold text-slate-800">Avance por generaciones</span><span className="text-slate-600">{Math.round(progreso)} %</span></div>
             <div role="progressbar" aria-valuenow={ultimo?.numero || 0} aria-valuemin={0} aria-valuemax={evolucion?.max_generaciones || Number(config.generaciones)} aria-label="Generaciones ejecutadas"
