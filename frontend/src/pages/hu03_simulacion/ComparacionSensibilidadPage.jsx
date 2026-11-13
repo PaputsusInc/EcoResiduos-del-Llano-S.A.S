@@ -86,7 +86,7 @@ export default function ComparacionSensibilidadPage() {
     <header className="rounded-3xl bg-slate-950 px-6 py-7 text-white shadow-lg md:px-9 md:py-9">
       <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300"><GitCompare size={17} aria-hidden="true" /> Sensibilidad comparada</p>
       <h1 className="mt-3 text-2xl font-bold tracking-tight md:text-4xl">Cómo responde cada método al cambio</h1>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">Elige una variante guardada. Ejecutaremos el método exacto y el AG en su referencia original y en la variante para comparar costo, brecha y recursos medidos.</p>
+      <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">Elige una variante guardada. Ejecutaremos el método exacto y el AG en su referencia original y en la variante para comparar costo, GAP y recursos medidos.</p>
     </header>
 
     <section className="grid gap-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end" aria-label="Ejecutar análisis">
@@ -108,7 +108,7 @@ export default function ComparacionSensibilidadPage() {
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-xs font-bold uppercase tracking-wider text-slate-500">Cambio de costo · exacto</p><p className="mt-2 text-xl font-bold text-slate-950">{firmado(comparada.resultado_exacto?.costo_total_Z == null || referencia.resultado_exacto?.costo_total_Z == null ? null : comparada.resultado_exacto.costo_total_Z - referencia.resultado_exacto.costo_total_Z, moneda)}</p></div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-xs font-bold uppercase tracking-wider text-slate-500">Cambio de costo · AG</p><p className="mt-2 text-xl font-bold text-slate-950">{firmado(comparada.resultado_genetico?.costo_total_Z == null || referencia.resultado_genetico?.costo_total_Z == null ? null : comparada.resultado_genetico.costo_total_Z - referencia.resultado_genetico.costo_total_Z, moneda)}</p></div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-xs font-bold uppercase tracking-wider text-slate-500">Brecha AG frente al óptimo</p><p className="mt-2 text-xl font-bold text-slate-950">{decimal(referencia.porcentaje_gap)} % <ArrowRight className="inline text-slate-400" size={17} aria-hidden="true" /> {decimal(comparada.porcentaje_gap)} %</p></div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-xs font-bold uppercase tracking-wider text-slate-500">GAP del AG frente al óptimo</p><p className="mt-2 text-xl font-bold text-slate-950">{decimal(referencia.porcentaje_gap)} % <ArrowRight className="inline text-slate-400" size={17} aria-hidden="true" /> {decimal(comparada.porcentaje_gap)} %</p></div>
       </section>
       {!valido && <p className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">Uno de los resultados no es comparable. Revisa los estados y causas en la tabla antes de interpretar los cambios.</p>}
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">

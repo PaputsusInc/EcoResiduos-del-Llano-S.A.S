@@ -102,7 +102,7 @@ export default function Hu16ComparacionExactoVsAgPage() {
             <ResultadoMetodo titulo="Algoritmo genético" resultado={reporte.resultado_genetico} />
           </div>
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-sm">
-            <span className="font-bold">Brecha frente al exacto: </span>
+            <span className="font-bold">GAP del AG frente al óptimo: </span>
             {reporte.porcentaje_gap == null ? 'No disponible' : `${reporte.porcentaje_gap.toFixed(2)} %`}
             {reporte.diferencia_costo != null && ` · Diferencia: ${costo(reporte.diferencia_costo)}`}
           </div>

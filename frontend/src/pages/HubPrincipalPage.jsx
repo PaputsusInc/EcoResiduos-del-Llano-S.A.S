@@ -60,7 +60,7 @@ export function HubPrincipalPage() {
       descripcion: "Optimización metaheurística por prioridades, convergencia y análisis de escalabilidad.",
       color: "amber",
       tarjetas: [
-        { titulo: "Comparación Exacto vs AG", desc: "Contraste de costo total, tiempos de cómputo y brecha de optimalidad.", ruta: "/comparacion-metodos", icon: GitCompare },
+        { titulo: "Comparación Exacto vs AG", desc: "Contraste de costo total, tiempos de cómputo y GAP de optimalidad.", ruta: "/comparacion-metodos", icon: GitCompare },
         { titulo: "Escalabilidad de la Red", desc: "Evaluación del comportamiento computacional al ampliar la red.", ruta: "/escalabilidad", icon: Maximize2 },
         { titulo: "Ajuste de parámetros AG", desc: "Configura la búsqueda o solicita una recomendación para este escenario.", ruta: "/ajuste-ag", icon: SlidersHorizontal },
         { titulo: "Evolución del Algoritmo Genético", desc: "Ejecuta el AG y sigue el mejor costo por generación.", ruta: "/evolucion-ag", icon: Sparkles }

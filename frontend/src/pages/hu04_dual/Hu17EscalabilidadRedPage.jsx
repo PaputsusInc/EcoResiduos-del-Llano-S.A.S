@@ -25,7 +25,7 @@ function TarjetaRed({ reporte }) {
           <p className="mt-1 text-xs text-slate-500">{entero(reporte.cantidad_empresas * reporte.cantidad_plantas)} pares origen–destino posibles</p>
         </div>
         <span className={`rounded-full px-3 py-1 text-xs font-bold ${valida ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
-          {valida ? `Brecha ${decimal(reporte.porcentaje_gap, 2)} %` : 'Revisar estados'}
+          {valida ? `GAP ${decimal(reporte.porcentaje_gap, 2)} %` : 'Revisar estados'}
         </span>
       </div>
 
