@@ -29,9 +29,7 @@ Proyecto final de la asignatura Optimización, Semestre VI.
 9. [Interfaz de programación (API REST)](#interfaz-de-programación-api-rest)
 10. [Motores de optimización en Python](#motores-de-optimización-en-python)
 11. [Pruebas](#pruebas)
-12. [Documentación](#documentación)
-13. [Estado actual y trabajo pendiente](#estado-actual-y-trabajo-pendiente)
-14. [Licencia](#licencia)
+12. [Licencia](#licencia)
 
 ## Descripción general
 
@@ -436,28 +434,6 @@ cd frontend
 npm test
 npm run build
 ```
-
-## Documentación
-
-- `docs/PLAN_IMPLEMENTACION.md`: hoja de ruta histórica del proyecto; algunas decisiones fueron reemplazadas por la formulación vigente.
-- `docs/MODELO_MATEMATICO.md`: formulación vigente que ejecutan ambos motores.
-- `docs/HUs y RNF/`: requisitos y diccionario originales, conservados como referencia de planificación.
-- `docs/diagramas/`: diagramas de clases (`DC`) y de secuencia (`DS`) en formato `.drawio`.
-- `mockups/`: maquetas HTML de referencia de cada vista.
-
-## Estado actual y trabajo pendiente
-
-Implementado:
-
-- Backend en cinco capas con persistencia JSON de escenarios, API REST y puente con Python.
-- Frontend con vistas por módulo, enrutamiento semántico, selector de escenario activo y datos dinámicos por escenario.
-- Validación de escenarios con detección y corrección de inconsistencias.
-- Motores Python funcionales: solución exacta por Vogel–MODI y algoritmo genético por prioridades con seguimiento por generación. El ajuste de parámetros usa Optuna bajo demanda.
-- Sensibilidad comparada de referencia y variante, escalabilidad medida, y recursos del proceso Python por ejecución.
-
-Pendiente:
-
-- Incorporar una base de datos si se necesita consulta multiusuario o trazabilidad histórica de ejecuciones; los escenarios ya se conservan como archivos JSON.
 
 ## Licencia
 
