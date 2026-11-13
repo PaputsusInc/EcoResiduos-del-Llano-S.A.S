@@ -232,21 +232,9 @@ public class Escenario {
     }
 
     public Escenario clonar_profundo(String nuevo_id, String nuevo_nombre) {
-        Escenario clon = new Escenario(nuevo_id, nuevo_nombre, this.periodo, this.moneda, this.procedencia_datos);
-        for (Empresa e : this.empresas) {
-            clon.getEmpresas().add(new Empresa(e.getId(), e.getNombre(), e.getUbicacion(), e.getLatitud(), e.getLongitud(), e.getTipo_residuo(), e.getOferta_t()));
-        }
-        for (Planta p : this.plantas) {
-            clon.getPlantas().add(new Planta(p.getId(), p.getNombre(), p.getUbicacion(), p.getLatitud(), p.getLongitud(), p.getCapacidad_maxima_t(), p.getResiduos_admitidos()));
-        }
-        for (NodoPaso np : this.nodos_paso) {
-            clon.getNodos_paso().add(new NodoPaso(np.getId(), np.getNombre(), np.getUbicacion(), np.getLatitud(), np.getLongitud(), np.getCapacidad_transbordo()));
-        }
-        for (Ruta r : this.rutas) {
-            clon.getRutas().add(new Ruta(r.getId(), r.getEmpresa_id(), r.getPlanta_id(), r.getDistancia_km(), r.getFuente_distancia(),
-                    r.getGeometria(), r.getEstado_consulta(), r.getTarifa_t_km(), r.getCosto_unitario_t(), r.getCompatible(), r.getActiva()));
-        }
-        clon.calcular_totales_red();
+        Escenario clon = CopiadorEscenarios.INSTANCE.copiarDatosOperativos(this);
+        clon.setId(nuevo_id);
+        clon.setNombre(nuevo_nombre);
         clon.validar_balance_red();
         return clon;
     }

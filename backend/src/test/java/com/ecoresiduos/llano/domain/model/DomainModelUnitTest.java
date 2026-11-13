@@ -169,6 +169,40 @@ class DomainModelUnitTest {
     }
 
     @Test
+    @DisplayName("El clon conserva adquisición y operación sin compartir datos mutables con la referencia")
+    void testClonProfundoConservaCostosYDatosOperativos() {
+        Escenario referencia = crearEscenarioReferencia();
+        referencia.getEmpresas().get(0).setPrecio_tonelada(123.0);
+        referencia.getPlantas().get(0).setCosto_operacion_t(456.0);
+        referencia.setReferencia_id("ESC-ANTERIOR");
+        referencia.setVariaciones(List.of(Map.of("tipo", "OFERTA")));
+        referencia.setReferencia_snapshot(new Escenario("ESC-ANTERIOR", "Anterior", null, null, null));
+
+        Escenario clon = referencia.clonar_profundo("ESC-COPIA", "Copia");
+
+        assertEquals("ESC-COPIA", clon.getId());
+        assertEquals("Copia", clon.getNombre());
+        assertEquals(123.0, clon.getEmpresas().get(0).getPrecio_tonelada());
+        assertEquals(456.0, clon.getPlantas().get(0).getCosto_operacion_t());
+        assertEquals(referencia.getOferta_total_t(), clon.getOferta_total_t());
+        assertEquals(referencia.getCapacidad_total_t(), clon.getCapacidad_total_t());
+        assertNull(clon.getReferencia_id());
+        assertTrue(clon.getVariaciones().isEmpty());
+        assertNull(clon.getReferencia_snapshot());
+        assertNotSame(referencia.getEmpresas().get(0), clon.getEmpresas().get(0));
+        assertNotSame(referencia.getPlantas().get(0), clon.getPlantas().get(0));
+        assertNotSame(referencia.getRutas().get(0).getGeometria().get(0),
+                clon.getRutas().get(0).getGeometria().get(0));
+
+        clon.getEmpresas().get(0).setPrecio_tonelada(999.0);
+        clon.getPlantas().get(0).setCosto_operacion_t(999.0);
+        clon.getRutas().get(0).getGeometria().get(0).set(0, 0.0);
+        assertEquals(123.0, referencia.getEmpresas().get(0).getPrecio_tonelada());
+        assertEquals(456.0, referencia.getPlantas().get(0).getCosto_operacion_t());
+        assertEquals(-73.77, referencia.getRutas().get(0).getGeometria().get(0).get(0));
+    }
+
+    @Test
     @DisplayName("ReporteComparativo debe formatear porcentaje de gap o «No disponible» (RF-28, DD-35)")
     void testReporteComparativoResumen() {
         ResultadoOptimizacion opt = new ResultadoOptimizacion("EJE-01", "ESC-01", "EXACTO", "OPTIMO");

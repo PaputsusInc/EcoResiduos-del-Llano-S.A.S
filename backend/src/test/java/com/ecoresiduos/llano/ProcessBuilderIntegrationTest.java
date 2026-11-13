@@ -101,10 +101,12 @@ public class ProcessBuilderIntegrationTest {
 
     @Test
     void ambosMotoresIncluyenPrecioYOperacionEnElMismoObjetivo() {
-        Escenario escenario = persistencia.obtener_por_id("ESC-01")
-                .clonar_profundo("ESC-COSTOS", "Costos completos");
-        escenario.getEmpresas().forEach(empresa -> empresa.setPrecio_tonelada(200.0));
-        escenario.getPlantas().forEach(planta -> planta.setCosto_operacion_t(300.0));
+        Escenario referencia = persistencia.obtener_por_id("ESC-01");
+        referencia.getEmpresas().forEach(empresa -> empresa.setPrecio_tonelada(200.0));
+        referencia.getPlantas().forEach(planta -> planta.setCosto_operacion_t(300.0));
+        Escenario escenario = referencia.clonar_profundo("ESC-COSTOS", "Costos completos");
+        assertTrue(escenario.getEmpresas().stream().allMatch(e -> e.getPrecio_tonelada() == 200.0));
+        assertTrue(escenario.getPlantas().stream().allMatch(p -> p.getCosto_operacion_t() == 300.0));
 
         ResultadoOptimizacion exacto = adaptadorExacto.resolver(escenario, null);
         ResultadoOptimizacion ag = adaptadorGenetico.resolver(escenario,

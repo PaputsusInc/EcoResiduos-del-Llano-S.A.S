@@ -1,5 +1,6 @@
 package com.ecoresiduos.llano;
 
+import com.ecoresiduos.llano.domain.model.Escenario;
 import com.ecoresiduos.llano.infrastructure.persistence.AdaptadorPersistencia;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -109,6 +110,43 @@ class SimulacionEscenariosIntegrationTest {
         assertEquals("Tarifas revisadas", editado.path("escenario").path("nombre").asText());
         assertEquals(115.0, editado.path("escenario").path("oferta_total_t").asDouble(), 1e-6);
         assertEquals(id, editado.path("escenario").path("id").asText());
+    }
+
+    @Test
+    void simulacionConservaCostosEnSnapshotYEdicion() throws Exception {
+        Escenario referencia = repositorio.obtener_por_id("ESC-01")
+                .clonar_profundo("ESC-REG-COSTOS", "Referencia con costos");
+        referencia.getEmpresas().forEach(empresa -> empresa.setPrecio_tonelada(200.0));
+        referencia.getPlantas().forEach(planta -> planta.setCosto_operacion_t(300.0));
+        repositorio.guardar(referencia);
+
+        String payload = """
+                {"nombre":"Simulación con costos", "variaciones":[
+                  {"tipo":"COSTOS","porcentaje":10}
+                ]}
+                """;
+        JsonNode creado = json.readTree(mvc.perform(post("/api/escenarios/ESC-REG-COSTOS/simulaciones")
+                .contentType(MediaType.APPLICATION_JSON).content(payload))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString());
+        String id = creado.path("escenario").path("id").asText();
+        assertEquals(200.0, creado.path("escenario").path("empresas").get(0).path("precio_tonelada").asDouble());
+        assertEquals(300.0, creado.path("escenario").path("plantas").get(0).path("costo_operacion_t").asDouble());
+        assertEquals(200.0, creado.path("escenario").path("referencia_snapshot")
+                .path("empresas").get(0).path("precio_tonelada").asDouble());
+        assertEquals(300.0, creado.path("escenario").path("referencia_snapshot")
+                .path("plantas").get(0).path("costo_operacion_t").asDouble());
+
+        repositorio.cargar_datos_semilla();
+        Escenario guardado = repositorio.obtener_por_id(id);
+        assertEquals(200.0, guardado.getReferencia_snapshot().getEmpresas().get(0).getPrecio_tonelada());
+        assertEquals(300.0, guardado.getReferencia_snapshot().getPlantas().get(0).getCosto_operacion_t());
+
+        JsonNode editado = json.readTree(mvc.perform(put(
+                "/api/escenarios/ESC-REG-COSTOS/simulaciones/" + id)
+                .contentType(MediaType.APPLICATION_JSON).content(payload))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertEquals(200.0, editado.path("escenario").path("empresas").get(0).path("precio_tonelada").asDouble());
+        assertEquals(300.0, editado.path("escenario").path("plantas").get(0).path("costo_operacion_t").asDouble());
     }
 
     @AfterAll
